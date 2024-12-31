@@ -1,0 +1,57 @@
+[
+    {
+      "id": 1,
+      "title": "The Importance of Web Development in 2024",
+      "image": "./trustBrand04.png",
+      "description": "Web development is more crucial than ever in 2024. As technology continues to evolve, having a strong online presence is essential for businesses of all sizes...",
+      "date": "25 Dec 2024",
+      "author": "John Doe",
+      "tags": ["Web Development", "Technology", "Business"]
+    },
+    {
+      "id": 2,
+      "title": "Understanding ReactJS for Beginners",
+      "image": "./trustBrand04.png",
+      "description": "ReactJS has become one of the most popular JavaScript libraries in recent years. In this blog post, we explore what makes React so powerful for building dynamic user interfaces...",
+      "date": "24 Dec 2024",
+      "author": "Jane Smith",
+      "tags": ["ReactJS", "JavaScript", "Frontend Development"]
+    },
+    {
+      "id": 3,
+      "title": "Top 5 Trends in E-commerce for 2024",
+      "image": "./trustBrand04.png",
+      "description": "The e-commerce industry is continuously evolving. In this blog post, we discuss the top 5 trends that will shape the future of e-commerce in 2024...",
+      "date": "23 Dec 2024",
+      "author": "Mike Johnson",
+      "tags": ["E-commerce", "Business", "Online Shopping"]
+    },
+    {
+      "id": 4,
+      "title": "How AI is Revolutionizing Healthcare",
+      "image": "./trustBrand04.png",
+      "description": "Artificial Intelligence is making significant strides in healthcare. This post explores how AI is changing diagnosis, treatment, and patient care across the world...",
+      "date": "22 Dec 2024",
+      "author": "Emily Davis",
+      "tags": ["AI", "Healthcare", "Technology"]
+    },
+    {
+      "id": 5,
+      "title": "The Future of Remote Work in 2024",
+      "image": "./trustBrand04.png",
+      "description": "As the world adapts to new work environments, remote work is expected to become even more prevalent in 2024. We explore the trends and challenges that come with this shift...",
+      "date": "21 Dec 2024",
+      "author": "Sarah Lee",
+      "tags": ["Remote Work", "Business", "Workplace Trends"]
+    },
+    {
+      "id": 6,
+      "title": "The Role of Blockchain in Financial Services",
+      "image": "./trustBrand04.png",
+      "description": "Blockchain technology is transforming financial services by enhancing security and transparency. In this blog post, we take a look at the key ways blockchain is impacting the industry...",
+      "date": "20 Dec 2024",
+      "author": "David Brown",
+      "tags": ["Blockchain", "Finance", "Technology"]
+    }
+  ]
+  

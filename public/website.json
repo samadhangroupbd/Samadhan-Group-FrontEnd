@@ -1,0 +1,123 @@
+[
+    {
+      "id": 1,
+      "website_name": "Google",
+      "website_image": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_92x30dp.png",
+      "website_link": "https://www.google.com"
+    },
+    {
+      "id": 2,
+      "website_name": "Facebook",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+      "website_link": "https://www.facebook.com"
+    },
+    {
+      "id": 3,
+      "website_name": "Twitter",
+      "website_image": "https://abs.twimg.com/icons/apple-touch-icon-192x192.png",
+      "website_link": "https://www.twitter.com"
+    },
+    {
+      "id": 4,
+      "website_name": "YouTube",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png",
+      "website_link": "https://www.youtube.com"
+    },
+    {
+      "id": 5,
+      "website_name": "Instagram",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
+      "website_link": "https://www.instagram.com"
+    },
+    {
+      "id": 6,
+      "website_name": "LinkedIn",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedIn_Logo_2013.png",
+      "website_link": "https://www.linkedin.com"
+    },
+    {
+      "id": 7,
+      "website_name": "Reddit",
+      "website_image": "https://www.redditinc.com/assets/images/site/reddit-logo.png",
+      "website_link": "https://www.reddit.com"
+    },
+    {
+      "id": 8,
+      "website_name": "Wikipedia",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia_logo_2023.png",
+      "website_link": "https://www.wikipedia.org"
+    },
+    {
+      "id": 9,
+      "website_name": "Amazon",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+      "website_link": "https://www.amazon.com"
+    },
+    {
+      "id": 10,
+      "website_name": "Yahoo",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Yahoo_Logo_2019.png",
+      "website_link": "https://www.yahoo.com"
+    },
+    {
+      "id": 11,
+      "website_name": "Pinterest",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png",
+      "website_link": "https://www.pinterest.com"
+    },
+    {
+      "id": 12,
+      "website_name": "TikTok",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo_2021.svg",
+      "website_link": "https://www.tiktok.com"
+    },
+    {
+      "id": 13,
+      "website_name": "Netflix",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+      "website_link": "https://www.netflix.com"
+    },
+    {
+      "id": 14,
+      "website_name": "Spotify",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Spotify_logo_with_text.svg",
+      "website_link": "https://www.spotify.com"
+    },
+    {
+      "id": 15,
+      "website_name": "GitHub",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg",
+      "website_link": "https://www.github.com"
+    },
+    {
+      "id": 16,
+      "website_name": "Microsoft",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo_2021.svg",
+      "website_link": "https://www.microsoft.com"
+    },
+    {
+      "id": 17,
+      "website_name": "Apple",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_2020.svg",
+      "website_link": "https://www.apple.com"
+    },
+    {
+      "id": 18,
+      "website_name": "Slack",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Slack_Icon_2019.svg",
+      "website_link": "https://www.slack.com"
+    },
+    {
+      "id": 19,
+      "website_name": "Zoom",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Zoom_2020_logo.svg",
+      "website_link": "https://www.zoom.us"
+    },
+    {
+      "id": 20,
+      "website_name": "WhatsApp",
+      "website_image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
+      "website_link": "https://www.whatsapp.com"
+    }
+  ]
+  

@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "productName": "Apple Watch Series 7 GPS",
+    "productDescription": "The Apple Watch Series 7 is designed for those who want both style and functionality. It features a durable aluminium case with a starlight sport band and a 41mm display. With advanced fitness and health tracking, it offers ECG, blood oxygen monitoring, and sleep tracking. The larger, more durable display ensures easy readability and seamless navigation, while the GPS feature makes it perfect for outdoor adventures. Whether you're tracking your workouts, staying connected, or monitoring your health, the Apple Watch Series 7 is the perfect companion.",
+    "productPrice": 599,
+    "productImage": "./trustBrand06.jpg"
+  },
+  {
+    "id": 2,
+    "productName": "Samsung Galaxy S21",
+    "productDescription": "The Samsung Galaxy S21 is a flagship smartphone that offers a stunning 6.2-inch Dynamic AMOLED display, perfect for watching content, gaming, or browsing. With 5G capability, the Galaxy S21 offers ultra-fast speeds, making it ideal for streaming and downloads. Powered by the Exynos 2100 chipset and equipped with a versatile triple camera setup, it includes a 64MP telephoto lens for professional-grade photos and videos. With a sleek design, long-lasting battery life, and the latest software features, the Galaxy S21 is the ideal choice for tech enthusiasts and everyday users alike.",
+    "productPrice": 799,
+    "productImage": "./trustBrand06.jpg"
+  },
+  {
+    "id": 3,
+    "productName": "Sony WH-1000XM4",
+    "productDescription": "The Sony WH-1000XM4 headphones are a must-have for audiophiles and travelers alike. With industry-leading noise canceling technology, these headphones ensure a truly immersive listening experience, blocking out ambient noise in any environment. Enjoy exceptional sound quality, whether you're listening to music, podcasts, or watching movies. With up to 30 hours of battery life on a single charge, you can enjoy your entertainment throughout the day without interruptions. The comfortable over-ear design and touch-sensitive controls make these headphones perfect for long listening sessions.",
+    "productPrice": 349,
+    "productImage": "./trustBrand06.jpg"
+  },
+  {
+    "id": 4,
+    "productName": "Nike Air Max 270",
+    "productDescription": "The Nike Air Max 270 sneakers combine performance and style, offering comfort with a contemporary edge. These sneakers feature a breathable mesh upper that keeps your feet cool while you’re on the go. The iconic Air Max cushioning in the heel provides unparalleled comfort, whether you’re running, walking, or just lounging. Designed with a modern look, they pair well with casual outfits, offering both style and utility. Whether you're working out or hitting the streets, the Nike Air Max 270 keeps your feet comfortable while keeping you on trend.",
+    "productPrice": 150,
+    "productImage": "./trustBrand06.jpg"
+  },
+  {
+    "id": 5,
+    "productName": "Dell XPS 13",
+    "productDescription": "The Dell XPS 13 is a high-performance ultrabook designed for professionals and creators who demand power and portability. Featuring a 13.4-inch InfinityEdge display, the laptop delivers stunning visuals with ultra-thin bezels. Powered by the latest 11th Gen Intel Core processors, it offers exceptional performance for multitasking, editing, and gaming. Its ultra-portable design makes it easy to take on the go, while the long battery life ensures productivity throughout the day. Whether you’re working from the office or traveling, the Dell XPS 13 provides the performance and mobility you need.",
+    "productPrice": 1099,
+    "productImage": "./trustBrand06.jpg"
+  },
+  {
+    "id": 6,
+    "productName": "Bose QuietComfort 45",
+    "productDescription": "Bose QuietComfort 45 headphones offer the ultimate listening experience with industry-leading noise-canceling technology. These over-ear headphones block out unwanted sounds, allowing you to enjoy high-fidelity audio wherever you go. With a comfortable and lightweight design, the QC45 is perfect for long listening sessions, whether at home, in the office, or while traveling. The 24-hour battery life ensures uninterrupted enjoyment, and the built-in microphone offers clear voice pickup for calls. Whether you're working, relaxing, or commuting, the Bose QuietComfort 45 provides exceptional sound and comfort.",
+    "productPrice": 329,
+    "productImage": "./trustBrand06.jpg"
+  }
+]
