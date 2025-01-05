@@ -8,7 +8,13 @@ import HomeProductDetail from "../Pages/HomeComponents/HomeSection/HomeProductDe
 import BlogDetails from "../Pages/HomeComponents/HomeBlogDetails/HomeBlogDetails";
 import Login from "../Authentication/Login/Login";
 import Registration from "../Authentication/Registration/Registration";
-
+import Statistic from "../../AllDashBoard/DashBoardComponent/Statistic/Statistic";
+import DashboardLayout from "../../AllDashBoard/DashboardLayout/DashboardLayout";
+import Create_Admin from "../../AllDashBoard/DashBoardComponent/Create_Admin/Create_Admin";
+import Create_Blog from "../../AllDashBoard/DashBoardComponent/Create_Blog/Create_Blog";
+import BlogMain from "../Pages/BlogComponents/BlogMain/BlogMain";
+import Manage_Admin from "../../AllDashBoard/DashBoardComponent/Manage_Admin/Manage_Admin";
+// import DashboardLayout from "../../AllDashBoard/DashboardLayout/DashboardLayout";
 
 
 
@@ -28,12 +34,18 @@ export const router = createBrowserRouter([
                 element: <HomeProjectDetails />,
             },
             {
-                path:"/product/:id",
-                element:<HomeProductDetail></HomeProductDetail>
+                path: "/product/:id",
+                element: <HomeProductDetail></HomeProductDetail>
             },
+
             {
-                path:"/blog/:id",
-                element:<BlogDetails></BlogDetails>
+                path:'/blog',
+                element:<BlogMain></BlogMain>
+            },
+
+            {
+                path: "/blog/:id",
+                element: <BlogDetails></BlogDetails>
             },
 
         ]
@@ -41,13 +53,41 @@ export const router = createBrowserRouter([
     },
 
     {
-        path:"/login",
-        element:<Login></Login>
-      },
-  
-      {
-        path:"/registration",
-        element:<Registration></Registration>
-      },
+        path: "/login",
+        element: <Login></Login>
+    },
+
+    {
+        path: "/registration",
+        element: <Registration></Registration>
+    },
+
+
+    // Dashboard 
+
+    {
+        path:'/dashboard',
+        element:<DashboardLayout></DashboardLayout>,
+        errorElement:<ErrorPage></ErrorPage>,
+        children:[
+            {
+                path:"statistic",
+                element:<Statistic></Statistic>
+
+            },
+            {
+                path:"create-admin",
+                element:<Create_Admin></Create_Admin>
+            },
+            {
+                path: "create-blog",
+                element:<Create_Blog></Create_Blog>
+            },
+            {
+                path: "manage-admin",
+                element:<Manage_Admin></Manage_Admin>
+            }
+        ]
+    }
 
 ])

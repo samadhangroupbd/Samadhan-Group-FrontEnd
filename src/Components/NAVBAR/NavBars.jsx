@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios"; // Import axios
 import {
     Navbar,
     MobileNav,
@@ -10,6 +11,7 @@ import {
     MenuItem,
     Avatar,
     IconButton,
+    Tooltip,
 } from "@material-tailwind/react";
 import {
     UserCircleIcon,
@@ -20,8 +22,8 @@ import {
     PowerIcon,
     Bars2Icon,
 } from "@heroicons/react/24/solid";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
-import { FaAddressBook, FaBloggerB, FaHome, FaProjectDiagram } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaAddressBook, FaBloggerB, FaHome, FaPhoneVolume, FaProjectDiagram } from "react-icons/fa";
 import { SiWikimediafoundation } from "react-icons/si";
 import { MdContactPhone } from "react-icons/md";
 import { AuthContext } from "../Authentication/AuthProvider/AuthProvider";
@@ -29,46 +31,64 @@ import { AuthContext } from "../Authentication/AuthProvider/AuthProvider";
 // Profile menu component with navigation paths
 const profileMenuItems = [
     {
-        label: "My Profile",
+        label: "Dashboard",
         icon: UserCircleIcon,
-        to: "/profile", // Path for My Profile
+        to: "/dashboard/statistic"
     },
     {
         label: "Edit Profile",
         icon: Cog6ToothIcon,
-        to: "/edit-profile", // Path for Edit Profile
+        to: "/edit-profile",
     },
     {
         label: "Inbox",
         icon: InboxArrowDownIcon,
-        to: "/inbox", // Path for Inbox
+        to: "/inbox",
     },
     {
         label: "Help",
         icon: LifebuoyIcon,
-        to: "/help", // Path for Help
+        to: "/help",
     },
     {
         label: "Sign Out",
         icon: PowerIcon,
-        to: "/signout", // Path for Sign Out (this can be handled by logging out)
+        to: "/signout",
     },
 ];
 
 function ProfileMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const navigate = useNavigate(); // Using the useNavigate hook
+    const navigate = useNavigate();
     const { user, logOut } = useContext(AuthContext);
+    const [registrationData, setRegistrationData] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/signup");
+                const data = response.data;
+                const userData = data.find(item => item.email === user?.email);
+                setRegistrationData(userData);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        if (user?.email) {
+            fetchUserData();
+        }
+    }, [user?.email]);
 
     const closeMenu = () => setIsMenuOpen(false);
 
     const handleNavigation = (to) => {
         if (to === "/signout") {
-            logOut(); // Handle logout logic here
+            logOut();
         } else {
-            navigate(to); // Navigate to the given path
+            navigate(to);
         }
-        closeMenu(); // Close the menu after navigation
+        closeMenu();
     };
 
     return (
@@ -79,13 +99,15 @@ function ProfileMenu() {
                     color="blue-gray"
                     className="flex items-center gap-1 rounded-full py-1 px-3 lg:ml-auto bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
-                    <Avatar
-                        variant="circular"
-                        size="sm"
-                        alt="Profile Picture"
-                        className="border border-white p-0.5"
-                        src={user?.image || "https://i.ibb.co/nnWFqp9/b-Kash-payment-Process999.png"} // Use user image or default
-                    />
+                    <Tooltip content={registrationData?.fullName || "User"} placement="bottom">
+                        <Avatar
+                            variant="circular"
+                            size="sm"
+                            alt="Profile Picture"
+                            className="border border-white p-0.5"
+                            src={registrationData?.image || "https://i.ibb.co/nnWFqp9/b-Kash-payment-Process999.png"}
+                        />
+                    </Tooltip>
                     <ChevronDownIcon
                         strokeWidth={2.5}
                         className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""}`}
@@ -98,7 +120,7 @@ function ProfileMenu() {
                     return (
                         <MenuItem
                             key={label}
-                            onClick={() => handleNavigation(to)}  // Handle navigation on click
+                            onClick={() => handleNavigation(to)}
                             className={`flex items-center gap-2 rounded-lg py-2 px-4 text-gray-700 hover:bg-indigo-100 ${isLastItem ? "text-red-500" : ""}`}
                         >
                             {React.createElement(icon, {
@@ -120,7 +142,6 @@ function ProfileMenu() {
     );
 }
 
-// Nav list component with routing links
 const navListItems = [
     {
         label: "Home",
@@ -171,7 +192,6 @@ function NavList() {
     );
 }
 
-// NavBar Component
 export function NavBars() {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const { user, logOut } = useContext(AuthContext);
@@ -195,19 +215,27 @@ export function NavBars() {
                     <NavList />
                 </div>
 
+                
+
                 {/* Conditional Rendering for Profile Menu and Login Button */}
                 <div className="flex items-center ml-auto space-x-2">
                     {user ? (
-                        // Profile menu is visible if user is logged in
                         <ProfileMenu />
                     ) : (
-                        // Show Login button if user is not logged in
                         <Link to={'/login'}>
                             <Button size="sm" variant="filled" color="amber" className="hover:bg-amber-600 transition-all duration-200 ">
                                 <span className="sm:text-xs">Log In</span>
                             </Button>
                         </Link>
                     )}
+                </div>
+                {/* Call Icon */}
+                <div className="flex items-center justify-center">
+                    <Link to="tel:+8801818697777">
+                        <div className="ml-1 p-1 bg-green-600 hover:bg-green-700 text-white rounded-full cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-110">
+                            <FaPhoneVolume className="h-5 w-5" />
+                        </div>
+                    </Link>
                 </div>
 
                 {/* Hamburger Icon for small screens */}

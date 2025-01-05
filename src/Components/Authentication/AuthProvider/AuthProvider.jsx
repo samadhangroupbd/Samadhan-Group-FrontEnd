@@ -45,15 +45,15 @@ const AuthProvider = ({ children }) => {
 const signUpUser = async (email, password) => {
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(auth.currentUser); // Send verification email
-    await signOut(auth); // Sign out the user to encourage email verification
+    // await sendEmailVerification(auth.currentUser); // Send verification email
+    // await signOut(auth); // Sign out the user to encourage email verification
 
-    const isConfirmed = window.confirm('Please verify your email by checking the inbox for a verification link. Click OK to go to the login page.');
+    // const isConfirmed = window.confirm('Please verify your email by checking the inbox for a verification link. Click OK to go to the login page.');
 
-    if (isConfirmed) {
-      // Navigate to login page after user clicks OK
-      navigate('/login');
-    }
+    // if (isConfirmed) {
+    //   // Navigate to login page after user clicks OK
+    //   navigate('/login');
+    // }
 
     setError(null); // Clear error on successful signup
   } catch (error) {
@@ -68,14 +68,14 @@ const signUpUser = async (email, password) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      if (user.emailVerified) {
-        alert('Your email is verified.');
-      } else {
-        alert('Please verify your email. Check your inbox.');
-        await signOut(auth);
-        await sendEmailVerification(auth.currentUser);
+      // if (user.emailVerified) {
+      //   alert('Your email is verified.');
+      // } else {
+      //   alert('Please verify your email. Check your inbox.');
+      //   await signOut(auth);
+      //   await sendEmailVerification(auth.currentUser);
         
-      }
+      // }
 
       setError(null); // Clear error on successful login
     } catch (error) {
