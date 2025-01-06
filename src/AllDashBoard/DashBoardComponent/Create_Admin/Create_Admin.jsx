@@ -183,8 +183,8 @@ const Create_Admin = () => {
         setUser(result.user);  // Assuming result contains the user object
 
         setLoading(false);  // Stop loading state
-        toast.success("Signup successful!");  // Show success message
-        navigate("/login");  // Redirect to homepage/dashboard (or any other page)
+        toast.success("Admin Create successful!");  // Show success message
+        navigate("/manage-admin");  // Redirect to homepage/dashboard (or any other page)
       }
 
       // Reset form after successful signup

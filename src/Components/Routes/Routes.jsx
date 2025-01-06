@@ -14,7 +14,12 @@ import Create_Admin from "../../AllDashBoard/DashBoardComponent/Create_Admin/Cre
 import Create_Blog from "../../AllDashBoard/DashBoardComponent/Create_Blog/Create_Blog";
 import BlogMain from "../Pages/BlogComponents/BlogMain/BlogMain";
 import Manage_Admin from "../../AllDashBoard/DashBoardComponent/Manage_Admin/Manage_Admin";
-// import DashboardLayout from "../../AllDashBoard/DashboardLayout/DashboardLayout";
+import Manage_Blog from "../../AllDashBoard/DashBoardComponent/Manage_Blog/Manage_Blog";
+import Create_Project from "../../AllDashBoard/DashBoardComponent/Create_Project/Create_Project";
+import Manage_Project from "../../AllDashBoard/DashBoardComponent/Manage_Project/Manage_Project";
+import ViewAdmin from "../../AllDashBoard/DashBoardComponent/ViewAdmin/ViewAdmin";
+import EditAdmin from "../../AllDashBoard/DashBoardComponent/EditAdminDetails/EditAdmin ";
+
 
 
 
@@ -80,13 +85,36 @@ export const router = createBrowserRouter([
                 element:<Create_Admin></Create_Admin>
             },
             {
+                path: "manage-admin",
+                element:<Manage_Admin></Manage_Admin>
+            },
+            {
                 path: "create-blog",
                 element:<Create_Blog></Create_Blog>
             },
             {
-                path: "manage-admin",
-                element:<Manage_Admin></Manage_Admin>
-            }
+                path: "manage-blog",
+                element:<Manage_Blog></Manage_Blog>
+            },
+
+            {
+                path: "project-post",
+                element:<Create_Project></Create_Project>
+            },
+
+            {
+                path: "manage-project",
+                element:<Manage_Project></Manage_Project>
+            },
+            {
+                path: "/dashboard/user-details/:id",
+                element:<ViewAdmin></ViewAdmin>
+            },
+            {
+                path: "/dashboard/edit-admin/:id",
+                element:<EditAdmin></EditAdmin>
+            },
+            
         ]
     }
 

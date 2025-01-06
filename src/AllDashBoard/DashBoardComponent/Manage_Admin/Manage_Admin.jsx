@@ -8,13 +8,12 @@ import {
   Typography,
   Button,
   CardBody,
-  Chip,
-  CardFooter,
   Avatar,
   IconButton,
   Tooltip,
+  CardFooter,
 } from "@material-tailwind/react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
 
 // Define roles you're interested in
@@ -22,7 +21,7 @@ const ROLES_TO_FILTER = [
   "Country Admin",
   "Division Admin",
   "District Admin",
-  "Upojila Admin",
+  "Upazila Admin",
   "Union Admin",
   "Ward Admin",
 ];
@@ -34,11 +33,8 @@ const Manage_Admin = () => {
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [selectedRole, setSelectedRole] = useState("All"); // Selected role for filtering
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Change this to control how many items per page
-
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(false);
   // Fetch data from the API
   useEffect(() => {
     const fetchMembers = async () => {
@@ -61,50 +57,54 @@ const Manage_Admin = () => {
     fetchMembers();
   }, []);
 
+
+ // Update this in the delete handler
+const handleDelete = (id) => {
+  const confirmDelete = window.confirm('Are you sure you want to delete this admin?');
+  if (!confirmDelete) return;
+
+  setLoading(true); // Start loading
+
+  fetch(`http://localhost:5000/UserAdmin-delete/${id}`, { method: 'DELETE' })
+    .then(() => {
+      setMembers(members.filter((member) => member._id !== id));
+      setLoading(false); // Stop loading after deletion
+    })
+    .catch((error) => {
+      console.error('Error deleting admin:', error);
+      setLoading(false); // Stop loading in case of error
+    });
+};
+
+
+
   // Filter members based on search query and selected role
   const filteredMembers = members
     .filter(
       (member) =>
         member.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        member.member.toLowerCase().includes(searchQuery.toLowerCase())
+        member.profileId.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .filter((member) => {
       if (selectedRole === "All") return true; // Show all members
       return member.member === selectedRole; // Show members for the selected role
     });
 
-  // Pagination: Get current page members
+  // Pagination
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastMember = currentPage * itemsPerPage;
   const indexOfFirstMember = indexOfLastMember - itemsPerPage;
   const currentMembers = filteredMembers.slice(indexOfFirstMember, indexOfLastMember);
 
-  // Change page
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Calculate total pages
   const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
-
-  // Handle Edit, Update, Delete buttons
-  const handleEdit = (id) => {
-    console.log("Edit user with ID:", id);
-    // Implement your edit functionality here
-  };
-
-  const handleUpdate = (id) => {
-    console.log("Update user with ID:", id);
-    // Implement your update functionality here
-  };
-
-  const handleDelete = (id) => {
-    console.log("Delete user with ID:", id);
-    // Implement your delete functionality here
-  };
 
   return (
     <div>
-      
       <Card className="h-full w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="mb-8 flex items-center justify-between gap-8 flex-wrap">
@@ -125,7 +125,6 @@ const Manage_Admin = () => {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
-            {/* Role selection buttons */}
             <div className="flex flex-wrap gap-2">
               {["All", ...ROLES_TO_FILTER].map((role) => (
                 <Button
@@ -138,8 +137,6 @@ const Manage_Admin = () => {
                 </Button>
               ))}
             </div>
-
-            {/* Search input */}
             <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
               <Input
                 label="Search Name And Admin Position"
@@ -158,10 +155,7 @@ const Manage_Admin = () => {
             <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (
-                  <th
-                    key={head}
-                    className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                  >
+                  <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                     <Typography
                       variant="small"
                       color="blue-gray"
@@ -175,11 +169,9 @@ const Manage_Admin = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({ _id, fullName, email, role, image, member, profileId, createDate }, index) => {
+                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate }, index) => {
                   const isLast = index === currentMembers.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
+                  const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                   return (
                     <tr key={_id}>
@@ -187,69 +179,60 @@ const Manage_Admin = () => {
                         <div className="flex items-center gap-3">
                           <Avatar src={image} alt={fullName} size="sm" />
                           <div className="flex flex-col">
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
+                            <Typography variant="small" color="blue-gray" className="font-normal">
                               {fullName}
                             </Typography>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal opacity-70"
-                            >
+                            <Typography variant="small" color="blue-gray" className="font-normal opacity-70">
                               {email}
                             </Typography>
                           </div>
                         </div>
                       </td>
                       <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {member}
-                          </Typography>
-                        </div>
+                        <Typography variant="small" color="blue-gray" className="font-normal">
+                          {member}
+                        </Typography>
                       </td>
                       <td className={classes}>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
+                        <Typography variant="small" color="blue-gray" className="font-normal">
                           {profileId}
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
+                        <Typography variant="small" color="blue-gray" className="font-normal">
                           {createDate}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <div className="flex gap-2">
+
+
                           <Tooltip content="Edit">
-                            <IconButton variant="text" onClick={() => handleEdit(_id)}>
-                              <PencilIcon className="h-4 w-4" />
-                            </IconButton>
+                            <Link to={`/dashboard/edit-admin/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto } }}>
+                              <IconButton variant="text">
+                                <PencilIcon className="h-4 w-4" />
+                              </IconButton>
+                            </Link>
                           </Tooltip>
-                          <Tooltip content="View">
-                            <IconButton variant="text" onClick={() => handleUpdate(_id)}>
-                              <FaEye className="h-4 w-4" />
-                            </IconButton>
-                          </Tooltip>
+
+
+                          <Link to={`/dashboard/user-details/${_id}`}>
+                            <Tooltip content="View">
+                              <IconButton variant="text">
+                                <FaEye className="h-4 w-4" />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
+
+
+
                           <Tooltip content="Delete">
-                            <IconButton variant="text" onClick={() => handleDelete(_id)}>
-                              <TrashIcon className="h-4 w-4 text-red-500" />
+                            <IconButton variant="text">
+                              <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)}/>
                             </IconButton>
                           </Tooltip>
+
+
                         </div>
                       </td>
                     </tr>
@@ -266,20 +249,10 @@ const Manage_Admin = () => {
             Page {currentPage} of {totalPages}
           </Typography>
           <div className="flex gap-2">
-            <Button
-              variant="outlined"
-              size="sm"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
+            <Button variant="outlined" size="sm" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
               Previous
             </Button>
-            <Button
-              variant="outlined"
-              size="sm"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
+            <Button variant="outlined" size="sm" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
               Next
             </Button>
           </div>

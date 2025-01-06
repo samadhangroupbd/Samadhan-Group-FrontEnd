@@ -65,7 +65,7 @@ const DashBoardNavBar = (props) => {
 
                     { text: 'Manage Admin', icon: <MdOutlineManageAccounts className='text-2xl' />, link: '/dashboard/manage-admin' },
 
-                    { text: 'Create Blog', icon: <PostAddIcon />, link: '/dashboard/create-blog' },
+                    // { text: 'Create Blog', icon: <PostAddIcon />, link: '/dashboard/create-blog' },
 
                     { text: 'Manage Blog', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-blog' },
 
@@ -99,7 +99,7 @@ const DashBoardNavBar = (props) => {
             <Divider />
             <List>
                 {[
-                    { text: 'Admin List', icon: <RiAdminFill className='text-2xl' />, link: '/dashboard/admin-list' },
+                    // { text: 'Admin List', icon: <RiAdminFill className='text-2xl' />, link: '/dashboard/admin-list' },
                     { text: 'Member List', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/member-list' },
                     { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },
                     { text: 'Sign Out', icon: <TbLogout className='text-2xl' />, link: '/dashboard/signout' },
