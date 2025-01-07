@@ -100,7 +100,7 @@ const DashBoardNavBar = (props) => {
             <List>
                 {[
                     // { text: 'Admin List', icon: <RiAdminFill className='text-2xl' />, link: '/dashboard/admin-list' },
-                    { text: 'Member List', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/member-list' },
+                    { text: 'Member List', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
                     { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },
                     { text: 'Sign Out', icon: <TbLogout className='text-2xl' />, link: '/dashboard/signout' },
                 ].map(({ text, icon, link }, index) => (

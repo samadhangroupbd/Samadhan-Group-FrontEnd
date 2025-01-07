@@ -13,13 +13,16 @@ import DashboardLayout from "../../AllDashBoard/DashboardLayout/DashboardLayout"
 import Create_Admin from "../../AllDashBoard/DashBoardComponent/Create_Admin/Create_Admin";
 import Create_Blog from "../../AllDashBoard/DashBoardComponent/Create_Blog/Create_Blog";
 import BlogMain from "../Pages/BlogComponents/BlogMain/BlogMain";
-import Manage_Admin from "../../AllDashBoard/DashBoardComponent/Manage_Admin/Manage_Admin";
 import Manage_Blog from "../../AllDashBoard/DashBoardComponent/Manage_Blog/Manage_Blog";
 import Create_Project from "../../AllDashBoard/DashBoardComponent/Create_Project/Create_Project";
 import Manage_Project from "../../AllDashBoard/DashBoardComponent/Manage_Project/Manage_Project";
-import ViewAdmin from "../../AllDashBoard/DashBoardComponent/ViewAdmin/ViewAdmin";
-import EditAdmin from "../../AllDashBoard/DashBoardComponent/EditAdminDetails/EditAdmin ";
-
+import Manage_Admin from "../../AllDashBoard/DashBoardComponent/ManageAdminComponent/Manage_Admin/Manage_Admin";
+import ViewAdmin from "../../AllDashBoard/DashBoardComponent/ManageAdminComponent/ViewAdmin/ViewAdmin";
+import EditAdmin from "../../AllDashBoard/DashBoardComponent/ManageAdminComponent/EditAdminDetails/EditAdmin "
+import Manage_Members from "../../AllDashBoard/DashBoardComponent/Manage_Members_Component/Manage_Member/Manage_Members";
+import Member_Edit from "../../AllDashBoard/DashBoardComponent/Manage_Members_Component/Member_Edit/Member_Edit";
+import Manage_View_Member from "../../AllDashBoard/DashBoardComponent/Manage_Members_Component/Manage_View_Member/Manage_View_Member";
+import Create_Member from "../../AllDashBoard/DashBoardComponent/Create_Member/Create_Member"
 
 
 
@@ -85,6 +88,10 @@ export const router = createBrowserRouter([
                 element:<Create_Admin></Create_Admin>
             },
             {
+                path:"create-member",
+                element:<Create_Member></Create_Member>
+            },
+            {
                 path: "manage-admin",
                 element:<Manage_Admin></Manage_Admin>
             },
@@ -114,6 +121,19 @@ export const router = createBrowserRouter([
                 path: "/dashboard/edit-admin/:id",
                 element:<EditAdmin></EditAdmin>
             },
+            {
+                path: "manage-members",
+                element:<Manage_Members></Manage_Members>
+            },
+            {
+                path: "/dashboard/edit-member/:id",
+                element:<Member_Edit></Member_Edit>
+            },
+            {
+                path: "/dashboard/member-details/:id",
+                element:<Manage_View_Member></Manage_View_Member>
+            },
+
             
         ]
     }

@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthProvider/AuthProvider";
+// import { AuthContext } from "../AuthProvider/AuthProvider";
 import { toast } from "react-toastify"; // Assuming you're using react-toastify for error messages
 import axios from "axios";
+import { AuthContext } from "../../../Components/Authentication/AuthProvider/AuthProvider";
 
-const Registration = () => {
+const Create_Member = () => {
   const { signUpUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate(); // For redirect after successful signup
 
@@ -99,10 +100,10 @@ const Registration = () => {
   const village = e.target.village.value;
   const ward = e.target.ward.value;
   const member = e.target.member.value;
-  const payment = e.target.payment.value;
-  const transactionId = e.target.transactionId.value;
   const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
   const paymentPhoto = e.target.paymentPhoto.files[0];  // For file input, use `files[0]`
+  const payment = e.target.payment.value;
+  const transactionId = e.target.transactionId.value;
 
   // Get the current date and time
   const currentDateTime = new Date();
@@ -125,7 +126,7 @@ const Registration = () => {
     fatherName,
     motherName,
     nidNumber,
-    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId,
+    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member,  payment, transactionId, paymentPhoto, profileId,
     createDate,  // Store the formatted date
     createTime  // Store the formatted time
   };
@@ -152,11 +153,13 @@ const Registration = () => {
       const nidBirthImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, nidBirthImageFormData);
       const nidBirthImageUrl = nidBirthImageResponse.data.data.display_url;
 
-      // Upload Payment Photo to ImgBB
-      const paymentPhotoFormData = new FormData();
-      paymentPhotoFormData.append('image', image);
-      const paymentPhotoResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, paymentPhotoFormData);
-      const paymentPhotoUrl = paymentPhotoResponse.data.data.display_url;
+     // Upload Payment Photo to ImgBB
+     const paymentPhotoFormData = new FormData();
+     paymentPhotoFormData.append('image', image);
+     const paymentPhotoResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, paymentPhotoFormData);
+     const paymentPhotoUrl = paymentPhotoResponse.data.data.display_url;
+
+
 
       // Create the user data object with the image URL
       const userData = {
@@ -173,7 +176,8 @@ const Registration = () => {
         nidNumber,
         gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
         nidBirthImage: nidBirthImageUrl,
-        member, payment, transactionId,
+        member, 
+        payment, transactionId,
         paymentPhoto: paymentPhotoUrl,
         profileId,
         createDate,  // Include the createDate
@@ -191,8 +195,8 @@ const Registration = () => {
         setUser(result.user);  // Assuming result contains the user object
 
         setLoading(false);  // Stop loading state
-        toast.success("Signup successful!");  // Show success message
-        navigate("/login");  // Redirect to homepage/dashboard (or any other page)
+        toast.success("Member Create successful!");  // Show success message
+        navigate("/dashboard/manage-members");  // Redirect to homepage/dashboard (or any other page)
       }
 
       // Reset form after successful signup
@@ -205,6 +209,7 @@ const Registration = () => {
       setLoading(false);  // Stop loading state
       setErrors({ ...errors, general: error.message });  // Set general error message if any
       toast.error(error.message);  // Show error message in toast
+      navigate("/dashboard/manage-members"); 
     }
   }
 };
@@ -247,8 +252,8 @@ const Registration = () => {
 
 
 
-  // Handle file input for image preview
-  const handlePaymentPhotoChange = (e) => {
+   // Handle file input for image preview
+   const handlePaymentPhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) { // Limit to 2MB
@@ -268,15 +273,17 @@ const Registration = () => {
 
 
 
+
+
   return (
-    <div className="flex justify-center  items-center min-h-screen bg-gradient-to-r from-blue-700 via-indigo-800 to-purple-900">
+    <div className="flex justify-center  items-center min-h-screen ">
       <div className="w-full max-w-5xl p-8 my-10 rounded-lg shadow-lg bg-gray-100 text-gray-800">
-        <h2 className="mb-4 text-3xl font-semibold text-center text-gray-800">Create Your Account</h2>
+        <h2 className="mb-4 text-3xl font-semibold text-center text-gray-800">Create Member Account</h2>
 
         {/* Display General Error */}
         {errors.general && (
           // <div className="mb-4 text-red-400 text-center">{errors.general}</div>
-          <div className="mb-4 text-red-400 text-center"><span>Registration Successfully..!</span></div>
+          <div className="mb-4 text-red-400 text-center"><span className="font-bold">Create Member Successfully....</span></div>
         )}
 
 
@@ -335,7 +342,7 @@ const Registration = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <label htmlFor="nidNumber" className="block text-sm text-gray-800">NID Number</label>
-              <input type="number" id="nidNumber" name="nidNumber" placeholder="NID Number"
+              <input type="text" id="nidNumber" name="nidNumber" placeholder="NID Number"
                 className={`w-full px-4 py-2 border rounded-md ${errors.nidNumber ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.nidNumber && <span className="text-xs text-red-400">{errors.nidNumber}</span>}
             </div>
@@ -495,8 +502,8 @@ const Registration = () => {
           </div>
 
 
-          {/* Password and Confirm Password */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Member,Password and Confirm Password */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <label htmlFor="password" className="block text-sm text-gray-800">Password</label>
               <input type="password" id="password" name="password" placeholder="Password"
@@ -510,12 +517,7 @@ const Registration = () => {
                 className={`w-full px-4 py-2 border rounded-md ${errors.confirmPassword ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.confirmPassword && <span className="text-xs text-red-400">{errors.confirmPassword}</span>}
             </div>
-          </div>
 
-
-
-          {/* Member Selection,Payment Method */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <div className="space-y-2">
               <label htmlFor="member" className="block text-sm text-gray-800">Member Type</label>
@@ -535,16 +537,21 @@ const Registration = () => {
                 <option value="Upazila Organizer">Upazila Organizer</option>
                 <option value="Union Organizer">Union Organizer</option>
                 <option value="Ward Organizer">Ward Organizer</option>
-
-
-
-
+ 
               </select>
               {errors.member && <span className="text-xs text-red-400">{errors.member}</span>}
             </div>
 
 
-            <div className="space-y-2">
+
+          </div>
+
+
+
+           {/* Trax ID, Payment prof */}
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+           <div className="space-y-2">
               <label htmlFor="payment" className="block text-sm text-gray-800">Payment Method</label>
               <select
                 id="payment"
@@ -561,42 +568,35 @@ const Registration = () => {
               {errors.payment && <span className="text-xs text-red-400">{errors.payment}</span>}
             </div>
 
-          </div>
+
+<div className="space-y-2">
+  <label htmlFor="transactionId" className="block text-sm text-gray-800">transaction ID/Serial No</label>
+  <input type="text" id="transactionId" name="transactionId" placeholder="Transaction ID / Serial No"
+    className={`w-full px-4 py-2 border rounded-md ${errors.transactionId ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+  {errors.transactionId && <span className="text-xs text-red-400">{errors.transactionId}</span>}
+</div>
+
+{/* Payment Image Upload */}
+{<div className="space-y-2">
+  <label htmlFor="image" className="block text-sm text-gray-800">Payment Proof Image</label>
+  <input
+    type="file"
+    id="paymentPhoto"
+    name="paymentPhoto"
+    accept="image/*"
+    onChange={handlePaymentPhotoChange}
+    className={`w-full px-4 py-2 border rounded-md ${errors.paymentPhoto ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+  />
+  {errors.paymentPhoto && <span className="text-xs text-red-400">{errors.paymentPhoto}</span>}
+  {paymentPhotoPreview && (
+    <div className="mt-2">
+      <img src={paymentPhotoPreview} alt="Preview" className="w-24 h-24 object-cover rounded-md" />
+    </div>
+  )}
+</div>}
 
 
-
-          {/* Trax ID, Payment prof */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-
-            <div className="space-y-2">
-              <label htmlFor="transactionId" className="block text-sm text-gray-800">transaction ID/Serial No</label>
-              <input type="text" id="transactionId" name="transactionId" placeholder="Transaction ID / Serial No"
-                className={`w-full px-4 py-2 border rounded-md ${errors.transactionId ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.transactionId && <span className="text-xs text-red-400">{errors.transactionId}</span>}
-            </div>
-
-            {/* Payment Image Upload */}
-            {<div className="space-y-2">
-              <label htmlFor="image" className="block text-sm text-gray-800">Payment Proof Image</label>
-              <input
-                type="file"
-                id="paymentPhoto"
-                name="paymentPhoto"
-                accept="image/*"
-                onChange={handlePaymentPhotoChange}
-                className={`w-full px-4 py-2 border rounded-md ${errors.paymentPhoto ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-              />
-              {errors.paymentPhoto && <span className="text-xs text-red-400">{errors.paymentPhoto}</span>}
-              {paymentPhotoPreview && (
-                <div className="mt-2">
-                  <img src={paymentPhotoPreview} alt="Preview" className="w-24 h-24 object-cover rounded-md" />
-                </div>
-              )}
-            </div>}
-
-
-          </div>
+</div>
 
 
 
@@ -605,18 +605,12 @@ const Registration = () => {
           <div className="mt-6">
             <button type="submit" disabled={loading}
               className="w-full py-2 px-4 text-white bg-blue-600 rounded-md shadow-md focus:outline-none hover:bg-blue-500 disabled:opacity-50">
-              {loading ? "Signing up..." : "Sign Up"}
+              {loading ? "Create Member..." : "Create Member"}
             </button>
           </div>
         </form>
 
-        <p className="text-xs mt-6 text-center sm:px-6 text-gray-400">
-          Don't have an account?{" "}
-          <Link className="underline text-indigo-600 font-bold" to="/login">
-            Login
-          </Link>
-        </p>
-
+       
 
 
 
@@ -629,4 +623,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Create_Member;
