@@ -13,7 +13,7 @@ import {
   Tooltip,
   CardFooter,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom"; // Use react-router-dom Link
+import { Link, useNavigate } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
 
 // Define roles you're interested in
@@ -34,36 +34,35 @@ const ROLES_TO_FILTER = [
 // Table headers
 const TABLE_HEAD = ["Member", "Position", "Profile ID", "Joining Date", "Actions"];
 
-const Manage_Members = () => {
+const Member_Aprove = () => {
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [selectedRole, setSelectedRole] = useState("All"); // Selected role for filtering
-  const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   // Fetch data from the API
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         const response = await fetch("http://localhost:5000/signup");
         const data = await response.json();
-  
-        // Filter members for approval status and role
+
+        // Filter the members based on approval status (pending or missing) and roles
         const filteredMembers = data
-          .filter((member) => member.aproval === "approved") // Filter only approved members
+          .filter((member) => member.approval === "pending" || !member.approval) // Filter for pending or missing approval
           .filter((member) => ROLES_TO_FILTER.includes(member.member)); // Filter by role
-  
+
         // Set filtered members to state
         setMembers(filteredMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
     };
-  
+
     fetchMembers();
   }, []);
-  
 
-  // Update this in the delete handler
+  // Handle delete action
   const handleDelete = (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this Member?');
     if (!confirmDelete) return;
@@ -81,8 +80,41 @@ const Manage_Members = () => {
       });
   };
 
+  // Handle approve action
+  const handleApprove = (id) => {
+    const confirmApprove = window.confirm("Are you sure you want to approve this admin?");
+    if (!confirmApprove) return;
 
+    setLoading(true); // Start loading
 
+    fetch(`http://localhost:5000/approve-member/${id}`, {
+      method: 'PUT', // Changed to PUT as per the backend implementation
+      headers: {
+        'Content-Type': 'application/json', // Make sure to send content as JSON
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error approving admin');
+        }
+        return response.json();
+      })
+      .then(() => {
+        // Update the local state after approval
+        setMembers((prevMembers) =>
+          prevMembers.map((member) =>
+            member._id === id ? { ...member, aproval: "approved" } : member
+          )
+        );
+        setLoading(false); // Stop loading after approval
+        navigate("/dashboard/manage-admin");  // Redirect to the same page after approval
+      })
+      .catch((error) => {
+        console.error('Error approving admin:', error);
+        setLoading(false); // Stop loading in case of error
+        navigate("/dashboard/manage-admin");
+      });
+  };
   // Filter members based on search query and selected role
   const filteredMembers = members
     .filter(
@@ -121,13 +153,6 @@ const Manage_Members = () => {
                 See information about all Members
               </Typography>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-              <Link to={'/dashboard/create-member'}>
-                <Button className="flex items-center gap-3" size="sm">
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Member
-                </Button>
-              </Link>
-            </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
             <div className="flex flex-wrap gap-2">
@@ -157,8 +182,6 @@ const Manage_Members = () => {
                 }}
               />
             </div>
-
-
           </div>
         </CardHeader>
 
@@ -181,7 +204,7 @@ const Manage_Members = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate }, index) => {
+                ({ _id, fullName, email, phoneNumber, nationality, image, member, profileId, createDate }, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -217,17 +240,28 @@ const Manage_Members = () => {
                       </td>
                       <td className={classes}>
                         <div className="flex gap-2">
+                          {/* Approve Button */}
+                          <Tooltip content="Approve">
+                            <Button
+                              variant="filled"
+                              size="sm"
+                              color="green"
+                              onClick={() => handleApprove(_id)}
+                            >
+                              Approve
+                            </Button>
+                          </Tooltip>
 
-
+                          {/* Edit Button */}
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto } }}>
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, member, profileId, createDate } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>
                             </Link>
                           </Tooltip>
 
-
+                          {/* View Button */}
                           <Link to={`/dashboard/member-details/${_id}`}>
                             <Tooltip content="View">
                               <IconButton variant="text">
@@ -236,15 +270,12 @@ const Manage_Members = () => {
                             </Tooltip>
                           </Link>
 
-
-
+                          {/* Delete Button */}
                           <Tooltip content="Delete">
                             <IconButton variant="text">
                               <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
                             </IconButton>
                           </Tooltip>
-
-
                         </div>
                       </td>
                     </tr>
@@ -274,4 +305,4 @@ const Manage_Members = () => {
   );
 };
 
-export default Manage_Members;
+export default Member_Aprove;

@@ -25,7 +25,7 @@ import { TbLogout } from 'react-icons/tb';
 import { CgProfile } from "react-icons/cg";
 import { RiAdminFill } from "react-icons/ri";
 import { GoProjectSymlink } from "react-icons/go";
-
+import { TiTick } from "react-icons/ti";
 
 
 
@@ -65,6 +65,8 @@ const DashBoardNavBar = (props) => {
 
                     { text: 'Manage Admin', icon: <MdOutlineManageAccounts className='text-2xl' />, link: '/dashboard/manage-admin' },
 
+                    { text: 'Aprove Admin', icon: <TiTick  className='text-2xl' />, link: '/dashboard/aprove-admin' },
+
                     // { text: 'Create Blog', icon: <PostAddIcon />, link: '/dashboard/create-blog' },
 
                     { text: 'Manage Blog', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-blog' },
@@ -101,6 +103,7 @@ const DashBoardNavBar = (props) => {
                 {[
                     // { text: 'Admin List', icon: <RiAdminFill className='text-2xl' />, link: '/dashboard/admin-list' },
                     { text: 'Member List', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
+                    { text: 'Aprove Member', icon: <TiTick className='text-2xl' />, link: '/dashboard/Aprove-members' },
                     { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },
                     { text: 'Sign Out', icon: <TbLogout className='text-2xl' />, link: '/dashboard/signout' },
                 ].map(({ text, icon, link }, index) => (

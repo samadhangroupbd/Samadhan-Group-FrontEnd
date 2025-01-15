@@ -23,6 +23,8 @@ import Manage_Members from "../../AllDashBoard/DashBoardComponent/Manage_Members
 import Member_Edit from "../../AllDashBoard/DashBoardComponent/Manage_Members_Component/Member_Edit/Member_Edit";
 import Manage_View_Member from "../../AllDashBoard/DashBoardComponent/Manage_Members_Component/Manage_View_Member/Manage_View_Member";
 import Create_Member from "../../AllDashBoard/DashBoardComponent/Create_Member/Create_Member"
+import Admin_Aprove from "../../AllDashBoard/DashBoardComponent/AprovalPage/Admin_Aprove/Admin_Aprove";
+import Member_Aprove from "../../AllDashBoard/DashBoardComponent/AprovalPage/Member_Aprove/Member_Aprove";
 
 
 
@@ -96,6 +98,10 @@ export const router = createBrowserRouter([
                 element:<Manage_Admin></Manage_Admin>
             },
             {
+                path: "aprove-admin",
+                element:<Admin_Aprove></Admin_Aprove>
+            },
+            {
                 path: "create-blog",
                 element:<Create_Blog></Create_Blog>
             },
@@ -124,6 +130,10 @@ export const router = createBrowserRouter([
             {
                 path: "manage-members",
                 element:<Manage_Members></Manage_Members>
+            },
+            {
+                path: "Aprove-members",
+                element:<Member_Aprove></Member_Aprove>
             },
             {
                 path: "/dashboard/edit-member/:id",

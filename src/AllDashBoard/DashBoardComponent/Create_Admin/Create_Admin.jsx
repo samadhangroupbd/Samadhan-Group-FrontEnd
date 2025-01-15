@@ -100,6 +100,7 @@ const Create_Admin = () => {
   const ward = e.target.ward.value;
   const member = e.target.member.value;
   const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
+  const aproval = "pending";
 
   // Get the current date and time
   const currentDateTime = new Date();
@@ -122,7 +123,7 @@ const Create_Admin = () => {
     fatherName,
     motherName,
     nidNumber,
-    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, profileId,
+    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, profileId,aproval,
     createDate,  // Store the formatted date
     createTime  // Store the formatted time
   };
@@ -167,7 +168,7 @@ const Create_Admin = () => {
         gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
         nidBirthImage: nidBirthImageUrl,
         member, 
-        profileId,
+        profileId,aproval,
         createDate,  // Include the createDate
         createTime  // Include the createTime
       };

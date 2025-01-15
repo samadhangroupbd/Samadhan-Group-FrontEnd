@@ -103,6 +103,7 @@ const Registration = () => {
   const transactionId = e.target.transactionId.value;
   const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
   const paymentPhoto = e.target.paymentPhoto.files[0];  // For file input, use `files[0]`
+  const aproval = "pending";
 
   // Get the current date and time
   const currentDateTime = new Date();
@@ -125,7 +126,7 @@ const Registration = () => {
     fatherName,
     motherName,
     nidNumber,
-    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId,
+    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId,aproval,
     createDate,  // Store the formatted date
     createTime  // Store the formatted time
   };

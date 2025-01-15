@@ -104,6 +104,7 @@ const Create_Member = () => {
   const paymentPhoto = e.target.paymentPhoto.files[0];  // For file input, use `files[0]`
   const payment = e.target.payment.value;
   const transactionId = e.target.transactionId.value;
+  const aproval = "pending";
 
   // Get the current date and time
   const currentDateTime = new Date();
@@ -126,7 +127,7 @@ const Create_Member = () => {
     fatherName,
     motherName,
     nidNumber,
-    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member,  payment, transactionId, paymentPhoto, profileId,
+    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member,  payment, transactionId, paymentPhoto, profileId,aproval,
     createDate,  // Store the formatted date
     createTime  // Store the formatted time
   };
@@ -179,7 +180,7 @@ const Create_Member = () => {
         member, 
         payment, transactionId,
         paymentPhoto: paymentPhotoUrl,
-        profileId,
+        profileId,aproval,
         createDate,  // Include the createDate
         createTime  // Include the createTime
       };
