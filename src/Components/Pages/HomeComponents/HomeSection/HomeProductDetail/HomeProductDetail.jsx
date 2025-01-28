@@ -6,13 +6,12 @@ const HomeProductDetail = () => {
   const [product, setProduct] = useState(null);
   const navigate = useNavigate(); // Hook to navigate to different pages
 
-  // Fetch product data from JSON based on the product ID
+  // Fetch product data from API based on the product ID
   useEffect(() => {
-    fetch("/product.json")
+    fetch(`http://localhost:5000/product/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        const productDetails = data.find((item) => item.id === parseInt(id)); // Find product by ID
-        setProduct(productDetails);
+        setProduct(data); // Assuming the data is the product object
       })
       .catch((error) => console.error("Error fetching product data:", error));
   }, [id]);
@@ -29,17 +28,22 @@ const HomeProductDetail = () => {
       >
         &larr; Back
       </button>
-      
-      <h2 className="text-4xl font-bold text-gray-900">{product.productName}</h2>
-      <img
-        src={product.productImage}
-        alt={product.productName}
-        className="w-full h-64 object-cover mt-6 mb-4"
-      />
-      <p className="text-lg text-gray-700 mb-4 text-justify">{product.productDescription}</p>
-      <span className="text-xl font-semibold text-cyan-700">
-        ৳{product.productPrice}
-      </span>
+
+      <div className="flex flex-col lg:flex-row items-center lg:items-start">
+        {/* Image Section */}
+        <img
+          src={product.image} // Dynamic image URL from the product data
+          alt={product.productName}
+          className="w-full lg:w-1/2 h-64 object-cover mb-4 lg:mb-0 lg:mr-6 rounded-2xl"
+        />
+
+        {/* Text Section */}
+        <div className="text-center lg:text-left">
+          <h2 className="text-4xl font-bold text-gray-900">{product.productName}</h2>
+          <p className="text-lg text-gray-700 mb-4 text-justify">{product.description}</p>
+          <span className="text-xl font-semibold text-cyan-700">{product.price}</span>
+        </div>
+      </div>
     </div>
   );
 };

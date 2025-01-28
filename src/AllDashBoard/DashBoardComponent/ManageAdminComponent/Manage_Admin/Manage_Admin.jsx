@@ -35,28 +35,33 @@ const Manage_Admin = () => {
   const [selectedRole, setSelectedRole] = useState("All"); // Selected role for filtering
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
+
+
   // Fetch data from the API
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         const response = await fetch("http://localhost:5000/signup");
         const data = await response.json();
-
-        // Filter the members based on the roles
-        const filteredMembers = data.filter((member) =>
+  
+        // Filter the members where the approval field is "approved"
+        const approvedMembers = data.filter((member) => member.aproval === "approved");
+  
+        // Filter based on roles if needed
+        const filteredMembers = approvedMembers.filter((member) =>
           ROLES_TO_FILTER.includes(member.member)
         );
-
-        // Set filtered members to state
+  
+        // Set the filtered and approved members to state
         setMembers(filteredMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
     };
-
+  
     fetchMembers();
   }, []);
-
+  
 
  // Update this in the delete handler
 const handleDelete = (id) => {
@@ -91,7 +96,7 @@ const handleDelete = (id) => {
     });
 
   // Pagination
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastMember = currentPage * itemsPerPage;
   const indexOfFirstMember = indexOfLastMember - itemsPerPage;

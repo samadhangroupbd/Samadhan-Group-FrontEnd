@@ -154,6 +154,10 @@ const Manage_View_Member = () => {
                   <Typography variant="h6" className="text-xl font-semibold text-gray-800">Creation Time:</Typography>
                   <Typography variant="small" className="text-lg text-gray-600">{admin.createTime}</Typography>
                 </div>
+                <div className="space-y-2">
+                  <Typography variant="h6" className="text-xl font-semibold text-gray-800">End Date:</Typography>
+                  <Typography variant="small" className="text-lg text-gray-600">{admin.endDate}</Typography>
+                </div>
               </div>
             </CardBody>
           </Card>

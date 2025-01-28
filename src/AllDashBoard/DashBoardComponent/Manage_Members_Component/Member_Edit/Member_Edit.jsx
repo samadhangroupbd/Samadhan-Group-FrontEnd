@@ -29,6 +29,8 @@ const Member_Edit = () => {
         member: adminData.member || "",
         payment: adminData.payment || "",
         transactionId: adminData.transactionId || "",
+        createDate: adminData.createDate || "",
+        endDate: adminData.endDate || "",
     });
 
     const handleInputChange = (e) => {
@@ -207,6 +209,22 @@ const Member_Edit = () => {
                             label="Transaction Id"
                             value={formData.transactionId}
                             name="transactionId"
+                            onChange={handleInputChange}
+                            className="mb-4"
+                        />
+                        <Input
+                            label="Create Date"
+                            value={formData.createDate}
+                            name="createDate"
+                            onChange={handleInputChange}
+                            className="mb-4"
+                            disabled
+                        />
+
+                        <Input
+                            label="End Date"
+                            value={formData.endDate}
+                            name="endDate"
                             onChange={handleInputChange}
                             className="mb-4"
                         />

@@ -8,6 +8,10 @@ import { AuthContext } from "../../../Components/Authentication/AuthProvider/Aut
 const Create_Member = () => {
   const { signUpUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate(); // For redirect after successful signup
+  const [membershipType, setMembershipType] = useState('');
+  const [createDate, setCreateDate] = useState(''); // Assuming you have this as part of your form
+  const [endDate, setEndDate] = useState(''); // This will hold the dynamically calculated endDate
+  const [membershipCost, setMembershipCost] = useState('');
 
   const [errors, setErrors] = useState({
     fullName: "",
@@ -18,11 +22,68 @@ const Create_Member = () => {
     password: "",
     confirmPassword: "",
     general: "",  // General error for form-wide issues
+    membershipType: "",
+    membershipCost: "",
+
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [nidBirthImagePreview, setNidBirthImagePreview] = useState(null);
   const [paymentPhotoPreview, setPaymentPhotoPreview] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state for the form submission
+
+
+  const calculateEndDate = (selectedMembershipType) => {
+    const currentDate = new Date(); // Get current date
+    let newEndDate = new Date(currentDate); // Make a copy to avoid modifying the original date
+
+    switch (selectedMembershipType) {
+      case 'monthly':
+        newEndDate.setMonth(newEndDate.getMonth() + 1);
+        break;
+      case 'half_yearly':
+        newEndDate.setMonth(newEndDate.getMonth() + 6);
+        break;
+      case 'yearly':
+        newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+        break;
+      case 'lifetime':
+        newEndDate.setFullYear(newEndDate.getFullYear() + 10);
+        break;
+      default:
+        break;
+    }
+
+    // Format the endDate in YYYY-MM-DD format
+    setEndDate(newEndDate.toISOString().split('T')[0]);
+  };
+
+  // Handle membership type change and calculate endDate
+  const handleMembershipTypeChange = (e) => {
+    const selectedType = e.target.value;
+    setMembershipType(selectedType);
+    calculateEndDate(selectedType);
+
+    // Set the membership cost based on membership type
+    switch (selectedType) {
+      case 'monthly':
+        setMembershipCost('100');
+        break;
+      case 'half_yearly':
+        setMembershipCost('500');
+        break;
+      case 'yearly':
+        setMembershipCost('900');
+        break;
+      case 'lifetime':
+        setMembershipCost('5000');
+        break;
+      default:
+        setMembershipCost('');
+    }
+  };
+
+
+
 
   // Basic form validation function
   const validateForm = (formData) => {
@@ -68,152 +129,168 @@ const Create_Member = () => {
       newErrors.image = "File must be an image";
     }
 
+    if (!formData.membershipType) {
+      newErrors.membershipType = "Membership Type is required";
+    }
+
+    if (!formData.membershipCost) {
+      newErrors.membershipCost = "Membership Cost is required";
+    }
+
     return newErrors;
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const profileId = "SG" + Math.floor(1000000000 + Math.random() * 9000000000); // Generates a random 10-digit number after "SG", making a total of 12 digits
+    const profileId = "SG" + Math.floor(1000000000 + Math.random() * 9000000000); // Generates a random 10-digit number after "SG", making a total of 12 digits
 
-  // Manually extract form values from e.target
-  const fullName = e.target.fullName.value;
-  const email = e.target.email.value;
-  const phoneNumber = e.target.phoneNumber.value;
-  const nationality = e.target.nationality.value;
-  const image = e.target.image.files[0];  // For file input, use `files[0]`
-  const password = e.target.password.value;
-  const confirmPassword = e.target.confirmPassword.value;
-  const role = "user";
-  const fatherName = e.target.fatherName.value;
-  const motherName = e.target.motherName.value;
-  const nidNumber = e.target.nidNumber.value;
-  const gender = e.target.gender.value;
-  const dateOfBirth = e.target.dateOfBirth.value;
-  const bloodGroup = e.target.bloodGroup.value;
-  const referenceId = e.target.referenceId.value;
-  const country = e.target.country.value;
-  const division = e.target.division.value;
-  const district = e.target.district.value;
-  const thana = e.target.thana.value;
-  const postOffice = e.target.postOffice.value;
-  const village = e.target.village.value;
-  const ward = e.target.ward.value;
-  const member = e.target.member.value;
-  const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
-  const paymentPhoto = e.target.paymentPhoto.files[0];  // For file input, use `files[0]`
-  const payment = e.target.payment.value;
-  const transactionId = e.target.transactionId.value;
-  const aproval = "pending";
+    // Manually extract form values from e.target
+    const fullName = e.target.fullName.value;
+    const email = e.target.email.value;
+    const phoneNumber = e.target.phoneNumber.value;
+    const nationality = e.target.nationality.value;
+    const image = e.target.image.files[0];  // For file input, use `files[0]`
+    const password = e.target.password.value;
+    const confirmPassword = e.target.confirmPassword.value;
+    const role = "user";
+    const fatherName = e.target.fatherName.value;
+    const motherName = e.target.motherName.value;
+    const nidNumber = e.target.nidNumber.value;
+    const gender = e.target.gender.value;
+    const dateOfBirth = e.target.dateOfBirth.value;
+    const bloodGroup = e.target.bloodGroup.value;
+    const referenceId = e.target.referenceId.value;
+    const country = e.target.country.value;
+    const division = e.target.division.value;
+    const district = e.target.district.value;
+    const thana = e.target.thana.value;
+    const postOffice = e.target.postOffice.value;
+    const village = e.target.village.value;
+    const ward = e.target.ward.value;
+    const member = e.target.member.value;
+    const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
+    const paymentPhoto = e.target.paymentPhoto.files[0];  // For file input, use `files[0]`
+    const payment = e.target.payment.value;
+    const transactionId = e.target.transactionId.value;
+    const aproval = "pending";
+    const membershipData = {
+      membershipType,
+      membershipCost,
+      endDate,
+    };
 
-  // Get the current date and time
-  const currentDateTime = new Date();
+    // Get the current date and time
+    const currentDateTime = new Date();
 
-  // Format the current date (MM/DD/YYYY)
-  const createDate = currentDateTime.toLocaleDateString();  // e.g., "12/31/2024"
+    // Format the current date (MM/DD/YYYY)
+    const createDate = currentDateTime.toLocaleDateString();  // e.g., "12/31/2024"
 
-  // Format the current time (hh:mm AM/PM)
-  const createTime = currentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });  // e.g., "03:45 PM"
+    // Format the current time (hh:mm AM/PM)
+    const createTime = currentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });  // e.g., "03:45 PM"
 
-  const formData = {
-    fullName,
-    email,
-    phoneNumber,
-    nationality,
-    role,
-    image,  // Store the image file here
-    password,
-    confirmPassword,
-    fatherName,
-    motherName,
-    nidNumber,
-    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member,  payment, transactionId, paymentPhoto, profileId,aproval,
-    createDate,  // Store the formatted date
-    createTime  // Store the formatted time
-  };
-
-  // Validate form before submission
-  const validationErrors = validateForm(formData);
-  setErrors(validationErrors);
-
-  // If there are no errors, proceed with signup
-  if (Object.keys(validationErrors).length === 0) {
-    try {
-      setLoading(true);  // Start loading state
-      setErrors({ ...errors, general: "" }); // Reset general errors before submission
-
-      // Upload Profile Image to ImgBB
-      const profileImageFormData = new FormData();
-      profileImageFormData.append('image', image);
-      const profileImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, profileImageFormData);
-      const profileImageUrl = profileImageResponse.data.data.display_url;
-
-      // Upload Nid/Birth Photo to ImgBB
-      const nidBirthImageFormData = new FormData();
-      nidBirthImageFormData.append('image', image);
-      const nidBirthImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, nidBirthImageFormData);
-      const nidBirthImageUrl = nidBirthImageResponse.data.data.display_url;
-
-     // Upload Payment Photo to ImgBB
-     const paymentPhotoFormData = new FormData();
-     paymentPhotoFormData.append('image', image);
-     const paymentPhotoResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, paymentPhotoFormData);
-     const paymentPhotoUrl = paymentPhotoResponse.data.data.display_url;
+    const formData = {
+      fullName,
+      email,
+      phoneNumber,
+      nationality,
+      role,
+      image,  // Store the image file here
+      password,
+      confirmPassword,
+      fatherName,
+      motherName,
+      nidNumber,
+      gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, aproval,
+      createDate,  // Store the formatted date
+      createTime,  // Store the formatted time
+      ...membershipData, // Include membership type and cost in form data
 
 
+    };
 
-      // Create the user data object with the image URL
-      const userData = {
-        fullName,
-        email,
-        phoneNumber,
-        nationality,
-        role,
-        image: profileImageUrl,  // Use the image URL from ImgBB
-        password,
-        confirmPassword,
-        fatherName,
-        motherName,
-        nidNumber,
-        gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
-        nidBirthImage: nidBirthImageUrl,
-        member, 
-        payment, transactionId,
-        paymentPhoto: paymentPhotoUrl,
-        profileId,aproval,
-        createDate,  // Include the createDate
-        createTime  // Include the createTime
-      };
+    // Validate form before submission
+    const validationErrors = validateForm(formData);
+    setErrors(validationErrors);
 
-      // Send data to backend to create a new user
-      const response = await axios.post('http://localhost:5000/signup', userData);
+    // If there are no errors, proceed with signup
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        setLoading(true);  // Start loading state
+        setErrors({ ...errors, general: "" }); // Reset general errors before submission
 
-      if (response.data.success) {
-        // Proceed with signup using the signUpUser function
-        const result = await signUpUser(email, password);
+        // Upload Profile Image to ImgBB
+        const profileImageFormData = new FormData();
+        profileImageFormData.append('image', image);
+        const profileImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, profileImageFormData);
+        const profileImageUrl = profileImageResponse.data.data.display_url;
 
-        // Once signUp is successful, set the user context
-        setUser(result.user);  // Assuming result contains the user object
+        // Upload Nid/Birth Photo to ImgBB
+        const nidBirthImageFormData = new FormData();
+        nidBirthImageFormData.append('image', image);
+        const nidBirthImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, nidBirthImageFormData);
+        const nidBirthImageUrl = nidBirthImageResponse.data.data.display_url;
 
+        // Upload Payment Photo to ImgBB
+        const paymentPhotoFormData = new FormData();
+        paymentPhotoFormData.append('image', image);
+        const paymentPhotoResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, paymentPhotoFormData);
+        const paymentPhotoUrl = paymentPhotoResponse.data.data.display_url;
+
+
+
+        // Create the user data object with the image URL
+        const userData = {
+          fullName,
+          email,
+          phoneNumber,
+          nationality,
+          role,
+          image: profileImageUrl,  // Use the image URL from ImgBB
+          password,
+          confirmPassword,
+          fatherName,
+          motherName,
+          nidNumber,
+          gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
+          nidBirthImage: nidBirthImageUrl,
+          member,
+          payment, transactionId,
+          paymentPhoto: paymentPhotoUrl,
+          profileId, aproval,
+          createDate,  // Include the createDate
+          createTime, ...membershipData, // Include membership type and cost in form datas  // Include the createTime
+        };
+
+        // Send data to backend to create a new user
+        const response = await axios.post('http://localhost:5000/signup', userData);
+
+        if (response.data.success) {
+          // Proceed with signup using the signUpUser function
+          const result = await signUpUser(email, password);
+
+          // Once signUp is successful, set the user context
+          setUser(result.user);  // Assuming result contains the user object
+
+          setLoading(false);  // Stop loading state
+          toast.success("Member Create successful!");  // Show success message
+          navigate("/dashboard/manage-members");  // Redirect to homepage/dashboard (or any other page)
+        }
+
+        // Reset form after successful signup
+        e.target.reset();
+        setImagePreview(null);  // Clear image preview
+        setNidBirthImagePreview(null);
+        setPaymentPhotoPreview(null);
         setLoading(false);  // Stop loading state
-        toast.success("Member Create successful!");  // Show success message
-        navigate("/dashboard/manage-members");  // Redirect to homepage/dashboard (or any other page)
+      } catch (error) {
+        setLoading(false);  // Stop loading state
+        setErrors({ ...errors, general: error.message });  // Set general error message if any
+        toast.error(error.message);  // Show error message in toast
+        navigate("/dashboard/manage-members");
       }
-
-      // Reset form after successful signup
-      e.target.reset();
-      setImagePreview(null);  // Clear image preview
-      setNidBirthImagePreview(null);
-      setPaymentPhotoPreview(null);
-      setLoading(false);  // Stop loading state
-    } catch (error) {
-      setLoading(false);  // Stop loading state
-      setErrors({ ...errors, general: error.message });  // Set general error message if any
-      toast.error(error.message);  // Show error message in toast
-      navigate("/dashboard/manage-members"); 
     }
-  }
-};
+  };
 
 
   // Handle file input for image preview
@@ -253,8 +330,8 @@ const Create_Member = () => {
 
 
 
-   // Handle file input for image preview
-   const handlePaymentPhotoChange = (e) => {
+  // Handle file input for image preview
+  const handlePaymentPhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) { // Limit to 2MB
@@ -538,7 +615,7 @@ const Create_Member = () => {
                 <option value="Upazila Organizer">Upazila Organizer</option>
                 <option value="Union Organizer">Union Organizer</option>
                 <option value="Ward Organizer">Ward Organizer</option>
- 
+
               </select>
               {errors.member && <span className="text-xs text-red-400">{errors.member}</span>}
             </div>
@@ -549,10 +626,10 @@ const Create_Member = () => {
 
 
 
-           {/* Trax ID, Payment prof */}
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Trax ID, Payment prof */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-           <div className="space-y-2">
+            <div className="space-y-2">
               <label htmlFor="payment" className="block text-sm text-gray-800">Payment Method</label>
               <select
                 id="payment"
@@ -570,36 +647,84 @@ const Create_Member = () => {
             </div>
 
 
-<div className="space-y-2">
-  <label htmlFor="transactionId" className="block text-sm text-gray-800">transaction ID/Serial No</label>
-  <input type="text" id="transactionId" name="transactionId" placeholder="Transaction ID / Serial No"
-    className={`w-full px-4 py-2 border rounded-md ${errors.transactionId ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-  {errors.transactionId && <span className="text-xs text-red-400">{errors.transactionId}</span>}
-</div>
+            <div className="space-y-2">
+              <label htmlFor="transactionId" className="block text-sm text-gray-800">transaction ID/Serial No</label>
+              <input type="text" id="transactionId" name="transactionId" placeholder="Transaction ID / Serial No"
+                className={`w-full px-4 py-2 border rounded-md ${errors.transactionId ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.transactionId && <span className="text-xs text-red-400">{errors.transactionId}</span>}
+            </div>
 
-{/* Payment Image Upload */}
-{<div className="space-y-2">
-  <label htmlFor="image" className="block text-sm text-gray-800">Payment Proof Image</label>
-  <input
-    type="file"
-    id="paymentPhoto"
-    name="paymentPhoto"
-    accept="image/*"
-    onChange={handlePaymentPhotoChange}
-    className={`w-full px-4 py-2 border rounded-md ${errors.paymentPhoto ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-  />
-  {errors.paymentPhoto && <span className="text-xs text-red-400">{errors.paymentPhoto}</span>}
-  {paymentPhotoPreview && (
-    <div className="mt-2">
-      <img src={paymentPhotoPreview} alt="Preview" className="w-24 h-24 object-cover rounded-md" />
-    </div>
-  )}
-</div>}
-
-
-</div>
+            {/* Payment Image Upload */}
+            {<div className="space-y-2">
+              <label htmlFor="image" className="block text-sm text-gray-800">Payment Proof Image</label>
+              <input
+                type="file"
+                id="paymentPhoto"
+                name="paymentPhoto"
+                accept="image/*"
+                onChange={handlePaymentPhotoChange}
+                className={`w-full px-4 py-2 border rounded-md ${errors.paymentPhoto ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+              />
+              {errors.paymentPhoto && <span className="text-xs text-red-400">{errors.paymentPhoto}</span>}
+              {paymentPhotoPreview && (
+                <div className="mt-2">
+                  <img src={paymentPhotoPreview} alt="Preview" className="w-24 h-24 object-cover rounded-md" />
+                </div>
+              )}
+            </div>}
 
 
+          </div>
+
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label htmlFor="membershipType" className="block text-sm text-gray-800">Membership Type</label>
+              <select
+                id="membershipType"
+                name="membershipType"
+                value={membershipType}
+                onChange={handleMembershipTypeChange}
+                className={`w-full px-4 py-2 border rounded-md ${errors.membershipType ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}>
+                <option value="" disabled>Select Membership Type</option>
+                <option value="monthly">Monthly</option>
+                <option value="half_yearly">Half Yearly</option>
+                <option value="yearly">Yearly</option>
+                <option value="lifetime">Life Time</option>
+              </select>
+              {errors.membershipType && <span className="text-xs text-red-400">{errors.membershipType}</span>}
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="membershipCost" className="block text-sm text-gray-800">Membership Cost</label>
+              <input
+                type="text"
+                id="membershipCost"
+                name="membershipCost"
+                value={membershipCost}
+                disabled
+                className={`w-full px-4 py-2 border rounded-md ${errors.membershipCost ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+              />
+              {errors.membershipCost && <span className="text-xs text-red-400">{errors.membershipCost}</span>}
+            </div>
+
+            {/* End Date */}
+          <div className="space-y-2">
+            <label htmlFor="endDate" className="block text-sm text-gray-800">End Date</label>
+            <input
+              type="date"
+              id="endDate"
+              name="endDate"
+              value={endDate}
+              disabled
+              className={`w-full px-4 py-2 border rounded-md ${errors.endDate ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+            />
+            {errors.endDate && <span className="text-xs text-red-400">{errors.endDate}</span>}
+          </div>
+
+          </div>
+
+          
 
 
           {/* Submit Button */}
@@ -611,7 +736,7 @@ const Create_Member = () => {
           </div>
         </form>
 
-       
+
 
 
 

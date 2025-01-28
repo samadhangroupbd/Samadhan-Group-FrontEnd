@@ -149,9 +149,9 @@ const navListItems = [
         to: "/",
     },
     {
-        label: "Projects",
+        label: "Products",
         icon: FaProjectDiagram,
-        to: "/projects",
+        to: "/products",
     },
     {
         label: "Samadhan Foundation",

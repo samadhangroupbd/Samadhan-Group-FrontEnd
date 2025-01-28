@@ -25,6 +25,13 @@ import Manage_View_Member from "../../AllDashBoard/DashBoardComponent/Manage_Mem
 import Create_Member from "../../AllDashBoard/DashBoardComponent/Create_Member/Create_Member"
 import Admin_Aprove from "../../AllDashBoard/DashBoardComponent/AprovalPage/Admin_Aprove/Admin_Aprove";
 import Member_Aprove from "../../AllDashBoard/DashBoardComponent/AprovalPage/Member_Aprove/Member_Aprove";
+import AllProducts from "../Pages/ProductsComponents/AllProducts/AllProducts";
+import Subscription_Manage from "../../AllDashBoard/DashBoardComponent/Subscription/Subscription_Manage/Subscription_Manage";
+import Manage_Product from "../Pages/ProductsComponents/Manage_Product/Manage_Product";
+import Create_Product from "../Pages/ProductsComponents/Create_Product/Create_Product";
+import Update_Product from "../Pages/ProductsComponents/Update_Product/Update_Product";
+
+
 
 
 
@@ -57,6 +64,12 @@ export const router = createBrowserRouter([
                 path: "/blog/:id",
                 element: <BlogDetails></BlogDetails>
             },
+
+            
+            {
+                path:"/products",
+                element:<AllProducts></AllProducts>
+            }
 
         ]
 
@@ -142,6 +155,22 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/member-details/:id",
                 element:<Manage_View_Member></Manage_View_Member>
+            },
+            {
+                path: "subscription",
+                element: <Subscription_Manage></Subscription_Manage>
+            },
+            {
+                path: "manage-product",
+                element:<Manage_Product></Manage_Product>   
+            },
+            {
+                path:"create-product",
+                element:<Create_Product></Create_Product>
+            },
+            {
+                path: "/dashboard/edit-product/:id",
+                element:<Update_Product></Update_Product>
             },
 
             

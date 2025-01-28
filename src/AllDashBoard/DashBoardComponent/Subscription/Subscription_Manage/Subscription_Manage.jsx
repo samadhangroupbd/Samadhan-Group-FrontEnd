@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { EyeSlashIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
   Card,
   CardHeader,
@@ -15,6 +14,7 @@ import {
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
@@ -32,39 +32,39 @@ const ROLES_TO_FILTER = [
 ];
 
 // Table headers
-const TABLE_HEAD = ["Member", "Position", "Profile ID", "Joining Date", "Actions"];
+const TABLE_HEAD = ["Member", "Position", "Profile ID", "Joining Date", "Availability", "Actions"];
 
-const Manage_Members = () => {
+const Subscription_Manage = () => {
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [selectedRole, setSelectedRole] = useState("All"); // Selected role for filtering
-  const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
+
   // Fetch data from the API
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         const response = await fetch("http://localhost:5000/signup");
         const data = await response.json();
-  
-        // Filter members for approval status and role
+
+        // Filter the members based on approval status (approved) and roles
         const filteredMembers = data
-          .filter((member) => member.aproval === "approved") // Filter only approved members
+          .filter((member) => member.aproval === "approved") // Filter for approved members
           .filter((member) => ROLES_TO_FILTER.includes(member.member)); // Filter by role
-  
+
         // Set filtered members to state
         setMembers(filteredMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
     };
-  
+
     fetchMembers();
   }, []);
-  
 
-  // Update this in the delete handler
-  const handleDelete = (id) => {
+
+   // Update this in the delete handler
+   const handleDelete = (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this Member?');
     if (!confirmDelete) return;
 
@@ -82,7 +82,6 @@ const Manage_Members = () => {
   };
 
 
-
   // Filter members based on search query and selected role
   const filteredMembers = members
     .filter(
@@ -95,18 +94,12 @@ const Manage_Members = () => {
       return member.member === selectedRole; // Show members for the selected role
     });
 
-  // Pagination
-  const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLastMember = currentPage * itemsPerPage;
-  const indexOfFirstMember = indexOfLastMember - itemsPerPage;
-  const currentMembers = filteredMembers.slice(indexOfFirstMember, indexOfLastMember);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  // Calculate availability based on endDate
+  const getAvailability = (endDate) => {
+    const currentDate = new Date();
+    const end = new Date(endDate);
+    return end >= currentDate ? "Available" : "Unavailable";
   };
-
-  const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
 
   return (
     <div>
@@ -120,13 +113,6 @@ const Manage_Members = () => {
               <Typography color="gray" className="mt-1 font-normal">
                 See information about all Members
               </Typography>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-              <Link to={'/dashboard/create-member'}>
-                <Button className="flex items-center gap-3" size="sm">
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Member
-                </Button>
-              </Link>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -148,17 +134,15 @@ const Manage_Members = () => {
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-2 sm:p-3 md:p-4 lg:p-4" // Adjust padding for responsiveness
+                className="w-full p-2 sm:p-3 md:p-4 lg:p-4"
                 labelProps={{
-                  className: "text-xs sm:text-sm lg:text-base", // Make label responsive
+                  className: "text-xs sm:text-sm lg:text-base",
                 }}
                 inputProps={{
-                  className: "flex items-center", // Align icon and text
+                  className: "flex items-center",
                 }}
               />
             </div>
-
-
           </div>
         </CardHeader>
 
@@ -180,10 +164,9 @@ const Manage_Members = () => {
               </tr>
             </thead>
             <tbody>
-              {currentMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate,endDate }, index) => {
-                  const isLast = index === currentMembers.length - 1;
-                  const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+              {filteredMembers.map(
+                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,endDate,profileId,createDate }, index) => {
+                  const classes = index === filteredMembers.length - 1 ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                   return (
                     <tr key={_id}>
@@ -216,36 +199,41 @@ const Manage_Members = () => {
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <div className="flex gap-2">
+                        <Typography variant="small" color="blue-gray" className="font-normal">
+                          {getAvailability(endDate)}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                      <div className="flex gap-2">
 
 
-                          <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,endDate } }}>
-                              <IconButton variant="text">
-                                <PencilIcon className="h-4 w-4" />
-                              </IconButton>
-                            </Link>
-                          </Tooltip>
+<Tooltip content="Edit">
+  <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,endDate,profileId,createDate  } }}>
+    <IconButton variant="text">
+      <PencilIcon className="h-4 w-4" />
+    </IconButton>
+  </Link>
+</Tooltip>
 
 
-                          <Link to={`/dashboard/member-details/${_id}`}>
-                            <Tooltip content="View">
-                              <IconButton variant="text">
-                                <FaEye className="h-4 w-4" />
-                              </IconButton>
-                            </Tooltip>
-                          </Link>
+<Link to={`/dashboard/member-details/${_id}`}>
+  <Tooltip content="View">
+    <IconButton variant="text">
+      <FaEye className="h-4 w-4" />
+    </IconButton>
+  </Tooltip>
+</Link>
 
 
 
-                          <Tooltip content="Delete">
-                            <IconButton variant="text">
-                              <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
-                            </IconButton>
-                          </Tooltip>
+<Tooltip content="Delete">
+  <IconButton variant="text">
+    <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
+  </IconButton>
+</Tooltip>
 
 
-                        </div>
+</div>
                       </td>
                     </tr>
                   );
@@ -254,24 +242,9 @@ const Manage_Members = () => {
             </tbody>
           </table>
         </CardBody>
-
-        {/* Pagination */}
-        <CardFooter className="flex flex-wrap items-center justify-between gap-4 border-t border-blue-gray-50 p-4">
-          <Typography variant="small" color="blue-gray" className="font-normal">
-            Page {currentPage} of {totalPages}
-          </Typography>
-          <div className="flex gap-2">
-            <Button variant="outlined" size="sm" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-              Previous
-            </Button>
-            <Button variant="outlined" size="sm" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-              Next
-            </Button>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );
 };
 
-export default Manage_Members;
+export default Subscription_Manage;

@@ -49,7 +49,7 @@ const Member_Aprove = () => {
 
         // Filter the members based on approval status (pending or missing) and roles
         const filteredMembers = data
-          .filter((member) => member.approval === "pending" || !member.approval) // Filter for pending or missing approval
+          .filter((member) => member.aproval === "pending" || !member.aproval) // Filter for pending or missing approval
           .filter((member) => ROLES_TO_FILTER.includes(member.member)); // Filter by role
 
         // Set filtered members to state
@@ -107,12 +107,12 @@ const Member_Aprove = () => {
           )
         );
         setLoading(false); // Stop loading after approval
-        navigate("/dashboard/manage-admin");  // Redirect to the same page after approval
+        navigate("/dashboard/manage-members");  // Redirect to the same page after approval
       })
       .catch((error) => {
         console.error('Error approving admin:', error);
         setLoading(false); // Stop loading in case of error
-        navigate("/dashboard/manage-admin");
+        navigate("/dashboard/manage-members");
       });
   };
   // Filter members based on search query and selected role
@@ -204,7 +204,7 @@ const Member_Aprove = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, member, profileId, createDate }, index) => {
+                ({  _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate,endDate}, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -254,7 +254,7 @@ const Member_Aprove = () => {
 
                           {/* Edit Button */}
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, member, profileId, createDate } }}>
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: {_id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate,endDate } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>

@@ -65,23 +65,16 @@ const DashBoardNavBar = (props) => {
 
                     { text: 'Manage Admin', icon: <MdOutlineManageAccounts className='text-2xl' />, link: '/dashboard/manage-admin' },
 
-                    { text: 'Aprove Admin', icon: <TiTick  className='text-2xl' />, link: '/dashboard/aprove-admin' },
-
-                    // { text: 'Create Blog', icon: <PostAddIcon />, link: '/dashboard/create-blog' },
+                    { text: 'Aprove Admin', icon: <TiTick className='text-2xl' />, link: '/dashboard/aprove-admin' },
 
                     { text: 'Manage Blog', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-blog' },
 
-                    { text: 'Project Post', icon: <GoProjectSymlink className='text-2xl' />, link: '/dashboard/project-post' },
+                    { text: 'Manage Product', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-product' },
 
-                    { text: 'Manage Project', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-project' },
+                    { text: 'Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/subscription' },
 
-                    { text: 'Create Product', icon: <PostAddIcon />, link: '/dashboard/create-product' },
-
-                    {
-                        text: 'Manage Product', icon: <MdOutlineManageSearch className='text-2xl' />
-                        , link: '/dashboard/manage-product'
-                    },
                     
+
                 ].map(({ text, icon, link }, index) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton selected={location.pathname === link}>

@@ -119,21 +119,21 @@ const Login = () => {
   return (
     // bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen
 
-<div className="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen">
+    <div className="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen">
 
-    <div>
-         {/* Welcome Text About Samadhan Group */}
-<p className="mb-8 pt-10 text-center text-white text-lg font-medium leading-relaxed md:text-2xl">
-  Welcome to <span className="text-indigo-200 font-bold">Samadhan Group!</span><br />
-  We are dedicated to providing innovative solutions to your business needs.<br />
-  Log in to access our services and features.
-</p>
+      <div>
+        {/* Welcome Text About Samadhan Group */}
+        <p className="mb-8 pt-10 text-center text-white text-lg font-medium leading-relaxed md:text-2xl">
+          Welcome to <span className="text-indigo-200 font-bold">Samadhan Group!</span><br />
+          We are dedicated to providing innovative solutions to your business needs.<br />
+          Log in to access our services and features.
+        </p>
 
-    </div>
+      </div>
 
 
-    <div className="flex flex-col md:flex-row ">
-        
+      <div className="flex flex-col md:flex-row ">
+
         {/* Image SVG */}
         <div className="w-full md:w-1/2 flex justify-center items-center p-8">
           <img
@@ -142,17 +142,17 @@ const Login = () => {
             className="max-w-full h-auto"
           />
         </div>
-  
+
         {/* Login form */}
         <div className="w-full md:w-1/2 flex justify-center items-center p-8">
           <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg text-gray-800">
             <h1 className="text-3xl font-semibold text-center text-gray-900">Login</h1>
-  
+
             {/* Display general error message */}
             {errors.general && (
               <div className="mb-4 text-red-400 text-center font-medium">{errors.general}</div>
             )}
-  
+
             <form onSubmit={handleSubmit} noValidate className="space-y-6">
               {/* Email */}
               <div className="space-y-2">
@@ -169,7 +169,7 @@ const Login = () => {
                 />
                 {errors.email && <span className="text-xs text-red-400">{errors.email}</span>}
               </div>
-  
+
               {/* Password */}
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium text-gray-600">
@@ -190,7 +190,7 @@ const Login = () => {
                   </button>
                 </div>
               </div>
-  
+
               {/* Submit Button */}
               <button
                 type="submit"
@@ -198,15 +198,14 @@ const Login = () => {
                 disabled={loading}
               >
                 {loading ? (
-                  <span className="animate-spin w-5 h-5 border-4 border-t-4 border-white rounded-full"></span>
-                ) : (
+                  "Log in...") : (
                   "Log in"
                 )}
               </button>
             </form>
-  
-            
-  
+
+
+
             <p className="text-xs text-center sm:px-6 text-gray-400">
               Don't have an account?{" "}
               <Link className="underline text-indigo-600 font-bold" to="/registration">
@@ -215,7 +214,7 @@ const Login = () => {
             </p>
           </div>
         </div>
-  
+
         {/* Modal for Forgot Password */}
         {showModal && (
           <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
@@ -254,9 +253,9 @@ const Login = () => {
         )}
       </div>
 
-</div>
+    </div>
 
-    
+
 
   );
 };

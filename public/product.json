@@ -15,10 +15,10 @@
   },
   {
     "id": 3,
-    "productName": "Sony WH-1000XM4",
-    "productDescription": "The Sony WH-1000XM4 headphones are a must-have for audiophiles and travelers alike. With industry-leading noise canceling technology, these headphones ensure a truly immersive listening experience, blocking out ambient noise in any environment. Enjoy exceptional sound quality, whether you're listening to music, podcasts, or watching movies. With up to 30 hours of battery life on a single charge, you can enjoy your entertainment throughout the day without interruptions. The comfortable over-ear design and touch-sensitive controls make these headphones perfect for long listening sessions.",
-    "productPrice": 349,
-    "productImage": "./trustBrand06.jpg"
+    "productName": "Salt",
+    "productDescription": "Salt is an essential mineral used in cooking and preserving food. It enhances the flavor of dishes and plays a crucial role in regulating the body's fluid balance. This high-quality salt is sourced from natural deposits, ensuring purity and a rich taste. Whether used in everyday meals or special recipes, Salt is a pantry staple for every kitchen.",
+    "productPrice": 40,
+    "productImage": "./salt.jpg"
   },
   {
     "id": 4,
