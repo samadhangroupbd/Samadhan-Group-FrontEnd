@@ -30,7 +30,9 @@ import Subscription_Manage from "../../AllDashBoard/DashBoardComponent/Subscript
 import Manage_Product from "../Pages/ProductsComponents/Manage_Product/Manage_Product";
 import Create_Product from "../Pages/ProductsComponents/Create_Product/Create_Product";
 import Update_Product from "../Pages/ProductsComponents/Update_Product/Update_Product";
-
+import SubscriptionRenew from "../Pages/SubscriptionRenew/SubscriptionRenew";
+import Edit_SubscriptionRenew from "../Pages/SubscriptionRenew/Edit_SubscriptionRenew";
+import Renew_Approve_Subscription from "../../AllDashBoard/DashBoardComponent/Subscription/Renew_Approve_Subscription/Renew_Approve_Subscription";
 
 
 
@@ -69,6 +71,14 @@ export const router = createBrowserRouter([
             {
                 path:"/products",
                 element:<AllProducts></AllProducts>
+            },
+            {
+                path:"/Renew-subscription",
+                element:<SubscriptionRenew></SubscriptionRenew>
+            },
+            {
+                path:"/Edit_SubscriptionRenew/:id",
+                element:<Edit_SubscriptionRenew></Edit_SubscriptionRenew>
             }
 
         ]
@@ -172,6 +182,10 @@ export const router = createBrowserRouter([
                 path: "/dashboard/edit-product/:id",
                 element:<Update_Product></Update_Product>
             },
+            {
+                path: "approve-renew-subscription",
+                element:<Renew_Approve_Subscription></Renew_Approve_Subscription>
+            }
 
             
         ]

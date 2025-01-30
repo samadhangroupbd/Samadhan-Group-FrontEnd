@@ -36,19 +36,14 @@ const profileMenuItems = [
         to: "/dashboard/statistic"
     },
     {
-        label: "Edit Profile",
+        label: "Profile",
         icon: Cog6ToothIcon,
         to: "/edit-profile",
     },
     {
-        label: "Inbox",
+        label: "Subscription Renew",
         icon: InboxArrowDownIcon,
-        to: "/inbox",
-    },
-    {
-        label: "Help",
-        icon: LifebuoyIcon,
-        to: "/help",
+        to: "/Renew-subscription",
     },
     {
         label: "Sign Out",

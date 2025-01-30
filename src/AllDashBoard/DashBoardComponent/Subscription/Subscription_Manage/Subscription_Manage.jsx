@@ -63,8 +63,8 @@ const Subscription_Manage = () => {
   }, []);
 
 
-   // Update this in the delete handler
-   const handleDelete = (id) => {
+  // Update this in the delete handler
+  const handleDelete = (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this Member?');
     if (!confirmDelete) return;
 
@@ -95,10 +95,16 @@ const Subscription_Manage = () => {
     });
 
   // Calculate availability based on endDate
-  const getAvailability = (endDate) => {
+  const getAvailability = (endDate, paymentApprove) => {
     const currentDate = new Date();
     const end = new Date(endDate);
-    return end >= currentDate ? "Available" : "Unavailable";
+
+    // Check if paymentApprove is "no" or the endDate is past
+    if (paymentApprove === "no" || end < currentDate) {
+      return "Unavailable";
+    }
+
+    return "Available";
   };
 
   return (
@@ -165,7 +171,7 @@ const Subscription_Manage = () => {
             </thead>
             <tbody>
               {filteredMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,endDate,profileId,createDate }, index) => {
+                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, endDate, paymentApprove, profileId, createDate }, index) => {
                   const classes = index === filteredMembers.length - 1 ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                   return (
@@ -200,40 +206,40 @@ const Subscription_Manage = () => {
                       </td>
                       <td className={classes}>
                         <Typography variant="small" color="blue-gray" className="font-normal">
-                          {getAvailability(endDate)}
+                          {getAvailability(endDate, paymentApprove)}
                         </Typography>
                       </td>
                       <td className={classes}>
-                      <div className="flex gap-2">
+                        <div className="flex gap-2">
 
 
-<Tooltip content="Edit">
-  <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,endDate,profileId,createDate  } }}>
-    <IconButton variant="text">
-      <PencilIcon className="h-4 w-4" />
-    </IconButton>
-  </Link>
-</Tooltip>
+                          <Tooltip content="Edit">
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, endDate, profileId, createDate } }}>
+                              <IconButton variant="text">
+                                <PencilIcon className="h-4 w-4" />
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
 
 
-<Link to={`/dashboard/member-details/${_id}`}>
-  <Tooltip content="View">
-    <IconButton variant="text">
-      <FaEye className="h-4 w-4" />
-    </IconButton>
-  </Tooltip>
-</Link>
+                          <Link to={`/dashboard/member-details/${_id}`}>
+                            <Tooltip content="View">
+                              <IconButton variant="text">
+                                <FaEye className="h-4 w-4" />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
 
 
 
-<Tooltip content="Delete">
-  <IconButton variant="text">
-    <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
-  </IconButton>
-</Tooltip>
+                          <Tooltip content="Delete">
+                            <IconButton variant="text">
+                              <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
+                            </IconButton>
+                          </Tooltip>
 
 
-</div>
+                        </div>
                       </td>
                     </tr>
                   );

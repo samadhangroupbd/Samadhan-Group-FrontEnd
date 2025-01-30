@@ -72,6 +72,8 @@ const DashBoardNavBar = (props) => {
                     { text: 'Manage Product', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-product' },
 
                     { text: 'Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/subscription' },
+                    { text: 'Approve Renew Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-renew-subscription' },
+                 
 
                     
 
