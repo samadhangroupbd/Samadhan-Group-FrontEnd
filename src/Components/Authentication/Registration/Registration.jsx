@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import { toast } from "react-toastify"; // Assuming you're using react-toastify for error messages
@@ -7,6 +7,37 @@ import axios from "axios";
 const Registration = () => {
   const { signUpUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate(); // For redirect after successful signup
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentDetails, setPaymentDetails] = useState("");
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [districts, setDistricts] = useState([]);
+  const [thanas, setThanas] = useState([]);
+  const [postOffices, setPostOffices] = useState([]);
+  const [wards, setWards] = useState([]);
+
+  const [selectedThana, setSelectedThana] = useState('');
+  const [selectedPostOffice, setSelectedPostOffice] = useState('');
+  const [selectedWard, setSelectedWard] = useState('');
+
+  const [customThana, setCustomThana] = useState('');
+  const [customPostOffice, setCustomPostOffice] = useState('');
+  const [customWard, setCustomWard] = useState('');
+
+  const [userData, setUserData] = useState(null);
+
+
+  const divisionDistricts = {
+    "Barisal": ["Barisal", "Bhola", "Barguna", "Jhalokathi", "Patuakhali", "Pirojpur"],
+    "Chattogram": ["Bandarban", "Brahmanbaria", "Chandpur", "Chittagong", "Comilla", "Cox's Bazar", "Feni", "Khagrachhari", "Lakshmipur", "Noakhali", "Rangamati"],
+    "Dhaka": ["Dhaka", "Gazipur", "Narsingdi", "Manikganj", "Munshiganj", "Narayanganj", "Mymensingh", "Sherpur", "Jamalpur", "Netrokona", "Kishoreganj", "Tangail", "Faridpur", "Maradipur", "Shariatpur", "Rajbari", "Gopalganj"],
+    "Khulna": ["Khulna", "Bagherhat", "Sathkhira", "Jessore", "Magura", "Jhenaidah", "Narail", "Kushtia", "Chuadanga", "Meherpur"],
+    "Rajshahi": ["Rajshahi", "Naogaon", "Natore", "Nawabganj", "Pabna", "Sirajganj", "Bogra", "Joypurhat"],
+    "Rangpur": ["Rangpur", "Gaibandha", "Nilphamari", "Kurigram", "Lalmonirhat", "Dinajpur", "Thakurgaon", "Panchagarh"],
+    "Sylhet": ["Sylhet", "Moulvibazar", "Habiganj", "Sunamganj"],
+    "Mymensingh": ["Tangail", "Jamalpur", "Mymensingh", "Kishoreganj", "Sherpur", "Netrokona"],
+  };
+
+
 
   const [errors, setErrors] = useState({
     fullName: "",
@@ -29,6 +60,45 @@ const Registration = () => {
   const [membershipType, setMembershipType] = useState('');
   const [endDate, setEndDate] = useState('');
   const [membershipCost, setMembershipCost] = useState('')
+
+
+  useEffect(() => {
+    // Fetch data from API or use hardcoded data
+    const fetchData = async () => {
+      const response = await axios.get('http://localhost:5000/signup');
+      const data = response.data;
+
+      // Assuming `data` contains arrays of thana, postOffice, and ward
+      const thanas = data.map(item => item.thana);
+      const postOffices = data.map(item => item.postOffice);
+      const wards = data.map(item => item.ward);
+
+      // Remove duplicates using Set
+      setThanas([...new Set(thanas)]);
+      setPostOffices([...new Set(postOffices)]);
+      setWards([...new Set(wards)]);
+    };
+
+    fetchData();
+  }, []);
+
+  // Handle Select Change for Thana, Post Office, and Ward
+  const handleSelectChange = (e, field) => {
+    const { value } = e.target;
+    if (field === 'thana') setSelectedThana(value);
+    else if (field === 'postOffice') setSelectedPostOffice(value);
+    else if (field === 'ward') setSelectedWard(value);
+  };
+
+  // Handle custom input change
+  const handleCustomChange = (e, field) => {
+    const { value } = e.target;
+    if (field === 'thana') setCustomThana(value);
+    else if (field === 'postOffice') setCustomPostOffice(value);
+    else if (field === 'ward') setCustomWard(value);
+  };
+
+
 
   // Function to calculate end date based on membership type
   const calculateEndDate = (selectedMembershipType) => {
@@ -163,10 +233,13 @@ const Registration = () => {
     const country = e.target.country.value;
     const division = e.target.division.value;
     const district = e.target.district.value;
-    const thana = e.target.thana.value;
-    const postOffice = e.target.postOffice.value;
+
+    // Handle thana, post office, and ward
+    const thana = selectedThana === 'Other' ? customThana : selectedThana;
+    const postOffice = selectedPostOffice === 'Other' ? customPostOffice : selectedPostOffice;
+    const ward = selectedWard === 'Other' ? customWard : selectedWard;
+
     const village = e.target.village.value;
-    const ward = e.target.ward.value;
     const member = e.target.member.value;
     const payment = e.target.payment.value;
     const transactionId = e.target.transactionId.value;
@@ -200,7 +273,24 @@ const Registration = () => {
       fatherName,
       motherName,
       nidNumber,
-      gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, aproval,
+      gender,
+      dateOfBirth,
+      bloodGroup,
+      referenceId,
+      country,
+      division,
+      district,
+      thana,
+      postOffice,
+      village,
+      ward,
+      nidBirthImage,
+      member,
+      payment,
+      transactionId,
+      paymentPhoto,
+      profileId,
+      aproval,
       createDate,  // Store the formatted date
       createTime,  // Store the formatted time
       ...membershipData, // Include membership type and cost in form data
@@ -224,13 +314,13 @@ const Registration = () => {
 
         // Upload Nid/Birth Photo to ImgBB
         const nidBirthImageFormData = new FormData();
-        nidBirthImageFormData.append('image', image);
+        nidBirthImageFormData.append('image', nidBirthImage);
         const nidBirthImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, nidBirthImageFormData);
         const nidBirthImageUrl = nidBirthImageResponse.data.data.display_url;
 
         // Upload Payment Photo to ImgBB
         const paymentPhotoFormData = new FormData();
-        paymentPhotoFormData.append('image', image);
+        paymentPhotoFormData.append('image', paymentPhoto);
         const paymentPhotoResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, paymentPhotoFormData);
         const paymentPhotoUrl = paymentPhotoResponse.data.data.display_url;
 
@@ -247,13 +337,26 @@ const Registration = () => {
           fatherName,
           motherName,
           nidNumber,
-          gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
+          gender,
+          dateOfBirth,
+          bloodGroup,
+          referenceId,
+          country,
+          division,
+          district,
+          thana,
+          postOffice,
+          village,
+          ward,
           nidBirthImage: nidBirthImageUrl,
-          member, payment, transactionId,
+          member,
+          payment,
+          transactionId,
           paymentPhoto: paymentPhotoUrl,
           profileId,
           createDate,  // Include the createDate
-          createTime, ...membershipData, // Include membership type and cost in form data
+          createTime,
+          ...membershipData, // Include membership type and cost in form data
         };
 
         // Send data to backend to create a new user
@@ -268,7 +371,7 @@ const Registration = () => {
 
           setLoading(false);  // Stop loading state
           toast.success("Signup successful!");  // Show success message
-          navigate("/login");  // Redirect to homepage/dashboard (or any other page)
+          navigate("/");  // Redirect to homepage/dashboard (or any other page)
         }
 
         // Reset form after successful signup
@@ -277,10 +380,12 @@ const Registration = () => {
         setNidBirthImagePreview(null);
         setPaymentPhotoPreview(null);
         setLoading(false);  // Stop loading state
+        navigate("/");  // Redirect to homepage/dashboard (or any other page)
       } catch (error) {
         setLoading(false);  // Stop loading state
         setErrors({ ...errors, general: error.message });  // Set general error message if any
         toast.error(error.message);  // Show error message in toast
+        navigate("/");  // Redirect to homepage/dashboard (or any other page)
       }
     }
   };
@@ -341,12 +446,39 @@ const Registration = () => {
   };
 
 
+  const handlePaymentMethodChange = (event) => {
+    const selectedPaymentMethod = event.target.value;
+    setPaymentMethod(selectedPaymentMethod);
+
+    // Conditionally setting the payment details based on the selected payment method
+    if (selectedPaymentMethod === "Bkash") {
+      setPaymentDetails("+08801690017320");
+    } else if (selectedPaymentMethod === "Nagad") {
+      setPaymentDetails("+0880192345678");
+    } else if (selectedPaymentMethod === "Rocket") {
+      setPaymentDetails("+0880176543210");
+    } else if (selectedPaymentMethod === "Bank") {
+      setPaymentDetails("AC-3827483274235832478 (branch: Motijheel, Dhaka)");
+    } else if (selectedPaymentMethod === "Cash") {
+      setPaymentDetails("Please pay in cash at the nearest office.");
+    } else {
+      setPaymentDetails(""); // Clear payment details if no valid option is selected
+    }
+  };
+
+  const handleDivisionChange = (e) => {
+    const division = e.target.value;
+    setSelectedDivision(division);
+    setDistricts(divisionDistricts[division] || []);
+  };
+
+
 
 
 
   return (
     <div className="flex justify-center  items-center min-h-screen bg-gradient-to-r from-blue-700 via-indigo-800 to-purple-900">
-      <div className="w-full max-w-5xl p-8 my-10 rounded-lg shadow-lg bg-gray-100 text-gray-800">
+      <div className="w-full max-w-7xl p-8 my-5 rounded-lg shadow-lg bg-gray-100 text-gray-800">
         <h2 className="mb-4 text-3xl font-semibold text-center text-gray-800">Create Your Account</h2>
 
         {/* Display General Error */}
@@ -473,38 +605,156 @@ const Registration = () => {
             </div>
           </div>
 
-          {/* Division, District, Thana */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Division, District*/}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
+              {/* Division Dropdown */}
+
               <label htmlFor="division" className="block text-sm text-gray-800">Division</label>
-              <input type="text" id="division" name="division" placeholder="Division"
-                className={`w-full px-4 py-2 border rounded-md ${errors.division ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.division && <span className="text-xs text-red-400">{errors.division}</span>}
+              <select
+                id="division"
+                name="division"
+                value={selectedDivision}
+                onChange={handleDivisionChange}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="" disabled>Select Division</option>
+                {Object.keys(divisionDistricts).map((division) => (
+                  <option key={division} value={division}>
+                    {division}
+                  </option>
+                ))}
+              </select>
+              {errors.division && <span className="text-xs text-red-500 mt-1">{errors.division}</span>}
+
+
             </div>
 
+
+            {/* District Dropdown */}
             <div className="space-y-2">
               <label htmlFor="district" className="block text-sm text-gray-800">District</label>
-              <input type="text" id="district" name="district" placeholder="District"
-                className={`w-full px-4 py-2 border rounded-md ${errors.district ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.district && <span className="text-xs text-red-400">{errors.district}</span>}
+              <select
+                id="district"
+                name="district"
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="" disabled>Select District</option>
+                {districts.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              </select>
+              {errors.district && <span className="text-xs text-red-500 mt-1">{errors.district}</span>}
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="thana" className="block text-sm text-gray-800">Thana</label>
-              <input type="text" id="thana" name="thana" placeholder="Thana"
-                className={`w-full px-4 py-2 border rounded-md ${errors.thana ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.thana && <span className="text-xs text-red-400">{errors.thana}</span>}
-            </div>
+
           </div>
 
           {/* Post Office, Village */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+            <div className="space-y-2">
+              <label htmlFor="thana" className="block text-sm text-gray-800">Thana</label>
+              <select
+                id="thana"
+                name="thana"
+                value={selectedThana}
+                onChange={(e) => handleSelectChange(e, 'thana')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Thana</option>
+                {thanas.map((thana, index) => (
+                  <option key={index} value={thana}>{thana}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedThana === 'Other' && (
+                <input
+                  type="text"
+                  value={customThana}
+                  onChange={(e) => handleCustomChange(e, 'thana')}
+                  placeholder="Enter custom Thana"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
+
+
             <div className="space-y-2">
               <label htmlFor="postOffice" className="block text-sm text-gray-800">Post Office</label>
-              <input type="text" id="postOffice" name="postOffice" placeholder="Post Office"
-                className={`w-full px-4 py-2 border rounded-md ${errors.postOffice ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.postOffice && <span className="text-xs text-red-400">{errors.postOffice}</span>}
+              <select
+                id="postOffice"
+                name="postOffice"
+                value={selectedPostOffice}
+                onChange={(e) => handleSelectChange(e, 'postOffice')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Post Office</option>
+                {postOffices.map((postOffice, index) => (
+                  <option key={index} value={postOffice}>{postOffice}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedPostOffice === 'Other' && (
+                <input
+                  type="text"
+                  value={customPostOffice}
+                  onChange={(e) => handleCustomChange(e, 'postOffice')}
+                  placeholder="Enter custom Post Office"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
             </div>
+
+
+            <div className="space-y-2">
+              <label htmlFor="ward" className="block text-sm text-gray-800">Ward</label>
+              <select
+                id="ward"
+                name="ward"
+                value={selectedWard}
+                onChange={(e) => handleSelectChange(e, 'ward')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Ward</option>
+                {/* {wards.map((ward, index) => (
+                  <option key={index} value={ward}>{ward}</option>
+                ))} */}
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+                <option value="">4</option>
+                <option value="">5</option>
+                <option value="">6</option>
+                <option value="">7</option>
+                <option value="">8</option>
+                <option value="">9</option>
+                <option value="">10</option>
+                <option value="">11</option>
+                <option value="">12</option>
+                <option value="">13</option>
+                <option value="">14</option>
+                <option value="">15</option>
+                
+                
+                <option value="Other">Other</option>
+              </select>
+              {selectedWard === 'Other' && (
+                <input
+                  type="text"
+                  value={customWard}
+                  onChange={(e) => handleCustomChange(e, 'ward')}
+                  placeholder="Enter custom Ward"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
+
+
+            
+
 
             <div className="space-y-2">
               <label htmlFor="village" className="block text-sm text-gray-800">Village</label>
@@ -513,14 +763,9 @@ const Registration = () => {
               {errors.village && <span className="text-xs text-red-400">{errors.village}</span>}
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="ward" className="block text-sm text-gray-800">Ward No</label>
-              <input type="number" id="ward" name="ward" placeholder="Ward No"
-                className={`w-full px-4 py-2 border rounded-md ${errors.village ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.ward && <span className="text-xs text-red-400">{errors.ward}</span>}
-            </div>
-
           </div>
+
+
 
           {/* Profile Image Upload */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -620,25 +865,39 @@ const Registration = () => {
             </div>
 
 
+            {/* Payment Method */}
             <div className="space-y-2">
               <label htmlFor="payment" className="block text-sm text-gray-800">Payment Method</label>
               <select
                 id="payment"
                 name="payment"
-                className={`w-full px-4 py-2 border rounded-md ${errors.payment ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}>
-                <option value="" disabled >Select Payment Method</option>
+                value={paymentMethod}
+                onChange={handlePaymentMethodChange}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="" disabled>Select Payment Method</option>
                 <option value="Bkash">Bkash</option>
                 <option value="Nagad">Nagad</option>
                 <option value="Rocket">Rocket</option>
                 <option value="Bank">Bank</option>
                 <option value="Cash">Cash</option>
-
               </select>
-              {errors.payment && <span className="text-xs text-red-400">{errors.payment}</span>}
             </div>
+
 
           </div>
 
+
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+            {/* Display Payment Details */}
+            {paymentDetails && (
+              <div className="mt-4 p-4 bg-gray-200 rounded-md text-center">
+                <p className="text-sm text-gray-800">
+                  <strong>Payment Information:</strong> {paymentDetails}
+                </p>
+              </div>
+            )}
+          </div>
 
 
           {/* Trax ID, Payment prof */}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { AuthContext } from "../AuthProvider/AuthProvider";
 import { AuthContext } from "../../../Components/Authentication/AuthProvider/AuthProvider";
@@ -8,6 +8,35 @@ import axios from "axios";
 const Create_Admin = () => {
   const { signUpUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate(); // For redirect after successful signup
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [districts, setDistricts] = useState([]);
+  const [thanas, setThanas] = useState([]);
+  const [postOffices, setPostOffices] = useState([]);
+  const [wards, setWards] = useState([]);
+
+  const [selectedThana, setSelectedThana] = useState('');
+  const [selectedPostOffice, setSelectedPostOffice] = useState('');
+  const [selectedWard, setSelectedWard] = useState('');
+
+  const [customThana, setCustomThana] = useState('');
+  const [customPostOffice, setCustomPostOffice] = useState('');
+  const [customWard, setCustomWard] = useState('');
+
+  const [userData, setUserData] = useState(null);
+
+
+  const divisionDistricts = {
+    "Barisal": ["Barisal", "Bhola", "Barguna", "Jhalokathi", "Patuakhali", "Pirojpur"],
+    "Chattogram": ["Bandarban", "Brahmanbaria", "Chandpur", "Chittagong", "Comilla", "Cox's Bazar", "Feni", "Khagrachhari", "Lakshmipur", "Noakhali", "Rangamati"],
+    "Dhaka": ["Dhaka", "Gazipur", "Narsingdi", "Manikganj", "Munshiganj", "Narayanganj", "Mymensingh", "Sherpur", "Jamalpur", "Netrokona", "Kishoreganj", "Tangail", "Faridpur", "Maradipur", "Shariatpur", "Rajbari", "Gopalganj"],
+    "Khulna": ["Khulna", "Bagherhat", "Sathkhira", "Jessore", "Magura", "Jhenaidah", "Narail", "Kushtia", "Chuadanga", "Meherpur"],
+    "Rajshahi": ["Rajshahi", "Naogaon", "Natore", "Nawabganj", "Pabna", "Sirajganj", "Bogra", "Joypurhat"],
+    "Rangpur": ["Rangpur", "Gaibandha", "Nilphamari", "Kurigram", "Lalmonirhat", "Dinajpur", "Thakurgaon", "Panchagarh"],
+    "Sylhet": ["Sylhet", "Moulvibazar", "Habiganj", "Sunamganj"],
+    "Mymensingh": ["Tangail", "Jamalpur", "Mymensingh", "Kishoreganj", "Sherpur", "Netrokona"],
+  };
+
+
 
   const [errors, setErrors] = useState({
     fullName: "",
@@ -70,136 +99,180 @@ const Create_Admin = () => {
     return newErrors;
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  const profileId = "SG" + Math.floor(1000000000 + Math.random() * 9000000000); // Generates a random 10-digit number after "SG", making a total of 12 digits
 
-  // Manually extract form values from e.target
-  const fullName = e.target.fullName.value;
-  const email = e.target.email.value;
-  const phoneNumber = e.target.phoneNumber.value;
-  const nationality = e.target.nationality.value;
-  const image = e.target.image.files[0];  // For file input, use `files[0]`
-  const password = e.target.password.value;
-  const confirmPassword = e.target.confirmPassword.value;
-  const role = "user";
-  const fatherName = e.target.fatherName.value;
-  const motherName = e.target.motherName.value;
-  const nidNumber = e.target.nidNumber.value;
-  const gender = e.target.gender.value;
-  const dateOfBirth = e.target.dateOfBirth.value;
-  const bloodGroup = e.target.bloodGroup.value;
-  const referenceId = e.target.referenceId.value;
-  const country = e.target.country.value;
-  const division = e.target.division.value;
-  const district = e.target.district.value;
-  const thana = e.target.thana.value;
-  const postOffice = e.target.postOffice.value;
-  const village = e.target.village.value;
-  const ward = e.target.ward.value;
-  const member = e.target.member.value;
-  const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
-  const aproval = "pending";
+  useEffect(() => {
+    // Fetch data from API or use hardcoded data
+    const fetchData = async () => {
+      const response = await axios.get('http://localhost:5000/signup');
+      const data = response.data;
 
-  // Get the current date and time
-  const currentDateTime = new Date();
+      // Assuming `data` contains arrays of thana, postOffice, and ward
+      const thanas = data.map(item => item.thana);
+      const postOffices = data.map(item => item.postOffice);
+      const wards = data.map(item => item.ward);
 
-  // Format the current date (MM/DD/YYYY)
-  const createDate = currentDateTime.toLocaleDateString();  // e.g., "12/31/2024"
+      // Remove duplicates using Set
+      setThanas([...new Set(thanas)]);
+      setPostOffices([...new Set(postOffices)]);
+      setWards([...new Set(wards)]);
+    };
 
-  // Format the current time (hh:mm AM/PM)
-  const createTime = currentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });  // e.g., "03:45 PM"
+    fetchData();
+  }, []);
 
-  const formData = {
-    fullName,
-    email,
-    phoneNumber,
-    nationality,
-    role,
-    image,  // Store the image file here
-    password,
-    confirmPassword,
-    fatherName,
-    motherName,
-    nidNumber,
-    gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, profileId,aproval,
-    createDate,  // Store the formatted date
-    createTime  // Store the formatted time
+  // Handle Select Change for Thana, Post Office, and Ward
+  const handleSelectChange = (e, field) => {
+    const { value } = e.target;
+    if (field === 'thana') setSelectedThana(value);
+    else if (field === 'postOffice') setSelectedPostOffice(value);
+    else if (field === 'ward') setSelectedWard(value);
   };
 
-  // Validate form before submission
-  const validationErrors = validateForm(formData);
-  setErrors(validationErrors);
+  // Handle custom input change
+  const handleCustomChange = (e, field) => {
+    const { value } = e.target;
+    if (field === 'thana') setCustomThana(value);
+    else if (field === 'postOffice') setCustomPostOffice(value);
+    else if (field === 'ward') setCustomWard(value);
+  };
 
-  // If there are no errors, proceed with signup
-  if (Object.keys(validationErrors).length === 0) {
-    try {
-      setLoading(true);  // Start loading state
-      setErrors({ ...errors, general: "" }); // Reset general errors before submission
 
-      // Upload Profile Image to ImgBB
-      const profileImageFormData = new FormData();
-      profileImageFormData.append('image', image);
-      const profileImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, profileImageFormData);
-      const profileImageUrl = profileImageResponse.data.data.display_url;
 
-      // Upload Nid/Birth Photo to ImgBB
-      const nidBirthImageFormData = new FormData();
-      nidBirthImageFormData.append('image', image);
-      const nidBirthImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, nidBirthImageFormData);
-      const nidBirthImageUrl = nidBirthImageResponse.data.data.display_url;
 
-     
 
-      // Create the user data object with the image URL
-      const userData = {
-        fullName,
-        email,
-        phoneNumber,
-        nationality,
-        role,
-        image: profileImageUrl,  // Use the image URL from ImgBB
-        password,
-        confirmPassword,
-        fatherName,
-        motherName,
-        nidNumber,
-        gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
-        nidBirthImage: nidBirthImageUrl,
-        member, 
-        profileId,aproval,
-        createDate,  // Include the createDate
-        createTime  // Include the createTime
-      };
 
-      // Send data to backend to create a new user
-      const response = await axios.post('http://localhost:5000/signup', userData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      if (response.data.success) {
-        // Proceed with signup using the signUpUser function
-        const result = await signUpUser(email, password);
+    const profileId = "SG" + Math.floor(1000000000 + Math.random() * 9000000000); // Generates a random 10-digit number after "SG", making a total of 12 digits
 
-        // Once signUp is successful, set the user context
-        setUser(result.user);  // Assuming result contains the user object
+    // Manually extract form values from e.target
+    const fullName = e.target.fullName.value;
+    const email = e.target.email.value;
+    const phoneNumber = e.target.phoneNumber.value;
+    const nationality = e.target.nationality.value;
+    const image = e.target.image.files[0];  // For file input, use `files[0]`
+    const password = e.target.password.value;
+    const confirmPassword = e.target.confirmPassword.value;
+    const role = "user";
+    const fatherName = e.target.fatherName.value;
+    const motherName = e.target.motherName.value;
+    const nidNumber = e.target.nidNumber.value;
+    const gender = e.target.gender.value;
+    const dateOfBirth = e.target.dateOfBirth.value;
+    const bloodGroup = e.target.bloodGroup.value;
+    const referenceId = e.target.referenceId.value;
+    const country = e.target.country.value;
+    const division = e.target.division.value;
+    const district = e.target.district.value;
+    // Handle thana, post office, and ward
+    const thana = selectedThana === 'Other' ? customThana : selectedThana;
+    const postOffice = selectedPostOffice === 'Other' ? customPostOffice : selectedPostOffice;
+    const ward = selectedWard === 'Other' ? customWard : selectedWard;
+    const village = e.target.village.value;
+    const member = e.target.member.value;
+    const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
+    const aproval = "pending";
 
+    // Get the current date and time
+    const currentDateTime = new Date();
+
+    // Format the current date (MM/DD/YYYY)
+    const createDate = currentDateTime.toLocaleDateString();  // e.g., "12/31/2024"
+
+    // Format the current time (hh:mm AM/PM)
+    const createTime = currentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });  // e.g., "03:45 PM"
+
+    const formData = {
+      fullName,
+      email,
+      phoneNumber,
+      nationality,
+      role,
+      image,  // Store the image file here
+      password,
+      confirmPassword,
+      fatherName,
+      motherName,
+      nidNumber,
+      gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, profileId, aproval,
+      createDate,  // Store the formatted date
+      createTime  // Store the formatted time
+    };
+
+    // Validate form before submission
+    const validationErrors = validateForm(formData);
+    setErrors(validationErrors);
+
+    // If there are no errors, proceed with signup
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        setLoading(true);  // Start loading state
+        setErrors({ ...errors, general: "" }); // Reset general errors before submission
+
+        // Upload Profile Image to ImgBB
+        const profileImageFormData = new FormData();
+        profileImageFormData.append('image', image);
+        const profileImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, profileImageFormData);
+        const profileImageUrl = profileImageResponse.data.data.display_url;
+
+        // Upload Nid/Birth Photo to ImgBB
+        const nidBirthImageFormData = new FormData();
+        nidBirthImageFormData.append('image', image);
+        const nidBirthImageResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`, nidBirthImageFormData);
+        const nidBirthImageUrl = nidBirthImageResponse.data.data.display_url;
+
+
+
+        // Create the user data object with the image URL
+        const userData = {
+          fullName,
+          email,
+          phoneNumber,
+          nationality,
+          role,
+          image: profileImageUrl,  // Use the image URL from ImgBB
+          password,
+          confirmPassword,
+          fatherName,
+          motherName,
+          nidNumber,
+          gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
+          nidBirthImage: nidBirthImageUrl,
+          member,
+          profileId, aproval,
+          createDate,  // Include the createDate
+          createTime  // Include the createTime
+        };
+
+        // Send data to backend to create a new user
+        const response = await axios.post('http://localhost:5000/signup', userData);
+
+        if (response.data.success) {
+          // Proceed with signup using the signUpUser function
+          const result = await signUpUser(email, password);
+
+          // Once signUp is successful, set the user context
+          setUser(result.user);  // Assuming result contains the user object
+
+          setLoading(false);  // Stop loading state
+          toast.success("Admin Create successful!");  // Show success message
+          navigate("/manage-admin");  // Redirect to homepage/dashboard (or any other page)
+        }
+
+        // Reset form after successful signup
+        e.target.reset();
+        setImagePreview(null);  // Clear image preview
+        setNidBirthImagePreview(null);
         setLoading(false);  // Stop loading state
-        toast.success("Admin Create successful!");  // Show success message
-        navigate("/manage-admin");  // Redirect to homepage/dashboard (or any other page)
+      } catch (error) {
+        setLoading(false);  // Stop loading state
+        setErrors({ ...errors, general: error.message });  // Set general error message if any
+        toast.error(error.message);  // Show error message in toast
       }
-
-      // Reset form after successful signup
-      e.target.reset();
-      setImagePreview(null);  // Clear image preview
-      setNidBirthImagePreview(null);
-      setLoading(false);  // Stop loading state
-    } catch (error) {
-      setLoading(false);  // Stop loading state
-      setErrors({ ...errors, general: error.message });  // Set general error message if any
-      toast.error(error.message);  // Show error message in toast
     }
-  }
-};
+  };
 
 
   // Handle file input for image preview
@@ -238,6 +311,12 @@ const Create_Admin = () => {
   };
 
 
+
+  const handleDivisionChange = (e) => {
+    const division = e.target.value;
+    setSelectedDivision(division);
+    setDistricts(divisionDistricts[division] || []);
+  };
 
 
 
@@ -372,51 +451,163 @@ const Create_Admin = () => {
             </div>
           </div>
 
-          {/* Division, District, Thana */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Division, District*/}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
+              {/* Division Dropdown */}
+
               <label htmlFor="division" className="block text-sm text-gray-800">Division</label>
-              <input type="text" id="division" name="division" placeholder="Division"
-                className={`w-full px-4 py-2 border rounded-md ${errors.division ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.division && <span className="text-xs text-red-400">{errors.division}</span>}
+              <select
+                id="division"
+                name="division"
+                value={selectedDivision}
+                onChange={handleDivisionChange}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="" disabled>Select Division</option>
+                {Object.keys(divisionDistricts).map((division) => (
+                  <option key={division} value={division}>
+                    {division}
+                  </option>
+                ))}
+              </select>
+              {errors.division && <span className="text-xs text-red-500 mt-1">{errors.division}</span>}
+
+
             </div>
 
+
+            {/* District Dropdown */}
             <div className="space-y-2">
               <label htmlFor="district" className="block text-sm text-gray-800">District</label>
-              <input type="text" id="district" name="district" placeholder="District"
-                className={`w-full px-4 py-2 border rounded-md ${errors.district ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.district && <span className="text-xs text-red-400">{errors.district}</span>}
+              <select
+                id="district"
+                name="district"
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="" disabled>Select District</option>
+                {districts.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              </select>
+              {errors.district && <span className="text-xs text-red-500 mt-1">{errors.district}</span>}
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="thana" className="block text-sm text-gray-800">Thana</label>
-              <input type="text" id="thana" name="thana" placeholder="Thana"
-                className={`w-full px-4 py-2 border rounded-md ${errors.thana ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.thana && <span className="text-xs text-red-400">{errors.thana}</span>}
-            </div>
+
           </div>
 
           {/* Post Office, Village */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+            <div className="space-y-2">
+              <label htmlFor="thana" className="block text-sm text-gray-800">Thana</label>
+              <select
+                id="thana"
+                name="thana"
+                value={selectedThana}
+                onChange={(e) => handleSelectChange(e, 'thana')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Thana</option>
+                {thanas.map((thana, index) => (
+                  <option key={index} value={thana}>{thana}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedThana === 'Other' && (
+                <input
+                  type="text"
+                  value={customThana}
+                  onChange={(e) => handleCustomChange(e, 'thana')}
+                  placeholder="Enter custom Thana"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
+
+
             <div className="space-y-2">
               <label htmlFor="postOffice" className="block text-sm text-gray-800">Post Office</label>
-              <input type="text" id="postOffice" name="postOffice" placeholder="Post Office"
-                className={`w-full px-4 py-2 border rounded-md ${errors.postOffice ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.postOffice && <span className="text-xs text-red-400">{errors.postOffice}</span>}
+              <select
+                id="postOffice"
+                name="postOffice"
+                value={selectedPostOffice}
+                onChange={(e) => handleSelectChange(e, 'postOffice')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Post Office</option>
+                {postOffices.map((postOffice, index) => (
+                  <option key={index} value={postOffice}>{postOffice}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedPostOffice === 'Other' && (
+                <input
+                  type="text"
+                  value={customPostOffice}
+                  onChange={(e) => handleCustomChange(e, 'postOffice')}
+                  placeholder="Enter custom Post Office"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
             </div>
+
+
+            <div className="space-y-2">
+              <label htmlFor="ward" className="block text-sm text-gray-800">Ward</label>
+              <select
+                id="ward"
+                name="ward"
+                value={selectedWard}
+                onChange={(e) => handleSelectChange(e, 'ward')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Ward</option>
+                {/* {wards.map((ward, index) => (
+                  <option key={index} value={ward}>{ward}</option>
+                ))} */}
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+                <option value="">4</option>
+                <option value="">5</option>
+                <option value="">6</option>
+                <option value="">7</option>
+                <option value="">8</option>
+                <option value="">9</option>
+                <option value="">10</option>
+                <option value="">11</option>
+                <option value="">12</option>
+                <option value="">13</option>
+                <option value="">14</option>
+                <option value="">15</option>
+                
+                
+                <option value="Other">Other</option>
+              </select>
+              {selectedWard === 'Other' && (
+                <input
+                  type="text"
+                  value={customWard}
+                  onChange={(e) => handleCustomChange(e, 'ward')}
+                  placeholder="Enter custom Ward"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
+
+
+
+            
+
 
             <div className="space-y-2">
               <label htmlFor="village" className="block text-sm text-gray-800">Village</label>
               <input type="text" id="village" name="village" placeholder="Village"
                 className={`w-full px-4 py-2 border rounded-md ${errors.village ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.village && <span className="text-xs text-red-400">{errors.village}</span>}
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="ward" className="block text-sm text-gray-800">Ward No</label>
-              <input type="number" id="ward" name="ward" placeholder="Ward No"
-                className={`w-full px-4 py-2 border rounded-md ${errors.village ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.ward && <span className="text-xs text-red-400">{errors.ward}</span>}
             </div>
 
           </div>
@@ -499,7 +690,7 @@ const Create_Admin = () => {
                 <option value="Upazila Admin">Upazila Admin</option>
                 <option value="Union Admin">Union Admin</option>
                 <option value="Ward Admin">Ward Admin</option>
- 
+
               </select>
               {errors.member && <span className="text-xs text-red-400">{errors.member}</span>}
             </div>
@@ -519,7 +710,7 @@ const Create_Admin = () => {
           </div>
         </form>
 
-       
+
 
 
 
