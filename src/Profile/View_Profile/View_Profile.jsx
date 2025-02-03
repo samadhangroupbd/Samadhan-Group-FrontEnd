@@ -15,16 +15,16 @@ import {
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { AuthContext } from "../../Authentication/AuthProvider/AuthProvider";
 import axios from "axios";
 import { HandThumbUpIcon } from "@heroicons/react/24/outline";
+import { AuthContext } from "../../Components/Authentication/AuthProvider/AuthProvider";
 
 
 
 // Table headers
-const TABLE_HEAD = ["Member", "Position", "Profile ID", "Joining Date", "Availability", "Actions"];
+const TABLE_HEAD = ["Member", "Position", "Profile ID", "Joining Date","Actions"];
 
-const SubscriptionRenew = () => {
+const View_Profile = () => {
     const { user, logOut } = useContext(AuthContext);
     const [members, setMembers] = useState([]);
     const [searchQuery, setSearchQuery] = useState(""); // Search query state
@@ -168,16 +168,12 @@ const SubscriptionRenew = () => {
                                                     {createDate}
                                                 </Typography>
                                             </td>
-                                            <td className={classes}>
-                                                <Typography variant="small" color="blue-gray" className="font-normal">
-                                                    {getAvailability(endDate, paymentApprove)}
-                                                </Typography>
-                                            </td>
+                                           
 
                                             <td className={classes}>
                                                 <div className="flex gap-2">
                                                     <Tooltip content="Edit">
-                                                        <Link to={`/Edit_SubscriptionRenew/${_id}`} state={{
+                                                        <Link to={`/edit-profile/${_id}`} state={{
                                                             adminData: {
                                                                 _id, fullName, email, phoneNumber, nationality, role, image, password, fatherName,
                                                                 motherName,
@@ -191,7 +187,7 @@ const SubscriptionRenew = () => {
                                                                 className="flex items-center justify-center px-4 py-2 rounded-md text-white hover:bg-blue-600 transition-all duration-200"
                                                             >
 
-                                                                Renew Subscription
+                                                                Edit Profile
                                                             </Button>
 
                                                         </Link>
@@ -225,4 +221,4 @@ const SubscriptionRenew = () => {
     );
 };
 
-export default SubscriptionRenew;
+export default View_Profile;

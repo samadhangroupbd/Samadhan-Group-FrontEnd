@@ -171,7 +171,10 @@ const Subscription_Manage = () => {
             </thead>
             <tbody>
               {filteredMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, endDate, paymentApprove, profileId, createDate }, index) => {
+                ({ _id, fullName, email, phoneNumber, nationality, role, image, password, fatherName,
+                  motherName,
+                  nidNumber,
+                  gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, general, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, aproval, createDate, createTime, endDate, paymentApprove, membershipType, membershipCost }, index) => {
                   const classes = index === filteredMembers.length - 1 ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                   return (
@@ -214,7 +217,14 @@ const Subscription_Manage = () => {
 
 
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, endDate, profileId, createDate } }}>
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{
+                              adminData: {
+                                _id, fullName, email, phoneNumber, nationality, role, image, password, fatherName,
+                                motherName,
+                                nidNumber,
+                                gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, general, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, aproval, createDate, createTime, endDate, paymentApprove, membershipType, membershipCost
+                              }
+                            }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>

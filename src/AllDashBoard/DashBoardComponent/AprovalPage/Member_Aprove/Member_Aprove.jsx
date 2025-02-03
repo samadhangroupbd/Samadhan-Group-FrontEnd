@@ -204,7 +204,7 @@ const Member_Aprove = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({  _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate,endDate}, index) => {
+                ({   _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost }, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -254,7 +254,7 @@ const Member_Aprove = () => {
 
                           {/* Edit Button */}
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: {_id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate,endDate } }}>
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost  } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>

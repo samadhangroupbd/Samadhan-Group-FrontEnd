@@ -33,6 +33,10 @@ import Update_Product from "../Pages/ProductsComponents/Update_Product/Update_Pr
 import SubscriptionRenew from "../Pages/SubscriptionRenew/SubscriptionRenew";
 import Edit_SubscriptionRenew from "../Pages/SubscriptionRenew/Edit_SubscriptionRenew";
 import Renew_Approve_Subscription from "../../AllDashBoard/DashBoardComponent/Subscription/Renew_Approve_Subscription/Renew_Approve_Subscription";
+import View_Renew_Subscription from "../../AllDashBoard/DashBoardComponent/Subscription/Renew_Approve_Subscription/View_Renew_Subscription";
+import Profile from "../../Profile/Profile/Profile";
+import View_Profile from "../../Profile/View_Profile/View_Profile";
+import Edit_Profile from "../../Profile/Edit_Profile/Edit_Profile";
 
 
 
@@ -79,7 +83,24 @@ export const router = createBrowserRouter([
             {
                 path:"/Edit_SubscriptionRenew/:id",
                 element:<Edit_SubscriptionRenew></Edit_SubscriptionRenew>
+            },
+            {
+                path: "/renew-view/:id",
+                element: <View_Renew_Subscription></View_Renew_Subscription>
+            },
+            {
+                path:"/profile",
+                element:<Profile></Profile>
+            },
+            {
+                path:"/edit-profile",
+                element:<View_Profile></View_Profile>
+            },
+            {
+                path: "/edit-profile/:id",
+                element:<Edit_Profile></Edit_Profile>
             }
+
 
         ]
 
@@ -185,8 +206,8 @@ export const router = createBrowserRouter([
             {
                 path: "approve-renew-subscription",
                 element:<Renew_Approve_Subscription></Renew_Approve_Subscription>
-            }
-
+            },
+          
             
         ]
     }

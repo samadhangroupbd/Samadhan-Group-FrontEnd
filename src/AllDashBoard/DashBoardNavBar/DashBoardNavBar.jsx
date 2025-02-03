@@ -99,7 +99,7 @@ const DashBoardNavBar = (props) => {
                     // { text: 'Admin List', icon: <RiAdminFill className='text-2xl' />, link: '/dashboard/admin-list' },
                     { text: 'Member List', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
                     { text: 'Aprove Member', icon: <TiTick className='text-2xl' />, link: '/dashboard/Aprove-members' },
-                    { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },
+                    // { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },
                     { text: 'Sign Out', icon: <TbLogout className='text-2xl' />, link: '/dashboard/signout' },
                 ].map(({ text, icon, link }, index) => (
                     <ListItem key={text} disablePadding>

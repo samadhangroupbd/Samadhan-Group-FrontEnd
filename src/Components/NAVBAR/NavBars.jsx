@@ -38,7 +38,7 @@ const profileMenuItems = [
     {
         label: "Profile",
         icon: Cog6ToothIcon,
-        to: "/edit-profile",
+        to: "/profile",
     },
     {
         label: "Subscription Renew",
@@ -174,11 +174,11 @@ function NavList() {
     return (
         <ul className="mt-2 mb-4 flex flex-col gap-3 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center justify-center">
             {navListItems.map(({ label, icon, to }, key) => (
-                <Typography key={label} as="a" variant="small" color="gray" className="font-medium text-white">
+                <Typography key={label} as="a" variant="small" color="red" className="font-medium text-white">
                     <Link to={to}>
                         <MenuItem className="flex items-center gap-3 lg:rounded-lg px-3 py-2 hover:bg-indigo-500 transition-all ease-in-out duration-200">
                             {React.createElement(icon, { className: "h-[20px] w-[20px] text-indigo-300" })}{" "}
-                            <span className="text-gray-300 font-medium">{label}</span>
+                            <span className=" font-medium">{label}</span>
                         </MenuItem>
                     </Link>
                 </Typography>

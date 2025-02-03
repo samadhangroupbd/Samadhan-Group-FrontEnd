@@ -1,0 +1,4 @@
+/* Assuming you're using Tailwind, you can add this custom CSS in your global styles */
+.navlink-active {
+    background-color: transparent !important; /* Removes background color */
+}
