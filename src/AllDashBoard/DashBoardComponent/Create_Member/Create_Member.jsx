@@ -12,38 +12,44 @@ const Create_Member = () => {
   const [createDate, setCreateDate] = useState(''); // Assuming you have this as part of your form
   const [endDate, setEndDate] = useState(''); // This will hold the dynamically calculated endDate
   const [membershipCost, setMembershipCost] = useState('');
-   const [paymentMethod, setPaymentMethod] = useState("");
-    const [paymentDetails, setPaymentDetails] = useState("");
-    const [selectedDivision, setSelectedDivision] = useState("");
-    const [districts, setDistricts] = useState([]);
-    const [thanas, setThanas] = useState([]);
-    const [postOffices, setPostOffices] = useState([]);
-    const [wards, setWards] = useState([]);
-  
-    const [selectedThana, setSelectedThana] = useState('');
-    const [selectedPostOffice, setSelectedPostOffice] = useState('');
-    const [selectedWard, setSelectedWard] = useState('');
-  
-    const [customThana, setCustomThana] = useState('');
-    const [customPostOffice, setCustomPostOffice] = useState('');
-    const [customWard, setCustomWard] = useState('');
-  
-    const [userData, setUserData] = useState(null);
-  
-  
-    const divisionDistricts = {
-      "Barisal": ["Barisal", "Bhola", "Barguna", "Jhalokathi", "Patuakhali", "Pirojpur"],
-      "Chattogram": ["Bandarban", "Brahmanbaria", "Chandpur", "Chittagong", "Comilla", "Cox's Bazar", "Feni", "Khagrachhari", "Lakshmipur", "Noakhali", "Rangamati"],
-      "Dhaka": ["Dhaka", "Gazipur", "Narsingdi", "Manikganj", "Munshiganj", "Narayanganj", "Mymensingh", "Sherpur", "Jamalpur", "Netrokona", "Kishoreganj", "Tangail", "Faridpur", "Maradipur", "Shariatpur", "Rajbari", "Gopalganj"],
-      "Khulna": ["Khulna", "Bagherhat", "Sathkhira", "Jessore", "Magura", "Jhenaidah", "Narail", "Kushtia", "Chuadanga", "Meherpur"],
-      "Rajshahi": ["Rajshahi", "Naogaon", "Natore", "Nawabganj", "Pabna", "Sirajganj", "Bogra", "Joypurhat"],
-      "Rangpur": ["Rangpur", "Gaibandha", "Nilphamari", "Kurigram", "Lalmonirhat", "Dinajpur", "Thakurgaon", "Panchagarh"],
-      "Sylhet": ["Sylhet", "Moulvibazar", "Habiganj", "Sunamganj"],
-      "Mymensingh": ["Tangail", "Jamalpur", "Mymensingh", "Kishoreganj", "Sherpur", "Netrokona"],
-    };
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentDetails, setPaymentDetails] = useState("");
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [districts, setDistricts] = useState([]);
+  const [thanas, setThanas] = useState([]);
+  const [paurasabhaWards, setpaurasabhaWards] = useState([]);
+  const [cityCorporationWards, setcityCorporationWards] = useState([]);
+  const [postOffices, setPostOffices] = useState([]);
+  const [wards, setWards] = useState([]);
+
+  const [selectedThana, setSelectedThana] = useState('');
+  const [selectedpaurasabhaWards, setSelectedpaurasabhaWards] = useState('');
+  const [selectedcityCorporationWards, setSelectedcityCorporationWards] = useState('');
+  const [selectedPostOffice, setSelectedPostOffice] = useState('');
+  const [selectedWard, setSelectedWard] = useState('');
+
+  const [customThana, setCustomThana] = useState('');
+  const [custompaurasabhaWards, setCustompaurasabhaWards] = useState('');
+  const [customselectedcityCorporationWards, setCustomselectedcityCorporationWards] = useState('');
+  const [customPostOffice, setCustomPostOffice] = useState('');
+  const [customWard, setCustomWard] = useState('');
+
+  const [userData, setUserData] = useState(null);
 
 
-    
+  const divisionDistricts = {
+    "Barisal": ["Barisal", "Bhola", "Barguna", "Jhalokathi", "Patuakhali", "Pirojpur"],
+    "Chattogram": ["Bandarban", "Brahmanbaria", "Chandpur", "Chittagong", "Comilla", "Cox's Bazar", "Feni", "Khagrachhari", "Lakshmipur", "Noakhali", "Rangamati"],
+    "Dhaka": ["Dhaka", "Gazipur", "Narsingdi", "Manikganj", "Munshiganj", "Narayanganj", "Mymensingh", "Sherpur", "Jamalpur", "Netrokona", "Kishoreganj", "Tangail", "Faridpur", "Maradipur", "Shariatpur", "Rajbari", "Gopalganj"],
+    "Khulna": ["Khulna", "Bagherhat", "Sathkhira", "Jessore", "Magura", "Jhenaidah", "Narail", "Kushtia", "Chuadanga", "Meherpur"],
+    "Rajshahi": ["Rajshahi", "Naogaon", "Natore", "Nawabganj", "Pabna", "Sirajganj", "Bogra", "Joypurhat"],
+    "Rangpur": ["Rangpur", "Gaibandha", "Nilphamari", "Kurigram", "Lalmonirhat", "Dinajpur", "Thakurgaon", "Panchagarh"],
+    "Sylhet": ["Sylhet", "Moulvibazar", "Habiganj", "Sunamganj"],
+    "Mymensingh": ["Tangail", "Jamalpur", "Mymensingh", "Kishoreganj", "Sherpur", "Netrokona"],
+  };
+
+
+
   useEffect(() => {
     // Fetch data from API or use hardcoded data
     const fetchData = async () => {
@@ -54,11 +60,15 @@ const Create_Member = () => {
       const thanas = data.map(item => item.thana);
       const postOffices = data.map(item => item.postOffice);
       const wards = data.map(item => item.ward);
+      const selectedcityCorporationWards = data.map(item => item.cityCorporationWard);
+      const selectedpaurasabhaWards = data.map(item => item.paurasabhaWard);
 
       // Remove duplicates using Set
       setThanas([...new Set(thanas)]);
       setPostOffices([...new Set(postOffices)]);
       setWards([...new Set(wards)]);
+      setcityCorporationWards([...new Set(selectedcityCorporationWards)]);
+      setpaurasabhaWards([...new Set(selectedpaurasabhaWards)]);
     };
 
     fetchData();
@@ -70,6 +80,8 @@ const Create_Member = () => {
     if (field === 'thana') setSelectedThana(value);
     else if (field === 'postOffice') setSelectedPostOffice(value);
     else if (field === 'ward') setSelectedWard(value);
+    else if (field === 'cityCorporationWard') setSelectedcityCorporationWards(value);
+    else if (field === 'paurasabhaWard') setSelectedpaurasabhaWards(value);
   };
 
   // Handle custom input change
@@ -78,6 +90,8 @@ const Create_Member = () => {
     if (field === 'thana') setCustomThana(value);
     else if (field === 'postOffice') setCustomPostOffice(value);
     else if (field === 'ward') setCustomWard(value);
+    else if (field === 'cityCorporationWard') setCustomselectedcityCorporationWards(value);
+    else if (field === 'paurasabhaWard') setCustompaurasabhaWards(value);
   };
 
 
@@ -138,7 +152,7 @@ const Create_Member = () => {
     // Set the membership cost based on membership type
     switch (selectedType) {
       case 'monthly':
-        setMembershipCost('100');
+        setMembershipCost('300');
         break;
       case 'half_yearly':
         setMembershipCost('500');
@@ -246,12 +260,22 @@ const Create_Member = () => {
     const paymentPhoto = e.target.paymentPhoto.files[0];  // For file input, use `files[0]`
     const payment = e.target.payment.value;
     const transactionId = e.target.transactionId.value;
+    const cityCorporationWard = selectedcityCorporationWards === 'Other' ? customselectedcityCorporationWards : selectedcityCorporationWards;
+    const paurasabhaWard = selectedpaurasabhaWards === 'Other' ? custompaurasabhaWards : selectedpaurasabhaWards;
     const aproval = "pending";
     const membershipData = {
       membershipType,
       membershipCost,
       endDate,
     };
+
+    const organizerFee = e.target.organizerFee.value;
+    const registrationFee = e.target.registrationFee.value;
+    const idCardFee = e.target.idCardFee.value;
+    const serviceFee = e.target.serviceFee.value;
+    const totalAmount = e.target.totalAmount.value;
+
+
 
     // Get the current date and time
     const currentDateTime = new Date();
@@ -274,10 +298,11 @@ const Create_Member = () => {
       fatherName,
       motherName,
       nidNumber,
-      gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, aproval,
+      gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, cityCorporationWard, paurasabhaWard, paymentPhoto, profileId, aproval,
       createDate,  // Store the formatted date
       createTime,  // Store the formatted time
       ...membershipData, // Include membership type and cost in form data
+      organizerFee, registrationFee, idCardFee, serviceFee, totalAmount,
 
 
     };
@@ -325,12 +350,13 @@ const Create_Member = () => {
           fatherName,
           motherName,
           nidNumber,
-          gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
+          gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, cityCorporationWard, paurasabhaWard,
           nidBirthImage: nidBirthImageUrl,
           member,
           payment, transactionId,
           paymentPhoto: paymentPhotoUrl,
           profileId, aproval,
+          organizerFee, registrationFee, idCardFee, serviceFee, totalAmount,
           createDate,  // Include the createDate
           createTime, ...membershipData, // Include membership type and cost in form datas  // Include the createTime
         };
@@ -542,7 +568,7 @@ const Create_Member = () => {
           </div>
 
           {/* Blood Group, Reference ID, Country */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label htmlFor="bloodGroup" className="block text-sm text-gray-800">Blood Group</label>
               <select
@@ -570,17 +596,22 @@ const Create_Member = () => {
               {errors.referenceId && <span className="text-xs text-red-400">{errors.referenceId}</span>}
             </div>
 
+
+
+
+          </div>
+
+
+          {/* Division, District*/}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
             <div className="space-y-2">
               <label htmlFor="country" className="block text-sm text-gray-800">Country</label>
-              <input type="text" id="country" name="country" placeholder="Country"
+              <input type="text" id="country" name="country" placeholder="Country" value={"Bangladesh"} readOnly
                 className={`w-full px-4 py-2 border rounded-md ${errors.country ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.country && <span className="text-xs text-red-400">{errors.country}</span>}
             </div>
-          </div>
 
-          
-          {/* Division, District*/}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               {/* Division Dropdown */}
 
@@ -623,8 +654,74 @@ const Create_Member = () => {
               {errors.district && <span className="text-xs text-red-500 mt-1">{errors.district}</span>}
             </div>
 
+          </div>
+
+
+
+
+          {/* City corporation ward, paurasabha ward */}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+            <div className="space-y-2">
+              <label htmlFor="cityCorporationWard" className="block text-sm text-gray-800">City Corporation Ward</label>
+              <select
+                id="cityCorporationWard"
+                name="cityCorporationWard"
+                value={selectedcityCorporationWards}
+                onChange={(e) => handleSelectChange(e, 'cityCorporationWard')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select City Corporation Ward</option>
+                {cityCorporationWards.map((cityCorporationWard, index) => (
+                  <option key={index} value={cityCorporationWard}>{cityCorporationWard}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedcityCorporationWards === 'Other' && (
+                <input
+                  type="text"
+                  value={customselectedcityCorporationWards}
+                  onChange={(e) => handleCustomChange(e, 'cityCorporationWard')}
+                  placeholder="Enter custom City Corporation Ward"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
+
+
+
+
+            <div className="space-y-2">
+              <label htmlFor="paurasabhaWard" className="block text-sm text-gray-800">Paurasabha Ward</label>
+              <select
+                id="paurasabhaWard"
+                name="paurasabhaWard"
+                value={selectedpaurasabhaWards}
+                onChange={(e) => handleSelectChange(e, 'paurasabhaWard')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Paurasabha Ward</option>
+                {paurasabhaWards.map((paurasabhaWard, index) => (
+                  <option key={index} value={paurasabhaWard}>{paurasabhaWard}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedpaurasabhaWards === 'Other' && (
+                <input
+                  type="text"
+                  value={custompaurasabhaWards}
+                  onChange={(e) => handleCustomChange(e, 'paurasabhaWard')}
+                  placeholder="Enter custom Paurasabha Ward"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
 
           </div>
+
+
 
           {/* Post Office, Village */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -711,8 +808,8 @@ const Create_Member = () => {
                 <option value="">13</option>
                 <option value="">14</option>
                 <option value="">15</option>
-                
-                
+
+
                 <option value="Other">Other</option>
               </select>
               {selectedWard === 'Other' && (
@@ -728,7 +825,7 @@ const Create_Member = () => {
 
 
 
-            
+
 
 
             <div className="space-y-2">
@@ -790,7 +887,7 @@ const Create_Member = () => {
 
 
           {/* Member,Password and Confirm Password */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label htmlFor="password" className="block text-sm text-gray-800">Password</label>
               <input type="password" id="password" name="password" placeholder="Password"
@@ -804,6 +901,17 @@ const Create_Member = () => {
                 className={`w-full px-4 py-2 border rounded-md ${errors.confirmPassword ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.confirmPassword && <span className="text-xs text-red-400">{errors.confirmPassword}</span>}
             </div>
+
+
+
+          </div>
+
+
+
+
+
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
 
 
             <div className="space-y-2">
@@ -820,6 +928,8 @@ const Create_Member = () => {
                 <option value="Divisional Organizer">Divisional Organizer</option>
                 <option value="District Chief Organizer">District Chief Organizer</option>
                 <option value="District Organizer">District Organizer</option>
+                <option value="City Corporation Ward Organizer">City Corporation Ward Organizer</option>
+                <option value="Paurasabha Ward Organizer">Paurasabha Ward Organizer</option>
                 <option value="Upazila Chief Organizer">Upazila Chief Organizer</option>
                 <option value="Upazila Organizer">Upazila Organizer</option>
                 <option value="Union Organizer">Union Organizer</option>
@@ -828,10 +938,109 @@ const Create_Member = () => {
               </select>
               {errors.member && <span className="text-xs text-red-400">{errors.member}</span>}
             </div>
+            <div className="space-y-2">
+              <label htmlFor="organizerFee" className="block text-sm text-gray-800">Organizer Fee</label>
+              <input type="number" id="organizerFee" name="organizerFee" placeholder="organizer Fee" value={30000} readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.organizerFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.organizerFee && <span className="text-xs text-red-400">{errors.organizerFee}</span>}
+            </div>
+
+
+            <div className="space-y-2">
+              <label htmlFor="membershipType" className="block text-sm text-gray-800">Subscription Time</label>
+              <select
+                id="membershipType"
+                name="membershipType"
+                value={membershipType}
+                onChange={handleMembershipTypeChange}
+                className={`w-full px-4 py-2 border rounded-md ${errors.membershipType ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}>
+                <option value="" disabled>Select Subscription Time</option>
+                <option value="monthly">Monthly</option>
+                {/* <option value="half_yearly">Half Yearly</option>
+                <option value="yearly">Yearly</option>
+                <option value="lifetime">Life Time</option> */}
+              </select>
+              {errors.membershipType && <span className="text-xs text-red-400">{errors.membershipType}</span>}
+            </div>
+
+
+            <div className="space-y-2">
+              <label htmlFor="membershipCost" className="block text-sm text-gray-800">Subscription Fee</label>
+              <input
+                type="text"
+                id="membershipCost"
+                name="membershipCost"
+                value={membershipCost}
+                disabled
+                className={`w-full px-4 py-2 border rounded-md ${errors.membershipCost ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+              />
+              {errors.membershipCost && <span className="text-xs text-red-400">{errors.membershipCost}</span>}
+            </div>
 
 
 
           </div>
+
+
+
+          {/* {registration fee, Id card fee, Service charge fee} */}
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+
+            <div className="space-y-2">
+              <label htmlFor="registrationFee" className="block text-sm text-gray-800">Registration Fee</label>
+              <input type="number" id="registrationFee" name="registrationFee" placeholder="Registration Fee" value={100} readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.registrationFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.registrationFee && <span className="text-xs text-red-400">{errors.registrationFee}</span>}
+            </div>
+
+
+
+            <div className="space-y-2">
+              <label htmlFor="idCardFee" className="block text-sm text-gray-800">ID Card Fee</label>
+              <input type="number" id="idCardFee" name="idCardFee" placeholder="Id Card Fee" value={250} readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.idCardFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.idCardFee && <span className="text-xs text-red-400">{errors.idCardFee}</span>}
+            </div>
+
+
+
+
+            <div className="space-y-2">
+              <label htmlFor="serviceFee" className="block text-sm text-gray-800">Service Fee</label>
+              <input type="number" id="serviceFee" name="serviceFee" placeholder="service Fee" value={200} readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.serviceFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.serviceFee && <span className="text-xs text-red-400">{errors.serviceFee}</span>}
+            </div>
+
+
+            {/* total amount  */}
+
+            <div className="space-y-2">
+              <label htmlFor="totalAmount" className="block text-sm text-gray-800">Total Amount</label>
+              <input type="number" id="totalAmount" name="totalAmount" placeholder="total Amount" value={30850} readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.totalAmount ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.totalAmount && <span className="text-xs text-red-400">{errors.totalAmount}</span>}
+            </div>
+
+
+            {/* End Date */}
+            <div className="space-y-2">
+              <label htmlFor="endDate" className="block text-sm text-gray-800">End Date</label>
+              <input
+                type="date"
+                id="endDate"
+                name="endDate"
+                value={endDate}
+                disabled
+                className={`w-full px-4 py-2 border rounded-md ${errors.endDate ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+              />
+              {errors.endDate && <span className="text-xs text-red-400">{errors.endDate}</span>}
+            </div>
+
+
+          </div>
+
 
 
 
@@ -899,55 +1108,6 @@ const Create_Member = () => {
             )}
           </div>
 
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label htmlFor="membershipType" className="block text-sm text-gray-800">Membership Type</label>
-              <select
-                id="membershipType"
-                name="membershipType"
-                value={membershipType}
-                onChange={handleMembershipTypeChange}
-                className={`w-full px-4 py-2 border rounded-md ${errors.membershipType ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}>
-                <option value="" disabled>Select Membership Type</option>
-                <option value="monthly">Monthly</option>
-                <option value="half_yearly">Half Yearly</option>
-                <option value="yearly">Yearly</option>
-                <option value="lifetime">Life Time</option>
-              </select>
-              {errors.membershipType && <span className="text-xs text-red-400">{errors.membershipType}</span>}
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="membershipCost" className="block text-sm text-gray-800">Membership Cost</label>
-              <input
-                type="text"
-                id="membershipCost"
-                name="membershipCost"
-                value={membershipCost}
-                disabled
-                className={`w-full px-4 py-2 border rounded-md ${errors.membershipCost ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-              />
-              {errors.membershipCost && <span className="text-xs text-red-400">{errors.membershipCost}</span>}
-            </div>
-
-            {/* End Date */}
-          <div className="space-y-2">
-            <label htmlFor="endDate" className="block text-sm text-gray-800">End Date</label>
-            <input
-              type="date"
-              id="endDate"
-              name="endDate"
-              value={endDate}
-              disabled
-              className={`w-full px-4 py-2 border rounded-md ${errors.endDate ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-            />
-            {errors.endDate && <span className="text-xs text-red-400">{errors.endDate}</span>}
-          </div>
-
-          </div>
-
-          
 
 
           {/* Submit Button */}

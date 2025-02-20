@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Input, Typography, Select, Option } from "@material-tailwind/react";
-import { BsFillPersonFill, BsFillEnvelopeFill, BsFillTelephoneFill } from "react-icons/bs"; // icons for inputs
 
 const EditAdmin = () => {
   const location = useLocation();
@@ -25,7 +24,6 @@ const EditAdmin = () => {
     district: adminData.district || "",
     thana: adminData.thana || "",
     postOffice: adminData.postOffice || "",
-    village: adminData.village || "",
     ward: adminData.ward || "",
     nidBirthImage: adminData.nidBirthImage || "",
     member: adminData.member || "",
@@ -40,68 +38,120 @@ const EditAdmin = () => {
     membershipCost: adminData.membershipCost || "",
   });
 
+  const [locationData, setLocationData] = useState({
+    divisions: [],
+    districts: [],
+    thanas: [],
+    postOffices: [],
+    wards: [],
+  });
 
+  const [selectedPostOffice, setSelectedPostOffice] = useState(formData.postOffice || "");
+  const [selectedDivision, setSelectedDivision] = useState(formData.division || "");
+  const [selectedDistrict, setSelectedDistrict] = useState(formData.district || "");
+  const [selectedThana, setSelectedThana] = useState(formData.thana || "");
+  const [selectedWard, setSelectedWard] = useState(formData.ward || "");
 
- const handleInputChange = (e) => {
-        // If event target exists (for inputs)
-        const target = e.target || e;  // If e.target is undefined, fallback to e itself
+  const [customPostOffice, setCustomPostOffice] = useState("");
+  const [customDivision, setCustomDivision] = useState("");
+  const [customDistrict, setCustomDistrict] = useState("");
+  const [customThana, setCustomThana] = useState("");
+  const [customWard, setCustomWard] = useState("");
 
-        // Ensure e.target (or e) has the necessary structure
-        if (target && target.name && target.value !== undefined) {
-            const { name, value } = target;
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
+  useEffect(() => {
+    async function fetchLocationData() {
+      try {
+        const response = await fetch("http://localhost:5000/signup");
+        const data = await response.json();
+
+        if (data) {
+          setLocationData({
+            divisions: data.map((user) => user.division),
+            districts: data.map((user) => user.district),
+            thanas: data.map((user) => user.thana),
+            postOffices: data.map((user) => user.postOffice),
+            wards: data.map((user) => user.ward),
+          });
         }
-    };
+      } catch (error) {
+        console.error("Error fetching location data:", error);
+      }
+    }
 
-  
+    fetchLocationData();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const target = e.target || e;
+    if (target && target.name && target.value !== undefined) {
+      const { name, value } = target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleSelectChange = (field, setField) => (e) => {
+    const value = e.target.value;
+    setField(value);
+    if (value !== "Other") {
+      setCustomPostOffice(""); // Clear custom input if it's not "Other"
+    }
+  };
+
+  const handleCustomChange = (setter) => (e) => {
+    setter(e.target.value);
+  };
 
   const handleUpdate = async () => {
-    if (!formData.fullName || !formData.email) {
+    const updatedFormData = {
+      ...formData,
+      postOffice: selectedPostOffice === "Other" ? customPostOffice : selectedPostOffice,
+      division: selectedDivision === "Other" ? customDivision : selectedDivision,
+      district: selectedDistrict === "Other" ? customDistrict : selectedDistrict,
+      thana: selectedThana === "Other" ? customThana : selectedThana,
+      ward: selectedWard === "Other" ? customWard : selectedWard,
+    };
+
+    if (!updatedFormData.fullName || !updatedFormData.email) {
       alert("Full Name and Email are required.");
       return;
     }
-  
+
     try {
       const response = await fetch(`http://localhost:5000/User-Admin/${adminData._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
-  
-      const data = await response.json(); // Get the response data
-  
-      console.log("Response Data:", data); // Log response data for debugging
-  
+
       if (!response.ok) {
-        throw new Error('Failed to update the admin.');
+        throw new Error('Failed to update the Member.');
       }
-  
+
+      const data = await response.json();
       if (data.success) {
-        alert("Admin updated successfully!");
+        alert("Member updated successfully!");
         navigate("/dashboard/manage-admin");
       } else {
-        alert("Admin updated successfully!");
+        alert("Member update failed.");
         navigate("/dashboard/manage-admin");
       }
     } catch (error) {
-      console.error("Error updating admin:", error);
-      alert("An error occurred while updating the admin.");
+      console.error("Error updating Member:", error);
+      alert("An error occurred while updating the Member.");
     }
   };
 
-  
-
-
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-6">
-      <div className="bg-white w-full sm:w-3/4 md:w-3/5 lg:w-2/3 p-8 rounded-lg shadow-lg">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+      <div className="bg-white w-full sm:w-full md:w-full lg:w-full p-8 rounded-lg shadow-lg">
         <Typography variant="h5" className="text-center font-semibold mb-6 text-blue-600">
-          Update Admin Information
+          Member Information Update
         </Typography>
         <form className="space-y-6">
+
           <div className="flex items-center space-x-4">
             <Input
               label="Full Name"
@@ -126,6 +176,7 @@ const EditAdmin = () => {
               />
             </div>
           </div>
+
 
           <div className="flex items-center space-x-4">
             <div className="w-full relative">
@@ -179,6 +230,150 @@ const EditAdmin = () => {
             />
           </div>
 
+
+
+
+
+          {/* Division Select */}
+          <div className="space-y-2">
+            <label htmlFor="division" className="block text-sm text-gray-800">Division</label>
+            <select
+              id="division"
+              name="division"
+              value={selectedDivision}
+              onChange={handleSelectChange('division', setSelectedDivision)}
+              className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+            >
+              <option value="">Select Division</option>
+              {locationData.divisions.map((division, index) => (
+                <option key={index} value={division}>{division}</option>
+              ))}
+              <option value="Other">Other</option>
+            </select>
+
+            {selectedDivision === "Other" && (
+              <input
+                type="text"
+                value={customDivision}
+                onChange={handleCustomChange(setCustomDivision)}
+                placeholder="Enter custom Division"
+                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              />
+            )}
+          </div>
+
+          {/* District Select */}
+          <div className="space-y-2">
+            <label htmlFor="district" className="block text-sm text-gray-800">District</label>
+            <select
+              id="district"
+              name="district"
+              value={selectedDistrict}
+              onChange={handleSelectChange('district', setSelectedDistrict)}
+              className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+            >
+              <option value="">Select District</option>
+              {locationData.districts.map((district, index) => (
+                <option key={index} value={district}>{district}</option>
+              ))}
+              <option value="Other">Other</option>
+            </select>
+
+            {selectedDistrict === "Other" && (
+              <input
+                type="text"
+                value={customDistrict}
+                onChange={handleCustomChange(setCustomDistrict)}
+                placeholder="Enter custom District"
+                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              />
+            )}
+          </div>
+
+          {/* Thana Select */}
+          <div className="space-y-2">
+            <label htmlFor="thana" className="block text-sm text-gray-800">Thana</label>
+            <select
+              id="thana"
+              name="thana"
+              value={selectedThana}
+              onChange={handleSelectChange('thana', setSelectedThana)}
+              className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+            >
+              <option value="">Select Thana</option>
+              {locationData.thanas.map((thana, index) => (
+                <option key={index} value={thana}>{thana}</option>
+              ))}
+              <option value="Other">Other</option>
+            </select>
+
+            {selectedThana === "Other" && (
+              <input
+                type="text"
+                value={customThana}
+                onChange={handleCustomChange(setCustomThana)}
+                placeholder="Enter custom Thana"
+                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              />
+            )}
+          </div>
+
+          {/* Ward Select */}
+          <div className="space-y-2">
+            <label htmlFor="ward" className="block text-sm text-gray-800">Ward</label>
+            <select
+              id="ward"
+              name="ward"
+              value={selectedWard}
+              onChange={handleSelectChange('ward', setSelectedWard)}
+              className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+            >
+              <option value="">Select Ward</option>
+              {locationData.wards.map((ward, index) => (
+                <option key={index} value={ward}>{ward}</option>
+              ))}
+              <option value="Other">Other</option>
+            </select>
+
+            {selectedWard === "Other" && (
+              <input
+                type="text"
+                value={customWard}
+                onChange={handleCustomChange(setCustomWard)}
+                placeholder="Enter custom Ward"
+                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              />
+            )}
+          </div>
+
+          {/* Post Office Select */}
+          <div className="space-y-2">
+            <label htmlFor="postOffice" className="block text-sm text-gray-800">Post Office</label>
+            <select
+              id="postOffice"
+              name="postOffice"
+              value={selectedPostOffice}
+              onChange={handleSelectChange('postOffice', setSelectedPostOffice)}
+              className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+            >
+              <option value="">Select Post Office</option>
+              {locationData.postOffices.map((postOffice, index) => (
+                <option key={index} value={postOffice}>{postOffice}</option>
+              ))}
+              <option value="Other">Other</option>
+            </select>
+
+            {selectedPostOffice === "Other" && (
+              <input
+                type="text"
+                value={customPostOffice}
+                onChange={handleCustomChange(setCustomPostOffice)}
+                placeholder="Enter custom Post Office"
+                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              />
+            )}
+          </div>
+
           {/* Gender Select */}
           <div className="flex items-center space-x-4">
             <Select
@@ -188,7 +383,7 @@ const EditAdmin = () => {
               onChange={(value) => {
                 // Manually trigger the handleInputChange function
                 handleInputChange({ target: { name: "gender", value } });
-            }}
+              }}
               className="w-full"
             >
               <Option value="">Select Gender</Option>
@@ -196,6 +391,7 @@ const EditAdmin = () => {
               <Option value="female">Female</Option>
               <Option value="other">Other</Option>
             </Select>
+
           </div>
 
           <div className="flex items-center space-x-4">
@@ -218,7 +414,7 @@ const EditAdmin = () => {
               onChange={(value) => {
                 // Manually trigger the handleInputChange function
                 handleInputChange({ target: { name: "bloodGroup", value } });
-            }}
+              }}
               className="w-full"
             >
               <Option value="">Select Blood Group</Option>
@@ -239,98 +435,34 @@ const EditAdmin = () => {
             <Select
               label="Member Type"
               name="member"
-              value={formData.member}
+              value={formData.member || ""}  // Ensure the value is set correctly
               onChange={(value) => {
                 // Manually trigger the handleInputChange function
                 handleInputChange({ target: { name: "member", value } });
-            }}
+              }}
               className="w-full"
             >
-              <Option value="">Select Member Type</Option>
+              <Option value="" disabled >Select Member Type</Option>
               <Option value="Division Admin">Division Admin</Option>
               <Option value="District Admin">District Admin</Option>
+              <Option value="Paurasabha Ward Admin">Paurasabha Ward Admin</Option>
+              <Option value="City Corporation Ward Admin">City Corporation Ward Admin</Option>
               <Option value="Upazila Admin">Upazila Admin</Option>
               <Option value="Union Admin">Union Admin</Option>
               <Option value="Ward Admin">Ward Admin</Option>
+
             </Select>
           </div>
 
-          {/* Payment Method */}
-          <div className="flex items-center space-x-4">
-            <Select
-              label="Payment Method"
-              name="payment"
-              value={formData.payment}
-              onChange={(value) => {
-                // Manually trigger the handleInputChange function
-                handleInputChange({ target: { name: "payment", value } });
-            }}
-              className="w-full"
-            >
-              <Option value="">Select Payment Method</Option>
-              <Option value="Bkash">Bkash</Option>
-              <Option value="Nagad">Nagad</Option>
-              <Option value="Rocket">Rocket</Option>
-              <Option value="Bank">Bank</Option>
-              <Option value="Cash">Cash</Option>
-            </Select>
-          </div>
 
-          <div className="flex items-center space-x-4">
-            <Input
-              label="Transaction Id"
-              value={formData.transactionId}
-              name="transactionId"
-              onChange={handleInputChange}
-              className="w-full"
-            />
-          </div>
+      
 
-          <div className="flex items-center space-x-4">
-            <Input
-              label="End Date"
-              value={formData.endDate}
-              name="endDate"
-              onChange={handleInputChange}
-              className="w-full"
-            />
-          </div>
-
-          {/* Membership Type */}
-          <div className="flex items-center space-x-4">
-            <Select
-              label="Membership Type"
-              name="membershipType"
-              value={formData.membershipType || ""} // Use an empty string if membershipType is not set
-              onChange={(value) => {
-                // Manually trigger the handleInputChange function
-                handleInputChange({ target: { name: "membershipType", value } });
-            }}
-              className="w-full"
-            >
-              <Option value="" disabled>Select Membership Type</Option>
-              <Option value="Monthly">Monthly</Option>
-              <Option value="Half Yearly">Half Yearly</Option>
-              <Option value="Yearly">Yearly</Option>
-              <Option value="Lifetime">Lifetime</Option>
-            </Select>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Input
-              label="Membership Cost"
-              value={formData.membershipCost}
-              name="membershipCost"
-              onChange={handleInputChange}
-              className="w-full"
-            />
-          </div>
 
           <Button
             onClick={handleUpdate}
             className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
           >
-            Update Admin
+            Update Member
           </Button>
         </form>
       </div>

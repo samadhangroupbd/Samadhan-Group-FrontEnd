@@ -38,7 +38,21 @@ const Subscription_Manage = () => {
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [selectedRole, setSelectedRole] = useState("All"); // Selected role for filtering
+  const [availabilityFilter, setAvailabilityFilter] = useState("All"); // Filter for availability
   const [loading, setLoading] = useState(false);
+
+  // Calculate availability based on endDate
+  const getAvailability = (endDate, paymentApprove) => {
+    const currentDate = new Date();
+    const end = new Date(endDate);
+
+    // Check if paymentApprove is "no" or the endDate is past
+    if (paymentApprove === "no" || end < currentDate) {
+      return "Unavailable";
+    }
+
+    return "Available";
+  };
 
   // Fetch data from the API
   useEffect(() => {
@@ -62,7 +76,6 @@ const Subscription_Manage = () => {
     fetchMembers();
   }, []);
 
-
   // Update this in the delete handler
   const handleDelete = (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this Member?');
@@ -81,8 +94,7 @@ const Subscription_Manage = () => {
       });
   };
 
-
-  // Filter members based on search query and selected role
+  // Filter members based on search query, selected role, and availability filter
   const filteredMembers = members
     .filter(
       (member) =>
@@ -92,20 +104,12 @@ const Subscription_Manage = () => {
     .filter((member) => {
       if (selectedRole === "All") return true; // Show all members
       return member.member === selectedRole; // Show members for the selected role
+    })
+    .filter((member) => {
+      if (availabilityFilter === "All") return true;
+      const availability = getAvailability(member.endDate, member.paymentApprove);
+      return availability === availabilityFilter; // Filter by availability (Available/Unavailable)
     });
-
-  // Calculate availability based on endDate
-  const getAvailability = (endDate, paymentApprove) => {
-    const currentDate = new Date();
-    const end = new Date(endDate);
-
-    // Check if paymentApprove is "no" or the endDate is past
-    if (paymentApprove === "no" || end < currentDate) {
-      return "Unavailable";
-    }
-
-    return "Available";
-  };
 
   return (
     <div>
@@ -134,7 +138,12 @@ const Subscription_Manage = () => {
                 </Button>
               ))}
             </div>
-            <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
+       
+          </div>
+        </CardHeader>
+
+        <div className="grid text-center mt-5 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+        <div className="w-full mt-5 sm:w-80 md:w-96 lg:w-1/2">
               <Input
                 label="Search(Name/Profile Id)"
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
@@ -149,8 +158,20 @@ const Subscription_Manage = () => {
                 }}
               />
             </div>
-          </div>
-        </CardHeader>
+
+            {/* Availability Filter */}
+            <div className="w-full mt-5 sm:w-48 md:w-64">
+              <select
+                value={availabilityFilter}
+                onChange={(e) => setAvailabilityFilter(e.target.value)}
+                className="w-full p-2 border rounded-md"
+              >
+                <option value="All">All Availability</option>
+                <option value="Available">Available</option>
+                <option value="Unavailable">Unavailable</option>
+              </select>
+            </div>
+        </div>
 
         <CardBody className="overflow-x-auto px-0">
           <table className="mt-4 w-full min-w-max table-auto text-left">
@@ -171,11 +192,46 @@ const Subscription_Manage = () => {
             </thead>
             <tbody>
               {filteredMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, role, image, password, fatherName,
+                ({
+                  _id,
+                  fullName,
+                  email,
+                  phoneNumber,
+                  nationality,
+                  role,
+                  image,
+                  password,
+                  fatherName,
                   motherName,
                   nidNumber,
-                  gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, general, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, aproval, createDate, createTime, endDate, paymentApprove, membershipType, membershipCost }, index) => {
-                  const classes = index === filteredMembers.length - 1 ? "p-4" : "p-4 border-b border-blue-gray-50";
+                  gender,
+                  dateOfBirth,
+                  bloodGroup,
+                  referenceId,
+                  country,
+                  division,
+                  district,
+                  thana,
+                  postOffice,
+                  village,
+                  general,
+                  ward,
+                  nidBirthImage,
+                  member,
+                  payment,
+                  transactionId,
+                  paymentPhoto,
+                  profileId,
+                  aproval,
+                  createDate,
+                  createTime,
+                  endDate,
+                  paymentApprove,
+                  membershipType,
+                  membershipCost,
+                }, index) => {
+                  const classes =
+                    index === filteredMembers.length - 1 ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                   return (
                     <tr key={_id}>
@@ -214,24 +270,55 @@ const Subscription_Manage = () => {
                       </td>
                       <td className={classes}>
                         <div className="flex gap-2">
-
-
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{
-                              adminData: {
-                                _id, fullName, email, phoneNumber, nationality, role, image, password, fatherName,
-                                motherName,
-                                nidNumber,
-                                gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, general, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, aproval, createDate, createTime, endDate, paymentApprove, membershipType, membershipCost
-                              }
-                            }}>
+                            <Link
+                              to={`/Edit_SubscriptionRenew/${_id}`}
+                              state={{
+                                adminData: {
+                                  _id,
+                                  fullName,
+                                  email,
+                                  phoneNumber,
+                                  nationality,
+                                  role,
+                                  image,
+                                  password,
+                                  fatherName,
+                                  motherName,
+                                  nidNumber,
+                                  gender,
+                                  dateOfBirth,
+                                  bloodGroup,
+                                  referenceId,
+                                  country,
+                                  division,
+                                  district,
+                                  thana,
+                                  postOffice,
+                                  village,
+                                  general,
+                                  ward,
+                                  nidBirthImage,
+                                  member,
+                                  payment,
+                                  transactionId,
+                                  paymentPhoto,
+                                  profileId,
+                                  aproval,
+                                  createDate,
+                                  createTime,
+                                  endDate,
+                                  paymentApprove,
+                                  membershipType,
+                                  membershipCost,
+                                },
+                              }}
+                            >
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>
                             </Link>
                           </Tooltip>
-
-
                           <Link to={`/dashboard/member-details/${_id}`}>
                             <Tooltip content="View">
                               <IconButton variant="text">
@@ -239,16 +326,14 @@ const Subscription_Manage = () => {
                               </IconButton>
                             </Tooltip>
                           </Link>
-
-
-
                           <Tooltip content="Delete">
                             <IconButton variant="text">
-                              <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
+                              <TrashIcon
+                                className="h-4 w-4 text-red-500"
+                                onClick={() => handleDelete(`${_id}`)}
+                              />
                             </IconButton>
                           </Tooltip>
-
-
                         </div>
                       </td>
                     </tr>

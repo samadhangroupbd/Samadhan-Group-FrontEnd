@@ -25,6 +25,8 @@ const ROLES_TO_FILTER = [
   "Divisional Organizer",
   "District Chief Organizer",
   "District Organizer",
+  "Paurasabha Ward Admin",
+  "City Corporation Ward Admin",
   "Upazila Chief Organizer",
   "Upazila Organizer",
   "Union Organizer",

@@ -73,9 +73,10 @@ const DashBoardNavBar = (props) => {
 
                     { text: 'Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/subscription' },
                     { text: 'Approve Renew Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-renew-subscription' },
-                 
+                    { text: 'Refer List', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/refer-list' },
 
-                    
+
+
 
                 ].map(({ text, icon, link }, index) => (
                     <ListItem key={text} disablePadding>

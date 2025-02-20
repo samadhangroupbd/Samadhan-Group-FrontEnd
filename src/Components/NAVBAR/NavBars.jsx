@@ -148,11 +148,7 @@ const navListItems = [
         icon: FaProjectDiagram,
         to: "/products",
     },
-    {
-        label: "Samadhan Foundation",
-        icon: SiWikimediafoundation,
-        to: "/foundation",
-    },
+    
     {
         label: "Blogs",
         icon: FaBloggerB,

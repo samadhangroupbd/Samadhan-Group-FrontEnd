@@ -13,14 +13,20 @@ const Create_Admin = () => {
   const [thanas, setThanas] = useState([]);
   const [postOffices, setPostOffices] = useState([]);
   const [wards, setWards] = useState([]);
+    const [paurasabhaWards, setpaurasabhaWards] = useState([]);
+    const [cityCorporationWards, setcityCorporationWards] = useState([]);
 
   const [selectedThana, setSelectedThana] = useState('');
   const [selectedPostOffice, setSelectedPostOffice] = useState('');
   const [selectedWard, setSelectedWard] = useState('');
+    const [selectedpaurasabhaWards, setSelectedpaurasabhaWards] = useState('');
+    const [selectedcityCorporationWards, setSelectedcityCorporationWards] = useState('');
 
   const [customThana, setCustomThana] = useState('');
   const [customPostOffice, setCustomPostOffice] = useState('');
   const [customWard, setCustomWard] = useState('');
+  const [custompaurasabhaWards, setCustompaurasabhaWards] = useState('');
+    const [customselectedcityCorporationWards, setCustomselectedcityCorporationWards] = useState('');
 
   const [userData, setUserData] = useState(null);
 
@@ -111,11 +117,15 @@ const Create_Admin = () => {
       const thanas = data.map(item => item.thana);
       const postOffices = data.map(item => item.postOffice);
       const wards = data.map(item => item.ward);
+      const selectedcityCorporationWards = data.map(item => item.cityCorporationWard);
+      const selectedpaurasabhaWards = data.map(item => item.paurasabhaWard);
 
       // Remove duplicates using Set
       setThanas([...new Set(thanas)]);
       setPostOffices([...new Set(postOffices)]);
       setWards([...new Set(wards)]);
+      setcityCorporationWards([...new Set(selectedcityCorporationWards)]);
+      setpaurasabhaWards([...new Set(selectedpaurasabhaWards)]);
     };
 
     fetchData();
@@ -127,6 +137,8 @@ const Create_Admin = () => {
     if (field === 'thana') setSelectedThana(value);
     else if (field === 'postOffice') setSelectedPostOffice(value);
     else if (field === 'ward') setSelectedWard(value);
+    else if (field === 'cityCorporationWard') setSelectedcityCorporationWards(value);
+    else if (field === 'paurasabhaWard') setSelectedpaurasabhaWards(value);
   };
 
   // Handle custom input change
@@ -135,6 +147,8 @@ const Create_Admin = () => {
     if (field === 'thana') setCustomThana(value);
     else if (field === 'postOffice') setCustomPostOffice(value);
     else if (field === 'ward') setCustomWard(value);
+    else if (field === 'cityCorporationWard') setCustomselectedcityCorporationWards(value);
+    else if (field === 'paurasabhaWard') setCustompaurasabhaWards(value);
   };
 
 
@@ -170,6 +184,8 @@ const Create_Admin = () => {
     const thana = selectedThana === 'Other' ? customThana : selectedThana;
     const postOffice = selectedPostOffice === 'Other' ? customPostOffice : selectedPostOffice;
     const ward = selectedWard === 'Other' ? customWard : selectedWard;
+    const cityCorporationWard = selectedcityCorporationWards === 'Other' ? customselectedcityCorporationWards : selectedcityCorporationWards;
+    const paurasabhaWard = selectedpaurasabhaWards === 'Other' ? custompaurasabhaWards : selectedpaurasabhaWards;
     const village = e.target.village.value;
     const member = e.target.member.value;
     const nidBirthImage = e.target.nidBirthImage.files[0];  // For file input, use `files[0]`
@@ -196,7 +212,7 @@ const Create_Admin = () => {
       fatherName,
       motherName,
       nidNumber,
-      gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, profileId, aproval,
+      gender, dateOfBirth, bloodGroup, referenceId, country, division, district, cityCorporationWard, paurasabhaWard, thana, postOffice, village, ward, nidBirthImage, member, profileId, aproval,
       createDate,  // Store the formatted date
       createTime  // Store the formatted time
     };
@@ -240,6 +256,7 @@ const Create_Admin = () => {
           nidNumber,
           gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward,
           nidBirthImage: nidBirthImageUrl,
+          cityCorporationWard, paurasabhaWard,
           member,
           profileId, aproval,
           createDate,  // Include the createDate
@@ -612,6 +629,73 @@ const Create_Admin = () => {
 
           </div>
 
+
+          
+          {/* City corporation ward, paurasabha ward */}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+            <div className="space-y-2">
+              <label htmlFor="cityCorporationWard" className="block text-sm text-gray-800">City Corporation Ward</label>
+              <select
+                id="cityCorporationWard"
+                name="cityCorporationWard"
+                value={selectedcityCorporationWards}
+                onChange={(e) => handleSelectChange(e, 'cityCorporationWard')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select City Corporation Ward</option>
+                {cityCorporationWards.map((cityCorporationWard, index) => (
+                  <option key={index} value={cityCorporationWard}>{cityCorporationWard}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedcityCorporationWards === 'Other' && (
+                <input
+                  type="text"
+                  value={customselectedcityCorporationWards}
+                  onChange={(e) => handleCustomChange(e, 'cityCorporationWard')}
+                  placeholder="Enter custom City Corporation Ward"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
+
+
+
+
+            <div className="space-y-2">
+              <label htmlFor="paurasabhaWard" className="block text-sm text-gray-800">Paurasabha Ward</label>
+              <select
+                id="paurasabhaWard"
+                name="paurasabhaWard"
+                value={selectedpaurasabhaWards}
+                onChange={(e) => handleSelectChange(e, 'paurasabhaWard')}
+                className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+              >
+                <option value="">Select Paurasabha Ward</option>
+                {paurasabhaWards.map((paurasabhaWard, index) => (
+                  <option key={index} value={paurasabhaWard}>{paurasabhaWard}</option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {selectedpaurasabhaWards === 'Other' && (
+                <input
+                  type="text"
+                  value={custompaurasabhaWards}
+                  onChange={(e) => handleCustomChange(e, 'paurasabhaWard')}
+                  placeholder="Enter custom Paurasabha Ward"
+                  className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                />
+              )}
+            </div>
+
+          </div>
+
+
+
+
           {/* Profile Image Upload */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Image Upload */}
@@ -687,6 +771,8 @@ const Create_Admin = () => {
                 <option value="" disabled >Select Admin Type</option>
                 <option value="Division Admin">Division Admin</option>
                 <option value="District Admin">District Admin</option>
+                <option value="City Corporation Ward Admin">City Corporation Ward Admin</option>
+                <option value="Paurasabha Ward Admin">Paurasabha Ward Admin</option>
                 <option value="Upazila Admin">Upazila Admin</option>
                 <option value="Union Admin">Union Admin</option>
                 <option value="Ward Admin">Ward Admin</option>

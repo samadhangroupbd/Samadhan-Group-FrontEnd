@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Input, Typography, Select, Option } from "@material-tailwind/react";
+import { Button, Input, Typography,Select,Option } from "@material-tailwind/react";
 
 const Member_Edit = () => {
     const location = useLocation();
@@ -24,7 +24,6 @@ const Member_Edit = () => {
         district: adminData.district || "",
         thana: adminData.thana || "",
         postOffice: adminData.postOffice || "",
-        village: adminData.village || "",
         ward: adminData.ward || "",
         nidBirthImage: adminData.nidBirthImage || "",
         member: adminData.member || "",
@@ -39,11 +38,51 @@ const Member_Edit = () => {
         membershipCost: adminData.membershipCost || "",
     });
 
-    const handleInputChange = (e) => {
-        // If event target exists (for inputs)
-        const target = e.target || e;  // If e.target is undefined, fallback to e itself
+    const [locationData, setLocationData] = useState({
+        divisions: [],
+        districts: [],
+        thanas: [],
+        postOffices: [],
+        wards: [],
+    });
 
-        // Ensure e.target (or e) has the necessary structure
+    const [selectedPostOffice, setSelectedPostOffice] = useState(formData.postOffice || "");
+    const [selectedDivision, setSelectedDivision] = useState(formData.division || "");
+    const [selectedDistrict, setSelectedDistrict] = useState(formData.district || "");
+    const [selectedThana, setSelectedThana] = useState(formData.thana || "");
+    const [selectedWard, setSelectedWard] = useState(formData.ward || "");
+
+    const [customPostOffice, setCustomPostOffice] = useState("");
+    const [customDivision, setCustomDivision] = useState("");
+    const [customDistrict, setCustomDistrict] = useState("");
+    const [customThana, setCustomThana] = useState("");
+    const [customWard, setCustomWard] = useState("");
+
+    useEffect(() => {
+        async function fetchLocationData() {
+            try {
+                const response = await fetch("http://localhost:5000/signup");
+                const data = await response.json();
+
+                if (data) {
+                    setLocationData({
+                        divisions: data.map((user) => user.division),
+                        districts: data.map((user) => user.district),
+                        thanas: data.map((user) => user.thana),
+                        postOffices: data.map((user) => user.postOffice),
+                        wards: data.map((user) => user.ward),
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching location data:", error);
+            }
+        }
+
+        fetchLocationData();
+    }, []);
+
+    const handleInputChange = (e) => {
+        const target = e.target || e;
         if (target && target.name && target.value !== undefined) {
             const { name, value } = target;
             setFormData((prevData) => ({
@@ -53,10 +92,29 @@ const Member_Edit = () => {
         }
     };
 
+    const handleSelectChange = (field, setField) => (e) => {
+        const value = e.target.value;
+        setField(value);
+        if (value !== "Other") {
+            setCustomPostOffice(""); // Clear custom input if it's not "Other"
+        }
+    };
+
+    const handleCustomChange = (setter) => (e) => {
+        setter(e.target.value);
+    };
 
     const handleUpdate = async () => {
-        // Basic form validation (e.g., required fields)
-        if (!formData.fullName || !formData.email) {
+        const updatedFormData = {
+            ...formData,
+            postOffice: selectedPostOffice === "Other" ? customPostOffice : selectedPostOffice,
+            division: selectedDivision === "Other" ? customDivision : selectedDivision,
+            district: selectedDistrict === "Other" ? customDistrict : selectedDistrict,
+            thana: selectedThana === "Other" ? customThana : selectedThana,
+            ward: selectedWard === "Other" ? customWard : selectedWard,
+        };
+
+        if (!updatedFormData.fullName || !updatedFormData.email) {
             alert("Full Name and Email are required.");
             return;
         }
@@ -65,7 +123,7 @@ const Member_Edit = () => {
             const response = await fetch(`http://localhost:5000/User-Admin/${adminData._id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(updatedFormData),
             });
 
             if (!response.ok) {
@@ -77,8 +135,8 @@ const Member_Edit = () => {
                 alert("Member updated successfully!");
                 navigate("/dashboard/manage-members");
             } else {
-                alert("Member updated successfully!");
-                navigate("/dashboard/manage-members");
+                alert("Member update failed.");
+                navigate("/dashboard/manage-members"); 
             }
         } catch (error) {
             console.error("Error updating Member:", error);
@@ -93,6 +151,7 @@ const Member_Edit = () => {
                     Member Information Update
                 </Typography>
                 <form className="space-y-6">
+
                     <div className="flex items-center space-x-4">
                         <Input
                             label="Full Name"
@@ -117,6 +176,7 @@ const Member_Edit = () => {
                             />
                         </div>
                     </div>
+
 
                     <div className="flex items-center space-x-4">
                         <div className="w-full relative">
@@ -170,8 +230,152 @@ const Member_Edit = () => {
                         />
                     </div>
 
-                    {/* Gender Select */}
-                    <div className="flex items-center space-x-4">
+
+
+
+
+                    {/* Division Select */}
+                    <div className="space-y-2">
+                        <label htmlFor="division" className="block text-sm text-gray-800">Division</label>
+                        <select
+                            id="division"
+                            name="division"
+                            value={selectedDivision}
+                            onChange={handleSelectChange('division', setSelectedDivision)}
+                            className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                        >
+                            <option value="">Select Division</option>
+                            {locationData.divisions.map((division, index) => (
+                                <option key={index} value={division}>{division}</option>
+                            ))}
+                            <option value="Other">Other</option>
+                        </select>
+
+                        {selectedDivision === "Other" && (
+                            <input
+                                type="text"
+                                value={customDivision}
+                                onChange={handleCustomChange(setCustomDivision)}
+                                placeholder="Enter custom Division"
+                                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                            />
+                        )}
+                    </div>
+
+                    {/* District Select */}
+                    <div className="space-y-2">
+                        <label htmlFor="district" className="block text-sm text-gray-800">District</label>
+                        <select
+                            id="district"
+                            name="district"
+                            value={selectedDistrict}
+                            onChange={handleSelectChange('district', setSelectedDistrict)}
+                            className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                        >
+                            <option value="">Select District</option>
+                            {locationData.districts.map((district, index) => (
+                                <option key={index} value={district}>{district}</option>
+                            ))}
+                            <option value="Other">Other</option>
+                        </select>
+
+                        {selectedDistrict === "Other" && (
+                            <input
+                                type="text"
+                                value={customDistrict}
+                                onChange={handleCustomChange(setCustomDistrict)}
+                                placeholder="Enter custom District"
+                                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                            />
+                        )}
+                    </div>
+
+                    {/* Thana Select */}
+                    <div className="space-y-2">
+                        <label htmlFor="thana" className="block text-sm text-gray-800">Thana</label>
+                        <select
+                            id="thana"
+                            name="thana"
+                            value={selectedThana}
+                            onChange={handleSelectChange('thana', setSelectedThana)}
+                            className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                        >
+                            <option value="">Select Thana</option>
+                            {locationData.thanas.map((thana, index) => (
+                                <option key={index} value={thana}>{thana}</option>
+                            ))}
+                            <option value="Other">Other</option>
+                        </select>
+
+                        {selectedThana === "Other" && (
+                            <input
+                                type="text"
+                                value={customThana}
+                                onChange={handleCustomChange(setCustomThana)}
+                                placeholder="Enter custom Thana"
+                                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                            />
+                        )}
+                    </div>
+
+                    {/* Ward Select */}
+                    <div className="space-y-2">
+                        <label htmlFor="ward" className="block text-sm text-gray-800">Ward</label>
+                        <select
+                            id="ward"
+                            name="ward"
+                            value={selectedWard}
+                            onChange={handleSelectChange('ward', setSelectedWard)}
+                            className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                        >
+                            <option value="">Select Ward</option>
+                            {locationData.wards.map((ward, index) => (
+                                <option key={index} value={ward}>{ward}</option>
+                            ))}
+                            <option value="Other">Other</option>
+                        </select>
+
+                        {selectedWard === "Other" && (
+                            <input
+                                type="text"
+                                value={customWard}
+                                onChange={handleCustomChange(setCustomWard)}
+                                placeholder="Enter custom Ward"
+                                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                            />
+                        )}
+                    </div>
+
+                    {/* Post Office Select */}
+                    <div className="space-y-2">
+                        <label htmlFor="postOffice" className="block text-sm text-gray-800">Post Office</label>
+                        <select
+                            id="postOffice"
+                            name="postOffice"
+                            value={selectedPostOffice}
+                            onChange={handleSelectChange('postOffice', setSelectedPostOffice)}
+                            className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                        >
+                            <option value="">Select Post Office</option>
+                            {locationData.postOffices.map((postOffice, index) => (
+                                <option key={index} value={postOffice}>{postOffice}</option>
+                            ))}
+                            <option value="Other">Other</option>
+                        </select>
+
+                        {selectedPostOffice === "Other" && (
+                            <input
+                                type="text"
+                                value={customPostOffice}
+                                onChange={handleCustomChange(setCustomPostOffice)}
+                                placeholder="Enter custom Post Office"
+                                className="w-full mt-2 px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
+                            />
+                        )}
+                    </div>
+
+                                        {/* Gender Select */}
+                                        <div className="flex items-center space-x-4">
                         <Select
                             label="Select Gender"
                             name="gender"
@@ -246,6 +450,8 @@ const Member_Edit = () => {
                             <Option value="Divisional Organizer">Divisional Organizer</Option>
                             <Option value="District Chief Organizer">District Chief Organizer</Option>
                             <Option value="District Organizer">District Organizer</Option>
+                            <Option value="City Corporation Ward Organizer">City Corporation Ward Organizer</Option>
+                            <Option value="Paurasabha Ward Organizer">Paurasabha Ward Organizer</Option>
                             <Option value="Upazila Chief Organizer">Upazila Chief Organizer</Option>
                             <Option value="Upazila Organizer">Upazila Organizer</Option>
                             <Option value="Union Organizer">Union Organizer</Option>
@@ -324,6 +530,9 @@ const Member_Edit = () => {
                             className="w-full"
                         />
                     </div>
+
+
+
 
                     <Button
                         onClick={handleUpdate}

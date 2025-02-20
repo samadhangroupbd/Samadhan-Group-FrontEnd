@@ -266,7 +266,7 @@ const Renew_Approve_Subscription = () => {
 
 
                                                     <Tooltip content="Edit">
-                                                        <Link to={`/dashboard/edit-member/${_id}`} state={{
+                                                        <Link to={`/Edit_SubscriptionRenew/${_id}`} state={{
                                                             adminData: {
                                                                 _id, fullName, email, phoneNumber, nationality, role, image, password, fatherName,
                                                                 motherName,

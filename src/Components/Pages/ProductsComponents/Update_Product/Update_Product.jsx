@@ -11,6 +11,7 @@ const Update_Product = () => {
   const [formData, setFormData] = useState({
     productName: adminData.productName || "",
     category: adminData.category || "",
+    defaultPrice: adminData.defaultPrice || "",
     price: adminData.price || "",
     createDate: adminData.createDate || "",
     image: adminData.image || "",
@@ -102,6 +103,7 @@ const Update_Product = () => {
       const updateData = {
         productName: formData.productName,
         category: formData.category,
+        defaultPrice: formData.defaultPrice,
         price: formData.price,
         createDate: formData.createDate,
         image: imageUrl,
@@ -152,6 +154,15 @@ const Update_Product = () => {
             name="category"
             onChange={handleInputChange}
             className="mb-4"
+          />
+
+          <Input
+            label="Default Price"
+            value={formData.defaultPrice}
+            name="defaultPrice"
+            onChange={handleInputChange}
+            className={`mb-4 ${errors.defaultPrice ? "border-red-400" : ""}`}
+            required
           />
 
           <Input

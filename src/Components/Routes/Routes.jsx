@@ -8,7 +8,6 @@ import HomeProductDetail from "../Pages/HomeComponents/HomeSection/HomeProductDe
 import BlogDetails from "../Pages/HomeComponents/HomeBlogDetails/HomeBlogDetails";
 import Login from "../Authentication/Login/Login";
 import Registration from "../Authentication/Registration/Registration";
-import Statistic from "../../AllDashBoard/DashBoardComponent/Statistic/Statistic";
 import DashboardLayout from "../../AllDashBoard/DashboardLayout/DashboardLayout";
 import Create_Admin from "../../AllDashBoard/DashBoardComponent/Create_Admin/Create_Admin";
 import Create_Blog from "../../AllDashBoard/DashBoardComponent/Create_Blog/Create_Blog";
@@ -37,7 +36,9 @@ import View_Renew_Subscription from "../../AllDashBoard/DashBoardComponent/Subsc
 import Profile from "../../Profile/Profile/Profile";
 import View_Profile from "../../Profile/View_Profile/View_Profile";
 import Edit_Profile from "../../Profile/Edit_Profile/Edit_Profile";
-
+import ReferList from "../Pages/ReferList/ReferList";
+import Dashboard_Statistic from "../../AllDashBoard/DashBoardComponent/Statistic/Dashboard_Statistic/Dashboard_Statistic"
+import Work_Profile from "../../AllDashBoard/DashBoardComponent/ManageAdminComponent/Work_Profile/Work_Profile";
 
 
 
@@ -126,7 +127,7 @@ export const router = createBrowserRouter([
         children:[
             {
                 path:"statistic",
-                element:<Statistic></Statistic>
+                element:<Dashboard_Statistic></Dashboard_Statistic>
 
             },
             {
@@ -168,6 +169,10 @@ export const router = createBrowserRouter([
                 element:<ViewAdmin></ViewAdmin>
             },
             {
+                path: "/dashboard/work-profile/:id",
+                element:<Work_Profile></Work_Profile>
+            },
+            {
                 path: "/dashboard/edit-admin/:id",
                 element:<EditAdmin></EditAdmin>
             },
@@ -207,6 +212,10 @@ export const router = createBrowserRouter([
                 path: "approve-renew-subscription",
                 element:<Renew_Approve_Subscription></Renew_Approve_Subscription>
             },
+            {
+                path:"refer-list",
+                element:<ReferList></ReferList>
+            }
           
             
         ]

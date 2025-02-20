@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Input, Typography } from "@material-tailwind/react";
-import axios from "axios"; // You need axios for the request
+import axios from "axios";
 
 const Edit_SubscriptionRenew = () => {
     const location = useLocation();
@@ -36,12 +36,19 @@ const Edit_SubscriptionRenew = () => {
         membershipType: adminData.membershipType || "",
         membershipCost: adminData.membershipCost || "",
         paymentPhoto: adminData.paymentPhoto || null,
-        paymentApprove:"no",
+        paymentApprove: "no",
     });
 
     const [errors, setErrors] = useState({});
     const [paymentPhotoPreview, setPaymentPhotoPreview] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    // Add useEffect to listen for membershipType changes
+    useEffect(() => {
+        if (formData.membershipType) {
+            calculateEndDate(formData.membershipType);
+        }
+    }, [formData.membershipType]);
 
     // Function to calculate end date based on membership type
     const calculateEndDate = (selectedMembershipType) => {
@@ -49,16 +56,16 @@ const Edit_SubscriptionRenew = () => {
         let newEndDate = new Date(currentDate);
 
         switch (selectedMembershipType) {
-            case 'monthly':
+            case "monthly":
                 newEndDate.setMonth(newEndDate.getMonth() + 1);
                 break;
-            case 'half_yearly':
+            case "half_yearly":
                 newEndDate.setMonth(newEndDate.getMonth() + 6);
                 break;
-            case 'yearly':
+            case "yearly":
                 newEndDate.setFullYear(newEndDate.getFullYear() + 1);
                 break;
-            case 'lifetime':
+            case "lifetime":
                 newEndDate.setFullYear(newEndDate.getFullYear() + 10);
                 break;
             default:
@@ -66,36 +73,32 @@ const Edit_SubscriptionRenew = () => {
         }
 
         // Update the formData state with the new end date and membership cost
-        setFormData(prevData => ({
+        setFormData((prevData) => ({
             ...prevData,
-            endDate: newEndDate.toISOString().split('T')[0], // set the endDate
+            endDate: newEndDate.toISOString().split("T")[0], // set the endDate
             membershipCost: getMembershipCost(selectedMembershipType), // set the membership cost dynamically
         }));
     };
 
     const getMembershipCost = (membershipType) => {
         switch (membershipType) {
-            case 'monthly':
-                return '100';
-            case 'half_yearly':
-                return '500';
-            case 'yearly':
-                return '900';
-            case 'lifetime':
-                return '5000';
+            case "monthly":
+                return "100";
+            case "half_yearly":
+                return "500";
+            case "yearly":
+                return "900";
+            case "lifetime":
+                return "5000";
             default:
-                return '';
+                return "";
         }
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevData => {
+        setFormData((prevData) => {
             const updatedData = { ...prevData, [name]: value };
-            // Check if membershipType is being changed, and recalculate endDate and membershipCost
-            if (name === 'membershipType') {
-                calculateEndDate(value); // Recalculate endDate and membershipCost
-            }
             return updatedData;
         });
     };
@@ -112,7 +115,7 @@ const Edit_SubscriptionRenew = () => {
             } else {
                 setErrors({ ...errors, paymentPhoto: "" });
                 setPaymentPhotoPreview(URL.createObjectURL(file));
-                setFormData(prevData => ({
+                setFormData((prevData) => ({
                     ...prevData,
                     paymentPhoto: file,
                 }));
@@ -151,11 +154,10 @@ const Edit_SubscriptionRenew = () => {
         setLoading(true);
 
         try {
-            // If there's a payment photo, upload it
             let paymentPhotoUrl = formData.paymentPhoto;
             if (formData.paymentPhoto && typeof formData.paymentPhoto !== "string") {
                 const paymentPhotoFormData = new FormData();
-                paymentPhotoFormData.append('image', formData.paymentPhoto);
+                paymentPhotoFormData.append("image", formData.paymentPhoto);
                 const paymentPhotoResponse = await axios.post(
                     `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`,
                     paymentPhotoFormData
@@ -165,11 +167,14 @@ const Edit_SubscriptionRenew = () => {
 
             const updatedData = { ...formData, paymentPhoto: paymentPhotoUrl };
 
-            const response = await fetch(`http://localhost:5000/User-Admin/${adminData._id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedData),
-            });
+            const response = await fetch(
+                `http://localhost:5000/User-Admin/${adminData._id}`,
+                {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(updatedData),
+                }
+            );
 
             if (!response.ok) {
                 throw new Error("Please wait until it gets approved.");
@@ -177,7 +182,7 @@ const Edit_SubscriptionRenew = () => {
 
             const data = await response.json();
             if (data.success) {
-                alert(" successfully!");
+                alert("Successfully updated!");
                 navigate("/dashboard/Renew-subscription");
             } else {
                 alert("Please wait until it gets approved!");

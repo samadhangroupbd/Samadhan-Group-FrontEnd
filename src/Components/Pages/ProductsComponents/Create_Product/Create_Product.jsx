@@ -11,6 +11,7 @@ const Create_Product = () => {
     description: "",
     image: "",
     price: "",
+    defaultPrice: "",
     category: "",
   });
 
@@ -18,6 +19,7 @@ const Create_Product = () => {
     productName: "",
     description: "",
     price: "",
+    defaultPrice: "",
     category: "",
     image: null,
   });
@@ -53,6 +55,7 @@ const Create_Product = () => {
     if (!formData.productName) newErrors.productName = "Product Name is required";
     if (!formData.description) newErrors.description = "Description is required";
     if (!formData.price) newErrors.price = "Price is required";
+    if (!formData. defaultPrice) newErrors.defaultPrice = "Default Price is required";
     if (!formData.category) newErrors.category = "Category is required";
     if (!formData.image) {
       newErrors.image = "Image is required";
@@ -84,7 +87,15 @@ const Create_Product = () => {
     const value = e.target.value;
     // Only allow numeric values
     if (/^\d*\.?\d*$/.test(value)) {
-      setFormData({ ...formData, price: value });
+      setFormData({ ...formData, price: value});
+    }
+  };
+
+    const handledefaultPriceChange = (e) => {
+    const value = e.target.value;
+    // Only allow numeric values
+    if (/^\d*\.?\d*$/.test(value)) {
+      setFormData({ ...formData, defaultPrice: value});
     }
   };
 
@@ -115,6 +126,7 @@ const Create_Product = () => {
           productName: formData.productName,
           description: formData.description,
           price: `${formData.price}৳`, // Add the symbol after the price
+          defaultPrice:`${formData.defaultPrice}৳`,
           category: formData.category,
           image: imageUrl,
           createDate,
@@ -173,9 +185,24 @@ const Create_Product = () => {
         </div>
 
         <div className="space-y-2">
+          <label htmlFor="defaultPrice" className="block text-lg font-medium text-gray-700">Default Price:</label>
+          <input
+            type="number"
+            id="defaultPrice"
+            name="defaultPrice"
+            placeholder="Enter product Default Price"
+            value={formData.defaultPrice}
+            onChange={handledefaultPriceChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            required
+          />
+          {errors.price && <span className="text-sm text-red-500">{errors.defaultPrice}</span>}
+        </div>
+
+        <div className="space-y-2">
           <label htmlFor="price" className="block text-lg font-medium text-gray-700">Price:</label>
           <input
-            type="text"
+            type="number"
             id="price"
             name="price"
             placeholder="Enter product price"

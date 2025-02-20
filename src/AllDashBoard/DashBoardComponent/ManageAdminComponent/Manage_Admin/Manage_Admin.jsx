@@ -15,12 +15,16 @@ import {
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
+import { FcProcess } from "react-icons/fc";
+
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
   "Country Admin",
   "Division Admin",
   "District Admin",
+  "Paurasabha Ward Admin",
+  "City Corporation Ward Admin",
   "Upazila Admin",
   "Union Admin",
   "Ward Admin",
@@ -43,43 +47,43 @@ const Manage_Admin = () => {
       try {
         const response = await fetch("http://localhost:5000/signup");
         const data = await response.json();
-  
+
         // Filter the members where the approval field is "approved"
         const approvedMembers = data.filter((member) => member.aproval === "approved");
-  
+
         // Filter based on roles if needed
         const filteredMembers = approvedMembers.filter((member) =>
           ROLES_TO_FILTER.includes(member.member)
         );
-  
+
         // Set the filtered and approved members to state
         setMembers(filteredMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
     };
-  
+
     fetchMembers();
   }, []);
-  
 
- // Update this in the delete handler
-const handleDelete = (id) => {
-  const confirmDelete = window.confirm('Are you sure you want to delete this admin?');
-  if (!confirmDelete) return;
 
-  setLoading(true); // Start loading
+  // Update this in the delete handler
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this admin?');
+    if (!confirmDelete) return;
 
-  fetch(`http://localhost:5000/UserAdmin-delete/${id}`, { method: 'DELETE' })
-    .then(() => {
-      setMembers(members.filter((member) => member._id !== id));
-      setLoading(false); // Stop loading after deletion
-    })
-    .catch((error) => {
-      console.error('Error deleting admin:', error);
-      setLoading(false); // Stop loading in case of error
-    });
-};
+    setLoading(true); // Start loading
+
+    fetch(`http://localhost:5000/UserAdmin-delete/${id}`, { method: 'DELETE' })
+      .then(() => {
+        setMembers(members.filter((member) => member._id !== id));
+        setLoading(false); // Stop loading after deletion
+      })
+      .catch((error) => {
+        console.error('Error deleting admin:', error);
+        setLoading(false); // Stop loading in case of error
+      });
+  };
 
 
 
@@ -174,7 +178,7 @@ const handleDelete = (id) => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost}, index) => {
+                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost }, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -213,7 +217,7 @@ const handleDelete = (id) => {
 
 
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-admin/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost } }}>
+                            <Link to={`/dashboard/edit-admin/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>
@@ -233,9 +237,18 @@ const handleDelete = (id) => {
 
                           <Tooltip content="Delete">
                             <IconButton variant="text">
-                              <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)}/>
+                              <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
                             </IconButton>
                           </Tooltip>
+
+
+                          <Link to={`/dashboard/work-profile/${_id}`}>
+                            <Tooltip content="Work Process">
+                              <IconButton variant="text">
+                                <FcProcess className="h-4 w-4 text-red-500" />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
 
 
                         </div>

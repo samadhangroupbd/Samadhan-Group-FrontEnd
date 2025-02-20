@@ -1,121 +1,176 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
-// Function to truncate the description to a given number of characters
-const truncateDescription = (description, charLimit = 40) => {
-  if (description.length <= charLimit) {
-    return description;
-  }
-  return description.slice(0, charLimit) + "...";
-};
+import { AuthContext } from "../../../Authentication/AuthProvider/AuthProvider";
+import { Spinner } from "@material-tailwind/react";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categories, setCategories] = useState([]);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch product data from API
   useEffect(() => {
-    fetch("http://localhost:5000/product")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-        const uniqueCategories = Array.from(
-          new Set(data.map((product) => product.category))
-        );
-        setCategories(["All", ...uniqueCategories]);
-      })
-      .catch((error) => console.error("Error fetching product data:", error));
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [productsResponse, userResponse] = await Promise.all([
+          fetch("http://localhost:5000/product"),
+          user?.email && fetch(`http://localhost:5000/signup?email=${user.email}`)
+        ]);
 
-  // Filter products based on search query and selected category
+        if (!productsResponse.ok) throw new Error('Failed to fetch products');
+        const productsData = await productsResponse.json();
+
+        setProducts(productsData);
+        setCategories(["All", ...new Set(productsData.map(p => p.category))]);
+
+        if (user?.email && userResponse) {
+          if (!userResponse.ok) throw new Error('Failed to fetch user data');
+          const userData = await userResponse.json();
+          setUserData(userData[0]);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user?.email]);
+
+  const truncateDescription = (text, limit = 80) => {
+    return text.length > limit ? `${text.substring(0, limit)}...` : text;
+  };
+
   const filteredProducts = products
-    .filter((product) =>
+    .filter(product => 
       product.productName.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    .filter((product) => {
-      if (selectedCategory === "All") return true;
-      return product.category === selectedCategory;
-    });
+    .filter(product => 
+      selectedCategory === "All" || product.category === selectedCategory
+    );
 
-  if (products.length === 0) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner className="h-12 w-12" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        Error: {error}
+      </div>
+    );
   }
 
   return (
-    <div className="flex mt-10 flex-col items-center gap-8 p-6 min-h-screen bg-gradient-to-br from-cyan-100 to-blue-50">
-      {/* Title Section */}
-      <h2 className="text-4xl mt-10 font-bold mb-8 text-gray-800 text-center drop-shadow-md">
-        Our Products
-      </h2>
+    <div className="mt-10 flex flex-col items-center gap-8 p-6 min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100">
+      {/* Header Section */}
+      <div className="text-center space-y-4 max-w-4xl">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-800">
+          Explore Our Products
+        </h1>
+        <p className="text-gray-600 text-lg">
+          Discover our curated collection of high-quality items
+        </p>
+      </div>
 
       {/* Filters Section */}
-      <div className="flex flex-col sm:flex-row gap-6 w-full mb-8 justify-between items-center">
-        <div className="w-full sm:w-1/2 md:w-1/3">
+      <div className="w-full max-w-6xl space-y-4 md:space-y-0 md:flex md:gap-6 md:items-center">
+        <div className="flex-1">
           <input
             type="text"
-            placeholder="Search by Name"
+            placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-4 rounded-lg border-2 border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-600 transition duration-300 ease-in-out placeholder:text-gray-400"
+            className="w-full px-6 py-3 rounded-xl border-2 border-cyan-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 transition-all duration-300"
           />
         </div>
 
-        <div className="w-full sm:w-1/3 md:w-1/4">
+        <div className="flex-1">
           <select
-            className="w-full p-4 rounded-lg border-2 border-cyan-500 text-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-600 transition duration-300 ease-in-out"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full px-6 py-3 rounded-xl border-2 border-cyan-200 bg-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 transition-all duration-300"
           >
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
+            {categories.map(category => (
+              <option key={category} value={category}>{category}</option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* Product Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-        {filteredProducts.map((product) => (
-          <div
-            key={product._id}
-            className="max-w-sm rounded-lg overflow-hidden bg-white shadow-xl transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
-          >
-            <div className="relative w-full h-60">
-              <img
-                className="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg"
-                src={product.image}
-                alt={product.productName}
-              />
-            </div>
-            <div className="p-6 flex flex-col">
-              <h5 className="text-2xl font-semibold text-gray-800 mb-3 hover:text-cyan-700 transition duration-300">
-                {product.productName}
-              </h5>
-              <p className="text-gray-600 text-sm mb-4 flex-grow">
-                {truncateDescription(product.description, 50)} {/* 50 character truncation */}
-              </p>
+      {/* Products Grid */}
+      {filteredProducts.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center text-gray-500 text-xl">
+          No products found matching your criteria
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full max-w-6xl">
+          {filteredProducts.map(product => {
+            const isApprovedUser = userData?.paymentApprove === "yes" || userData?.aproval === "approved";
+            const displayPrice = isApprovedUser ? product.price : product.defaultPrice;
 
-              {/* Price and Button Section */}
-              <div className="flex justify-between items-center mt-auto">
-                <span className="text-xl font-semibold text-cyan-700">
-                  {product.price}
-                </span>
-                <button
-                  onClick={() => navigate(`/product/${product._id}`)}
-                  className="inline-block rounded-lg bg-cyan-700 px-6 py-2 text-white text-sm font-medium hover:bg-cyan-800 transition-all duration-200 ease-in-out"
-                >
-                  Read More
-                </button>
+            return (
+              <div 
+                key={product._id}
+                className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden flex flex-col"
+              >
+                {/* Product Image */}
+                <div className="relative h-60 w-full overflow-hidden rounded-t-3xl">
+                  <img
+                    src={product.image}
+                    alt={product.productName}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-t-3xl" />
+                </div>
+
+                {/* Product Info */}
+                <div className="p-6 flex flex-col justify-between flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className="px-4 py-2 bg-cyan-100 text-cyan-800 rounded-full text-sm font-semibold">
+                      {product.category}
+                    </span>
+                    <span className="text-xl font-bold text-cyan-700">
+                      {displayPrice}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {product.productName}
+                  </h3>
+
+                  <p className="text-gray-600 text-sm">
+                    {truncateDescription(product.description)}
+                  </p>
+
+                  {/* "View Details" Button */}
+                  <button
+                    onClick={() => navigate(`/product/${product._id}`)}
+                    className="mt-auto w-full flex items-center justify-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
+                  >
+                    View Details
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

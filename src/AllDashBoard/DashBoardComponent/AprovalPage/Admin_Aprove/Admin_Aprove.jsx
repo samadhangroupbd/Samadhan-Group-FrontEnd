@@ -21,9 +21,12 @@ const ROLES_TO_FILTER = [
   "Country Admin",
   "Division Admin",
   "District Admin",
+  "Paurasabha Ward Admin",
+  "City Corporation Ward Admin",
   "Upazila Admin",
   "Union Admin",
   "Ward Admin",
+
 ];
 
 // Table headers

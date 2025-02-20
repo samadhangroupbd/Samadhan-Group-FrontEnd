@@ -25,10 +25,13 @@ const ROLES_TO_FILTER = [
   "Divisional Organizer",
   "District Chief Organizer",
   "District Organizer",
+  "Paurasabha Ward Organizer",
+  "City Corporation Ward Organizer",
   "Upazila Chief Organizer",
   "Upazila Organizer",
   "Union Organizer",
   "Ward Organizer",
+
 ];
 
 // Table headers
