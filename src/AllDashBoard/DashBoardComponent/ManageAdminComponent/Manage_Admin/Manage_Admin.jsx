@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
 import { FcProcess } from "react-icons/fc";
+import { MdDriveFileMoveOutline } from "react-icons/md";
 
 
 // Define roles you're interested in
@@ -246,6 +247,14 @@ const Manage_Admin = () => {
                             <Tooltip content="Work Process">
                               <IconButton variant="text">
                                 <FcProcess className="h-4 w-4 text-red-500" />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
+
+                          <Link to={`/dashboard/file-manage/${_id}`}>
+                            <Tooltip content="File Manage">
+                              <IconButton variant="text">
+                                <MdDriveFileMoveOutline className="h-4 w-4 text-red-500" />
                               </IconButton>
                             </Tooltip>
                           </Link>

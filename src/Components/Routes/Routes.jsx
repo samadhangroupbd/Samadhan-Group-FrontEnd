@@ -39,7 +39,9 @@ import Edit_Profile from "../../Profile/Edit_Profile/Edit_Profile";
 import ReferList from "../Pages/ReferList/ReferList";
 import Dashboard_Statistic from "../../AllDashBoard/DashBoardComponent/Statistic/Dashboard_Statistic/Dashboard_Statistic"
 import Work_Profile from "../../AllDashBoard/DashBoardComponent/ManageAdminComponent/Work_Profile/Work_Profile";
-
+import InvoiceAndOthers from "../Pages/InvoiceAndOthers/InvoiceAndOthers/InvoiceAndOthers";
+import IdCard from "../Pages/InvoiceAndOthers/IdCard/IdCard";
+import Certificate from "../Pages/InvoiceAndOthers/Certificate/Certificate";
 
 
 export const router = createBrowserRouter([
@@ -171,6 +173,19 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/work-profile/:id",
                 element:<Work_Profile></Work_Profile>
+            },
+            
+            {
+                path: "/dashboard/file-manage/:id",
+                element:<InvoiceAndOthers></InvoiceAndOthers>
+            },
+            {
+                path: "/dashboard/id-card/:id",
+                element:<IdCard></IdCard>
+            },
+            {
+                path: "/dashboard/certificate/:id",
+                element:<Certificate></Certificate>
             },
             {
                 path: "/dashboard/edit-admin/:id",

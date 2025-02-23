@@ -15,6 +15,7 @@ import {
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
+import { MdDriveFileMoveOutline } from "react-icons/md";
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
@@ -49,22 +50,22 @@ const Manage_Members = () => {
       try {
         const response = await fetch("http://localhost:5000/signup");
         const data = await response.json();
-  
+
         // Filter members for approval status and role
         const filteredMembers = data
           .filter((member) => member.aproval === "approved") // Filter only approved members
           .filter((member) => ROLES_TO_FILTER.includes(member.member)); // Filter by role
-  
+
         // Set filtered members to state
         setMembers(filteredMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
     };
-  
+
     fetchMembers();
   }, []);
-  
+
 
   // Update this in the delete handler
   const handleDelete = (id) => {
@@ -184,7 +185,7 @@ const Manage_Members = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({  _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost}, index) => {
+                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost }, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -223,7 +224,7 @@ const Manage_Members = () => {
 
 
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: {  _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost } }}>
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>
@@ -246,6 +247,14 @@ const Manage_Members = () => {
                               <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
                             </IconButton>
                           </Tooltip>
+
+                          <Link to={`/dashboard/file-manage/${_id}`}>
+                            <Tooltip content="File Manage">
+                              <IconButton variant="text">
+                                <MdDriveFileMoveOutline className="h-4 w-4 text-red-500" />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
 
 
                         </div>

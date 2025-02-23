@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { AuthContext } from "../AuthProvider/AuthProvider";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from "react-toastify"; // Assuming you're using react-toastify for error messages
 import axios from "axios";
 import { AuthContext } from "../../../Components/Authentication/AuthProvider/AuthProvider";
 
@@ -21,7 +21,6 @@ const Create_Member = () => {
   const [cityCorporationWards, setcityCorporationWards] = useState([]);
   const [postOffices, setPostOffices] = useState([]);
   const [wards, setWards] = useState([]);
-  const [selectedMemberType, setSelectedMemberType] = useState('');
 
   const [selectedThana, setSelectedThana] = useState('');
   const [selectedpaurasabhaWards, setSelectedpaurasabhaWards] = useState('');
@@ -374,7 +373,7 @@ const Create_Member = () => {
 
           setLoading(false);  // Stop loading state
           toast.success("Member Create successful!");  // Show success message
-          navigate("/");  // Redirect to homepage/dashboard (or any other page)
+          navigate("/dashboard/manage-members");  // Redirect to homepage/dashboard (or any other page)
         }
 
         // Reset form after successful signup
@@ -386,8 +385,8 @@ const Create_Member = () => {
       } catch (error) {
         setLoading(false);  // Stop loading state
         setErrors({ ...errors, general: error.message });  // Set general error message if any
-        toast.success("Member Create successful!");  // Show success message
-        navigate("/");
+        toast.error(error.message);  // Show error message in toast
+        navigate("/dashboard/manage-members");
       }
     }
   };
@@ -478,13 +477,13 @@ const Create_Member = () => {
 
   return (
     <div className="flex justify-center  items-center min-h-screen ">
-      <div className="w-full max-w-5xl p-8 my-10 rounded-lg shadow-lg bg-gray-200 text-gray-800">
-        <h2 className="mb-4 text-3xl font-semibold text-center text-gray-800">Create Samadhan Group Account</h2>
+      <div className="w-full max-w-5xl p-8 my-10 rounded-lg shadow-lg bg-gray-100 text-gray-800">
+        <h2 className="mb-4 text-3xl font-semibold text-center text-gray-800">Create Member Account</h2>
 
         {/* Display General Error */}
         {errors.general && (
           // <div className="mb-4 text-red-400 text-center">{errors.general}</div>
-          <div className="mb-4 text-red-400 text-center"><span className="font-bold">Create Successfully....</span></div>
+          <div className="mb-4 text-red-400 text-center"><span className="font-bold">Create Member Successfully....</span></div>
         )}
 
 
@@ -920,11 +919,8 @@ const Create_Member = () => {
               <select
                 id="member"
                 name="member"
-                value={selectedMemberType}
-                onChange={(e) => setSelectedMemberType(e.target.value)}
-                className={`w-full px-4 py-2 border rounded-md ${errors.member ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-              >
-                <option value="" disabled>Select Member Type</option>
+                className={`w-full px-4 py-2 border rounded-md ${errors.payment ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}>
+                <option value="" disabled >Select Member Type</option>
                 <option value="General Member">General Member</option>
                 <option value="Central chief Organizer">Central chief Organizer</option>
                 <option value="Central Organizer">Central Organizer</option>
@@ -938,24 +934,16 @@ const Create_Member = () => {
                 <option value="Upazila Organizer">Upazila Organizer</option>
                 <option value="Union Organizer">Union Organizer</option>
                 <option value="Ward Organizer">Ward Organizer</option>
+
               </select>
+              {errors.member && <span className="text-xs text-red-400">{errors.member}</span>}
             </div>
-
-
-            {selectedMemberType !== "General Member" && (
-              <div className="space-y-2">
-                <label htmlFor="organizerFee" className="block text-sm text-gray-800">Organizer Fee</label>
-                <input
-                  type="number"
-                  id="organizerFee"
-                  name="organizerFee"
-                  value={30000}
-                  readOnly
-                  className={`w-full px-4 py-2 border rounded-md ${errors.organizerFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-                />
-              </div>
-            )}
-
+            <div className="space-y-2">
+              <label htmlFor="organizerFee" className="block text-sm text-gray-800">Organizer Fee</label>
+              <input type="number" id="organizerFee" name="organizerFee" placeholder="organizer Fee" value={30000} readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.organizerFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.organizerFee && <span className="text-xs text-red-400">{errors.organizerFee}</span>}
+            </div>
 
 
             <div className="space-y-2">
@@ -1030,20 +1018,9 @@ const Create_Member = () => {
 
             <div className="space-y-2">
               <label htmlFor="totalAmount" className="block text-sm text-gray-800">Total Amount</label>
-              <input
-                type="number"
-                id="totalAmount"
-                name="totalAmount"
-                value={
-                  (selectedMemberType !== "General Member" ? 30000 : 0) +
-                  (parseInt(membershipCost) || 0) +
-                  100 + // Registration Fee
-                  250 + // ID Card Fee
-                  200   // Service Fee
-                }
-                readOnly
-                className={`w-full px-4 py-2 border rounded-md ${errors.totalAmount ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-              />
+              <input type="number" id="totalAmount" name="totalAmount" placeholder="total Amount" value={30850} readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.totalAmount ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.totalAmount && <span className="text-xs text-red-400">{errors.totalAmount}</span>}
             </div>
 
 

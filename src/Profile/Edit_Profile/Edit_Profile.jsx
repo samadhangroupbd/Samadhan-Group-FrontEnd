@@ -72,6 +72,8 @@ const Edit_Profile = () => {
             }
         }
     };
+    console.log(errors);
+
 
     const handleNIDPhotoChange = (e) => {
         const file = e.target.files[0];
@@ -93,58 +95,58 @@ const Edit_Profile = () => {
         }
     };
 
-    const validateForm = () => {
-        const validationErrors = {};
-        if (!formData.payment) {
-            validationErrors.payment = "Payment method is required.";
-        }
-        if (!formData.transactionId) {
-            validationErrors.transactionId = "Transaction ID is required.";
-        }
-        if (!formData.membershipType) {
-            validationErrors.membershipType = "Membership type is required.";
-        }
-        if (!formData.membershipCost) {
-            validationErrors.membershipCost = "Membership cost is required.";
-        }
-        if (!formData.endDate) {
-            validationErrors.endDate = "End date is required.";
-        }
-        setErrors(validationErrors);
-        return Object.keys(validationErrors).length === 0;
-    };
+    // const validateForm = () => {
+    //     const validationErrors = {};
+    //     if (!formData.payment) {
+    //         validationErrors.payment = "Payment method is required.";
+    //     }
+    //     if (!formData.transactionId) {
+    //         validationErrors.transactionId = "Transaction ID is required.";
+    //     }
+    //     if (!formData.membershipType) {
+    //         validationErrors.membershipType = "Membership type is required.";
+    //     }
+    //     if (!formData.membershipCost) {
+    //         validationErrors.membershipCost = "Membership cost is required.";
+    //     }
+    //     if (!formData.endDate) {
+    //         validationErrors.endDate = "End date is required.";
+    //     }
+    //     setErrors(validationErrors);
+    //     return Object.keys(validationErrors).length === 0;
+    // };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
+    
+        // Perform validation before sending the request
+        // if (!validateForm()) {
+        //     return;
+        // }
+    
         setLoading(true);
-
+    
         try {
-            // If there's a payment photo, upload it
             let NIDPhotoUrl = formData.nidBirthImage;
             let ProfilePhotoUrl = formData.image;
-
-            // Handle Profile Image upload
+    
+            // Upload Profile Image if it's a new image file
             if (formData.image && typeof formData.image !== "string") {
-                const paymentPhotoFormData = new FormData();
-                paymentPhotoFormData.append("image", formData.image);
-                const paymentPhotoResponse = await axios.post(
+                const profilePhotoFormData = new FormData();
+                profilePhotoFormData.append("image", formData.image);
+                const profilePhotoResponse = await axios.post(
                     `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`,
-                    paymentPhotoFormData
+                    profilePhotoFormData
                 );
-
-                if (paymentPhotoResponse.status !== 200) {
+    
+                if (profilePhotoResponse.status !== 200) {
                     throw new Error("Error uploading Profile Image");
                 }
-
-                ProfilePhotoUrl = paymentPhotoResponse.data.data.display_url;
+    
+                ProfilePhotoUrl = profilePhotoResponse.data.data.display_url;
             }
-
-            // Handle NID Image upload
+    
+            // Upload NID Image if it's a new image file
             if (formData.nidBirthImage && typeof formData.nidBirthImage !== "string") {
                 const NIDPhotoFormData = new FormData();
                 NIDPhotoFormData.append("image", formData.nidBirthImage);
@@ -152,42 +154,51 @@ const Edit_Profile = () => {
                     `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_APIKEY}`,
                     NIDPhotoFormData
                 );
-
+    
                 if (NIDPhotoResponse.status !== 200) {
                     throw new Error("Error uploading NID Image");
                 }
-
+    
                 NIDPhotoUrl = NIDPhotoResponse.data.data.display_url;
             }
-
-            const updatedData = { ...formData, nidBirthImage: NIDPhotoUrl, image: ProfilePhotoUrl };
-
+    
+            // Prepare the updated data to send in the PUT request
+            const updatedData = {
+                ...formData,
+                nidBirthImage: NIDPhotoUrl,
+                image: ProfilePhotoUrl,
+            };
+    
+            // Make the PUT request to update the profile
             const response = await fetch(`http://localhost:5000/User-Admin/${adminData._id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(updatedData),
             });
-
+    
             if (!response.ok) {
                 throw new Error("Failed to update profile");
             }
-
+    
             const data = await response.json();
+    
             if (data.success) {
                 alert("Successfully updated!");
-                navigate("/edit-profile");
+                navigate("/profile"); // Redirect to the profile page after successful update
             } else {
                 alert("Please wait until it gets approved!");
-                navigate("/edit-profile");
+                navigate("/profile");
             }
         } catch (error) {
-            console.error("Error updating Member:", error);
+            console.error("Error updating profile:", error);
             alert("Error while updating the profile, please try again.");
         } finally {
             setLoading(false);
         }
     };
-
+    
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 p-6">
             <div className="bg-white my-20 w-full sm:w-3/4 lg:w-3/4 xl:w-3/4 p-8 rounded-lg shadow-xl">
