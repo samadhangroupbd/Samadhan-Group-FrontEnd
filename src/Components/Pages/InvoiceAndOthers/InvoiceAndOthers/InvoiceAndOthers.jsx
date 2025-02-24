@@ -69,7 +69,9 @@ const InvoiceAndOthers = () => {
             </div>
 
             {/* Stats */}
-            <div className="stats shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+            <div className="stats shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-4">
+
+
                 {/* Invoice */}
                 <div className="stat">
                     <div className="stat-figure text-primary"></div>
@@ -79,11 +81,11 @@ const InvoiceAndOthers = () => {
 
                 {/* Certificate */}
                 <Link to={`/dashboard/certificate/${id}`}>
-                <div className="stat">
-                    <div className="stat-figure text-secondary"></div>
-                    <div className="stat-value text-primary text-xl">Certificate</div>
-                    <div className="stat-desc">Certificate generated</div>
-                </div>
+                    <div className="stat">
+                        <div className="stat-figure text-secondary"></div>
+                        <div className="stat-value text-primary text-xl">Certificate</div>
+                        <div className="stat-desc">Certificate generated</div>
+                    </div>
                 </Link>
 
                 {/* ID Card */}
@@ -94,6 +96,16 @@ const InvoiceAndOthers = () => {
                         <div className="stat-desc">ID Card generated</div>
                     </div>
                 </Link>
+
+                {/* Personal Info */}
+                <Link to={`/dashboard/registration-form/${id}`}>
+                    <div className="stat">
+                        <div className="stat-figure text-primary"></div>
+                        <div className="stat-value text-primary text-xl">Registration Form</div>
+                        <div className="stat-desc">Registration form generated</div>
+                    </div>
+                </Link>
+
 
 
                 {/* Appointment Letter */}

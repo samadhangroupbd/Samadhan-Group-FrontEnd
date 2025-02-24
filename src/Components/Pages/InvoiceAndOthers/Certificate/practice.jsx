@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import CertificatePDF from "./CertificatePDF";
 
 const Certificate = () => {
     const { id } = useParams();
@@ -24,42 +22,28 @@ const Certificate = () => {
 
     return (
         <div className="min-h-screen bg-black flex items-center justify-center p-2 relative overflow-hidden">
-            {/* PDF Download Button */}
-            <div className="fixed bottom-4 right-4 z-50">
-                <PDFDownloadLink
-                    document={<CertificatePDF admin={admin} />}
-                    fileName={`certificate_${admin.fullName}.pdf`}
-                >
-                    {({ loading }) => (
-                        <button className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition">
-                            {loading ? 'Generating PDF...' : 'Download PDF'}
-                        </button>
-                    )}
-                </PDFDownloadLink>
-            </div>
+            
 
-            {/* Certificate Container (Original Design) */}
+            {/* Certificate Container */}
             <div className="relative w-full max-w-7xl bg-black rounded-xl shadow-lg border-4 border-orange-600 p-1 text-center text-white">
 
-
-
                 {/* Watermark */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <span className="text-2xl font-bold opacity-5 select-none"><img className=" h-80 w-80" src="/trustBrand01.png" alt="" /></span>
-                </div>
-
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span className="text-2xl font-bold opacity-5 select-none"><img className=" h-80 w-80" src="/trustBrand01.png"  alt="" /></span>
+            </div>
+                
                 {/* Corner Images */}
-                <img
-                    src="/border2.png"
+                <img 
+                    src="/border2.png" 
                     className="absolute top-2 left-2 w-32 h-32 opacity-80"
                     alt="decoration"
                 />
-                <img
-                    src="/border2.png"
+                <img 
+                    src="/border2.png" 
                     className="absolute rotate-90 top-2 right-2 w-32 h-32 opacity-80 transform scaleX(-1)"
                     alt="decoration"
                 />
-
+                
                 {/* Header */}
                 <div className="mb-10 relative z-10">
                     <div className="text-5xl font-bold text-orange-500 mt-5">CERTIFICATE</div>
@@ -97,7 +81,6 @@ const Certificate = () => {
                         <div className="text-lg">Chairman, Excellence Group</div>
                     </div>
                 </div>
-
             </div>
         </div>
     );

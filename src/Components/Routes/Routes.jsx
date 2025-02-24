@@ -40,8 +40,9 @@ import ReferList from "../Pages/ReferList/ReferList";
 import Dashboard_Statistic from "../../AllDashBoard/DashBoardComponent/Statistic/Dashboard_Statistic/Dashboard_Statistic"
 import Work_Profile from "../../AllDashBoard/DashBoardComponent/ManageAdminComponent/Work_Profile/Work_Profile";
 import InvoiceAndOthers from "../Pages/InvoiceAndOthers/InvoiceAndOthers/InvoiceAndOthers";
-import IdCard from "../Pages/InvoiceAndOthers/IdCard/IdCard";
 import Certificate from "../Pages/InvoiceAndOthers/Certificate/Certificate";
+import IdCard from "../Pages/InvoiceAndOthers/IdCard/IdCard";
+import PersonalInfo from "../Pages/InvoiceAndOthers/PersonalInfo/PersonalInfo";
 
 
 export const router = createBrowserRouter([
@@ -182,6 +183,10 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/id-card/:id",
                 element:<IdCard></IdCard>
+            },
+            {
+                path: "/dashboard/registration-form/:id",
+                element:<PersonalInfo></PersonalInfo>
             },
             {
                 path: "/dashboard/certificate/:id",
