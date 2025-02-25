@@ -164,7 +164,7 @@ const Create_Product = () => {
             placeholder="Enter product name"
             value={formData.productName}
             onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 text-white rounded-md focus:ring-2 focus:ring-blue-500"
             required
           />
           {errors.productName && <span className="text-sm text-red-500">{errors.productName}</span>}
@@ -178,7 +178,7 @@ const Create_Product = () => {
             placeholder="Enter product description"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border text-white border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             required
           />
           {errors.description && <span className="text-sm text-red-500">{errors.description}</span>}
@@ -193,7 +193,7 @@ const Create_Product = () => {
             placeholder="Enter product Default Price"
             value={formData.defaultPrice}
             onChange={handledefaultPriceChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border text-white border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             required
           />
           {errors.price && <span className="text-sm text-red-500">{errors.defaultPrice}</span>}
@@ -208,7 +208,7 @@ const Create_Product = () => {
             placeholder="Enter product price"
             value={formData.price}
             onChange={handlePriceChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border text-white border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             required
           />
           {errors.price && <span className="text-sm text-red-500">{errors.price}</span>}
@@ -221,7 +221,7 @@ const Create_Product = () => {
             name="category"
             value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border text-white border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             required
           >
             <option value="">Select Category</option>
@@ -240,7 +240,7 @@ const Create_Product = () => {
             name="image"
             accept="image/*"
             onChange={handleImageChange}
-            className="w-full py-2 px-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full py-2 px-4 border text-white border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             required
           />
           {errors.image && <span className="text-sm text-red-500">{errors.image}</span>}

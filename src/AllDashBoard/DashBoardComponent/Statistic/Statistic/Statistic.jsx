@@ -75,11 +75,11 @@ const Statistic = () => {
         setMemberCount(members.length);
 
         // Count renewals (approved and paymentApprove === "yes")
-        const renewals = filteredData.filter(item => item.aproval === "approved" && item.paymentApprove === "yes");
+        const renewals = filteredData.filter(item => item.aproval === "approved" && !item.paymentApprove && new Date(item.endDate) > new Date());
         setRenewalCount(renewals.length);
 
         // Count unsubscribed users (paymentApprove === "no" and endDate is after the current date)
-        const unsubscribed = filteredData.filter(item => item.aproval === "approved" &item.paymentApprove === "no" || new Date(item.endDate) > new Date());
+        const unsubscribed = filteredData.filter(item => item.aproval === "approved" &item.paymentApprove === "no" || new Date(item.endDate) < new Date());
         setUnsubscribeCount(unsubscribed.length); // Update unsubscribe count
         
       } catch (error) {

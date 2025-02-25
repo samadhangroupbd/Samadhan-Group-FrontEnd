@@ -43,7 +43,8 @@ import InvoiceAndOthers from "../Pages/InvoiceAndOthers/InvoiceAndOthers/Invoice
 import Certificate from "../Pages/InvoiceAndOthers/Certificate/Certificate";
 import IdCard from "../Pages/InvoiceAndOthers/IdCard/IdCard";
 import PersonalInfo from "../Pages/InvoiceAndOthers/PersonalInfo/PersonalInfo";
-
+import VisitingCard from "../Pages/InvoiceAndOthers/VisitingCard/VisitingCard";
+import Invoice from "../Pages/InvoiceAndOthers/Invoice/Invoice";
 
 export const router = createBrowserRouter([
     {
@@ -195,6 +196,14 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/edit-admin/:id",
                 element:<EditAdmin></EditAdmin>
+            },
+            {
+                path: "/dashboard/visiting-card/:id",
+                element:<VisitingCard></VisitingCard>
+            },
+            {
+                path: "/dashboard/invoice/:id",
+                element:<Invoice></Invoice>
             },
             {
                 path: "manage-members",

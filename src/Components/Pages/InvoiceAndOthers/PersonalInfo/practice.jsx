@@ -31,11 +31,8 @@ const generatePDF = () => {
     const doc = new jsPDF();
 
     // Background and Header
-    
     doc.setFillColor(240, 240, 240); // Light gray background for a premium look
-    
     doc.rect(0, 0, 210, 297, "F"); // Fill the entire page
-    
 
     // Watermark Image - Add first to place it behind text
     const watermarkUrl = "/watermarkLogo01.png"; // Add the watermark URL here
@@ -47,35 +44,32 @@ const generatePDF = () => {
     // Add watermark image with transparency (ensure it's pre-made with low opacity)
     doc.addImage(watermarkUrl, "PNG", watermarkX, watermarkY, watermarkWidth, watermarkHeight, "50", "S");
 
-      // Words Row (Space Between Layout) - Move this code block before the Samadhan Group title
-const words = ["Unity", "Strength", "Progress", "Discipline", "Development", "Peace"];
-const spaceBetweenX = 20; // Starting X position for the words
-const rowWidth = 230; // Available width for the words
-const wordSpacing = rowWidth / (words.length + 1); // Calculate space between each word
+    // Words Row (Space Between Layout) - Move this code block before the Samadhan Group title
+    const words = ["Unity", "Strength", "Progress", "Discipline", "Development", "Peace"];
+    const spaceBetweenX = 20; // Starting X position for the words
+    const rowWidth = 230; // Available width for the words
+    const wordSpacing = rowWidth / (words.length + 1); // Calculate space between each word
 
-// Position the words row above the "Samadhan Group" title
-const wordsYPosition = 18; // Set Y position for the words (just above the title)
+    // Position the words row above the "Samadhan Group" title
+    const wordsYPosition = 18; // Set Y position for the words (just above the title)
 
-// Add the words with space between
-words.forEach((word, index) => {
-    const xPosition = spaceBetweenX + index * wordSpacing;
-    doc.setFont("Times", "normal");
-    doc.setFontSize(12);
-    doc.setTextColor(50, 50, 50); // Dark gray color for the words
-    doc.text(word, xPosition, wordsYPosition); // Position the words above the title
-});
-
+    // Add the words with space between
+    words.forEach((word, index) => {
+        const xPosition = spaceBetweenX + index * wordSpacing;
+        doc.setFont("Times", "normal");
+        doc.setFontSize(12);
+        doc.setTextColor(50, 50, 50); // Dark gray color for the words
+        doc.text(word, xPosition, wordsYPosition); // Position the words above the title
+    });
 
     // Title and Company Logo
     doc.setFont("Times", "bold");
     doc.setFontSize(35);
     doc.setTextColor(34, 139, 34); // Green color for the title
-    
 
     // Add "Samadhan Group" Title
     doc.text("Samadhan Group", 105, 33, null, null, "center");
 
-  
     // Add the Company Logo next to the title (Adjust the logo size)
     const logoUrl = "/logo01.png";
     const logoX = 10;
@@ -102,9 +96,9 @@ words.forEach((word, index) => {
 
     // Profile Image in the top right corner inside an elegant border
     const imageUrl = admin.image || '';  // Ensure the imageUrl is not undefined or null
-    const x = 160;
-    const y = 65;
-    const diameter = 35;  // Adjusted diameter for the profile image to make it bigger
+    const x = 155;
+    const y = 60;
+    const diameter = 25;  // Adjusted diameter for the profile image to make it bigger
     
     // Check if the imageUrl exists before adding it to the PDF
     if (imageUrl) {
@@ -149,30 +143,46 @@ words.forEach((word, index) => {
 
     doc.setFontSize(12); // Set the font size
 
-    // Left Column
+    // Left Column with alternating row colors
     detailsLeft.forEach((item, index) => {
         const yOffset = profileImageBottomY + index * lineHeight;
+        
+        // Alternate row background colors
+        const isEvenRow = index % 2 === 0;
+        const rowBgColor = isEvenRow ? [219, 220, 220] : [255, 255, 255]; // Light gray for even, white for odd
+
+        doc.setFillColor(rowBgColor[0], rowBgColor[1], rowBgColor[2]);
+        doc.rect(leftColumnX - 5, yOffset - 10, 85, lineHeight + 5, 'F'); // Background for the row
+
         doc.setFont("Times", "bold", 12);
         doc.setTextColor(34, 139, 34); // Green color for the keys
         doc.text(item.key, leftColumnX, yOffset);
 
         const valueWidth = doc.getTextWidth(item.value);
-        const valueX = 105 - valueWidth - 10; // Align value to the right of the left column
+        const valueX = 105 - valueWidth - 5; // Align value to the right of the left column
 
         doc.setFont("Times", "normal", 12);
         doc.setTextColor(0, 0, 0); // Black color for values
         doc.text(item.value, valueX, yOffset);
     });
 
-    // Right Column
+    // Right Column with alternating row colors
     detailsRight.forEach((item, index) => {
         const yOffset = profileImageBottomY + index * lineHeight;
+        
+        // Alternate row background colors
+        const isEvenRow = index % 2 === 0;
+        const rowBgColor = isEvenRow ? [219, 220, 220] : [255, 255, 255]; // Light gray for even, white for odd
+
+        doc.setFillColor(rowBgColor[0], rowBgColor[1], rowBgColor[2]);
+        doc.rect(rightColumnX - 5, yOffset - 10, 85, lineHeight + 5, 'F'); // Background for the row
+
         doc.setFont("Times", "bold", 12);
         doc.setTextColor(34, 139, 34); // Green color for the keys
         doc.text(item.key, rightColumnX, yOffset);
 
         const valueWidth = doc.getTextWidth(item.value);
-        const valueX = 210 - valueWidth - 20; // Align value to the right margin
+        const valueX = 210 - valueWidth - 30; // Align value to the right margin
 
         doc.setFont("Times", "normal", 12);
         doc.setTextColor(0, 0, 0); // Black color for values
@@ -190,13 +200,12 @@ words.forEach((word, index) => {
     doc.text(`Issued On: ${admin.createDate || "N/A"} ${admin.createTime || "N/A"}`, 105, idDateY + 10, null, null, "center");
 
     // Add the address at the bottom of the page, just above the ID & Date section
-const addressText = "119-120 Adamjee Court Annex -2, Motijheel 1000";
-const addressYPosition = 290; // Adjusted Y position for the address text
+    const addressText = "119-120 Adamjee Court Annex -2, Motijheel 1000";
+    const addressYPosition = 290; // Adjusted Y position for the address text
 
-doc.setFont("Times", "normal", 12);
-doc.setTextColor(0, 0, 0); // Black color for address text
-doc.text(addressText, 105, addressYPosition, null, null, "center");
-
+    doc.setFont("Times", "normal", 12);
+    doc.setTextColor(0, 0, 0); // Black color for address text
+    doc.text(addressText, 105, addressYPosition, null, null, "center");
 
     // Save the generated PDF
     doc.save("id-card-premium.pdf");
