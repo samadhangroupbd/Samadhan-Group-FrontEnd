@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import { Card, CardHeader, CardBody, Typography } from "@material-tailwind/react";
 
 const Manage_View_Member = () => {
-  const { id } = useParams(); // Get the profileId from the URL
+  const { id } = useParams();
   const [admin, setAdmin] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // For controlling modal visibility
-  const [selectedImage, setSelectedImage] = useState(null); // For storing selected image
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchAdminDetails = async () => {
@@ -21,215 +21,126 @@ const Manage_View_Member = () => {
     fetchAdminDetails();
   }, [id]);
 
-  if (!admin) return <div className="text-center text-lg">Loading...</div>;
-
-
-  // Handle image click to open modal
   const openModal = (image) => {
     setSelectedImage(image);
     setIsModalOpen(true);
   };
 
-  // Handle closing modal
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
   };
 
+  if (!admin) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-pulse text-xl text-gray-600">Loading member details...</div>
+    </div>
+  );
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      {/* Main container */}
-      <div className="space-y-8">
-        {/* Top row: Admin Images */}
-        <div className="flex flex-wrap justify-center md:justify-around  space-x-4 my-8">
-          {/* Profile Image */}
-          <div className="flex justify-center items-center mb-4">
+    <div className="max-w-7xl mx-auto p-4 lg:p-8">
+      {/* Image Gallery Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {[admin.image, admin.nidBirthImage, admin.paymentPhoto].map((img, index) => (
+          <div 
+            key={index}
+            className="group relative cursor-pointer rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+            onClick={() => openModal(img)}
+          >
             <img
-              className="rounded-full w-32 h-32 object-cover shadow-2xl border-4 border-blue-600 cursor-pointer"
-              src={admin.image}
-              alt={admin.fullName}
-              onClick={() => openModal(admin.image)} // Open modal on click
+              className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+              src={img}
+              alt={index === 0 ? admin.fullName : index === 1 ? "NID/Birth Certificate" : "Payment Proof"}
             />
-          </div>
-
-          {/* NID Birth Image */}
-          <div className="flex justify-center items-center mb-4">
-            <img
-              className="rounded-full w-32 h-32 object-cover shadow-2xl border-4 border-blue-600 cursor-pointer"
-              src={admin.nidBirthImage}
-              alt="NID Birth Image"
-              onClick={() => openModal(admin.nidBirthImage)} // Open modal on click
-            />
-          </div>
-
-
-          <div className="flex justify-center items-center mb-4">
-            <img
-              className="rounded-full w-32 h-32 object-cover shadow-2xl border-4 border-blue-600 cursor-pointer"
-              src={admin.paymentPhoto}
-              alt="Payment Photo"
-              onClick={() => openModal(admin.paymentPhoto)} // Open modal on click
-            />
-          </div>
-
-
-        </div>
-
-        {/* Admin Details */}
-        <Card className="p-6 shadow-xl bg-white rounded-lg">
-          <CardHeader className="bg-gradient-to-r from-blue-500 to-teal-500 text-white text-center py-4 rounded-t-lg shadow-md">
-            <Typography variant="h5" color="white">Member Profile</Typography>
-          </CardHeader>
-          <CardBody>
-            <div className="space-y-4">
-              {/* Profile Information */}
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Full Name:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.fullName}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Email:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.email}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Role:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.member}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Profile ID:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.profileId}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Phone Number:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.phoneNumber}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Nationality:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.nationality}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Father's Name:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.fatherName}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Mother's Name:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.motherName}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Date of Birth:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.dateOfBirth}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Blood Group:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.bloodGroup}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Reference ID:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.referenceId}</Typography>
-              </div>
-
-              {/* Additional Info */}
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Country:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.country}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Division:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.division}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">District:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.district}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Thana:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.thana}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Post Office:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.postOffice}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Village:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.village}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Ward:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.ward}</Typography>
-              </div>
-
-              {/* Creation Info */}
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Creation Date:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.createDate}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Creation Time:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.createTime}</Typography>
-              </div>
-
-              {/* Additional Membership and Payment Info */}
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Membership Type:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.membershipType}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Membership Cost:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.membershipCost}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Payment Method:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.payment}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">Transaction ID:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.transactionId}</Typography>
-              </div>
-
-              <div className="space-y-2">
-                <Typography variant="h6" className="text-xl font-semibold text-gray-800">End Date:</Typography>
-                <Typography variant="small" className="text-lg text-gray-600">{admin.endDate}</Typography>
-              </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent flex items-end p-4">
+              <span className="text-white font-semibold text-lg">
+                {index === 0 ? "Profile Photo" : index === 1 ? "NID/Birth Certificate" : "Payment Proof"}
+              </span>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        ))}
       </div>
 
-      {/* Modal for Image Display */}
+      {/* Profile Details Section */}
+      <Card className="rounded-2xl overflow-hidden shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 p-8 rounded-t-2xl">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <Typography variant="h2" className="text-white mb-2">{admin.fullName}</Typography>
+              <div className="flex items-center space-x-4">
+                <span className="bg-blue-500/20 px-4 py-1 rounded-full text-white text-sm">
+                  {admin.member} Member
+                </span>
+                <span className="text-blue-100">{admin.profileId}</span>
+              </div>
+            </div>
+            <div className="mt-4 md:mt-0 bg-white/10 px-6 py-2 rounded-full">
+              <Typography variant="small" className="text-white">
+                Membership Expires: {admin.endDate}
+              </Typography>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardBody className="p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Personal Information Column */}
+            <div className="space-y-6">
+              <Section title="Personal Details">
+                <DetailItem label="Email" value={admin.email} />
+                <DetailItem label="Phone" value={admin.phoneNumber} />
+                <DetailItem label="Date of Birth" value={admin.dateOfBirth} />
+                <DetailItem label="Blood Group" value={admin.bloodGroup} />
+                <DetailItem label="Nationality" value={admin.nationality} />
+              </Section>
+
+              <Section title="Family Information">
+                <DetailItem label="Father's Name" value={admin.fatherName} />
+                <DetailItem label="Mother's Name" value={admin.motherName} />
+              </Section>
+
+              <Section title="Membership Info">
+                <DetailItem label="Type" value={admin.membershipType} />
+                <DetailItem label="Cost" value={admin.membershipCost} />
+                <DetailItem label="Payment Method" value={admin.payment} />
+                <DetailItem label="Transaction ID" value={admin.transactionId} />
+              </Section>
+            </div>
+
+            {/* Address & System Information Column */}
+            <div className="space-y-6">
+              <Section title="Address Details">
+                <DetailItem label="Country" value={admin.country} />
+                <DetailItem label="Division" value={admin.division} />
+                <DetailItem label="District" value={admin.district} />
+                <DetailItem label="Thana" value={admin.thana} />
+                <DetailItem label="Post Office" value={admin.postOffice} />
+                <DetailItem label="Village/Ward" value={`${admin.village} (Ward ${admin.ward})`} />
+              </Section>
+
+              <Section title="System Info">
+                <DetailItem label="Registration Date" value={`${admin.createDate} ${admin.createTime}`} />
+                <DetailItem label="Reference ID" value={admin.referenceId} />
+              </Section>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+
+      {/* Image Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 mt-20 bg-black bg-opacity-70 flex justify-center items-center z-50">
-          <div className="relative mt-20">
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="relative max-w-4xl w-full">
             <img
-              className="max-w-full max-h-full object-contain"
+              className="w-1/2 mx-auto max-h-[90vh] object-contain rounded-lg"
               src={selectedImage}
-              alt="Selected"
+              alt="Enlarged view"
             />
             <button
-              className="absolute top-4 right-4 text-white text-2xl font-bold"
               onClick={closeModal}
+              className="absolute -top-8 right-0 text-white hover:text-blue-300 transition-colors"
             >
-              X
+              <span className="text-4xl">&times;</span>
             </button>
           </div>
         </div>
@@ -237,5 +148,22 @@ const Manage_View_Member = () => {
     </div>
   );
 };
+
+// Helper Components
+const Section = ({ title, children }) => (
+  <div className="border-l-4 border-blue-600 pl-4 space-y-4">
+    <h3 className="text-xl font-bold text-gray-800 mb-2">{title}</h3>
+    {children}
+  </div>
+);
+
+const DetailItem = ({ label, value }) => (
+  <div className="flex justify-between items-start py-2 border-b border-gray-100 last:border-0">
+    <span className="text-gray-600 font-medium">{label}</span>
+    <span className="text-gray-800 text-right max-w-[60%] break-words">
+      {value || 'N/A'}
+    </span>
+  </div>
+);
 
 export default Manage_View_Member;

@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
 import { AuthContext } from "../../../Components/Authentication/AuthProvider/AuthProvider";
 
-const Create_Member = () => {
+const Registration = () => {
   const { signUpUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate(); // For redirect after successful signup
   const [membershipType, setMembershipType] = useState('');
@@ -275,6 +275,7 @@ const Create_Member = () => {
     const cityCorporationWard = selectedcityCorporationWards === 'Other' ? customselectedcityCorporationWards : selectedcityCorporationWards;
     const paurasabhaWard = selectedpaurasabhaWards === 'Other' ? custompaurasabhaWards : selectedpaurasabhaWards;
     const aproval = "pending";
+    const salary = "0";
     const membershipData = {
       membershipType,
       membershipCost,
@@ -313,6 +314,7 @@ const Create_Member = () => {
       gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, cityCorporationWard, paurasabhaWard, paymentPhoto, profileId, aproval,
       createDate,  // Store the formatted date
       createTime,  // Store the formatted time
+      salary,  // Include the salary in form data
       ...membershipData, // Include membership type and cost in form data
       organizerFee, registrationFee, idCardFee, serviceFee, totalAmount,
 
@@ -369,6 +371,7 @@ const Create_Member = () => {
           paymentPhoto: paymentPhotoUrl,
           profileId, aproval,
           organizerFee, registrationFee, idCardFee, serviceFee, totalAmount,
+          salary,  // Include the salary in form data
           createDate,  // Include the createDate
           createTime, ...membershipData, // Include membership type and cost in form datas  // Include the createTime
         };
@@ -1102,4 +1105,4 @@ const Create_Member = () => {
   );
 };
 
-export default Create_Member;
+export default Registration;

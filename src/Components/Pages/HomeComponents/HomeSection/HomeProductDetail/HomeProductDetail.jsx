@@ -21,20 +21,20 @@ const HomeProductDetail = () => {
   }
 
   return (
-    <div className="p-10">
+    <div className="py-3 px-2 bg-gray-100">
       <button
         onClick={() => navigate(-1)} // Go back to the previous page
-        className="inline-block mt-24 rounded-lg bg-gray-700 text-white px-4 py-2 mb-6"
+        className="inline-block mt-24 rounded-lg bg-blue-700 text-white px-4 py-2 mb-6"
       >
         &larr; Back
       </button>
 
-      <div className="flex flex-col lg:flex-row items-center lg:items-start">
+      <div className="flex flex-col lg:flex-row items-center lg:items-start bg-gray-100">
         {/* Image Section */}
         <img
           src={product.image} // Dynamic image URL from the product data
           alt={product.productName}
-          className="w-full lg:w-1/2 h-64 object-cover mb-4 lg:mb-0 lg:mr-6 rounded-2xl"
+          className="w-full lg:w-1/2 h-2/3 object-cover mb-4 lg:mb-0 lg:mr-6 rounded-2xl"
         />
 
         {/* Text Section */}

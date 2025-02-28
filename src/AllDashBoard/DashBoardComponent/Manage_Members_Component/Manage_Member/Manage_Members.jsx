@@ -16,23 +16,11 @@ import {
 import { Link } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
 import { MdDriveFileMoveOutline } from "react-icons/md";
+import { FcProcess } from "react-icons/fc";
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
   "General Member",
-  "Central chief Organizer",
-  "Central Organizer",
-  "Divisional Chief Organizer",
-  "Divisional Organizer",
-  "District Chief Organizer",
-  "District Organizer",
-  "Paurasabha Ward Organizer",
-  "City Corporation Ward Organizer",
-  "Upazila Chief Organizer",
-  "Upazila Organizer",
-  "Union Organizer",
-  "Ward Organizer",
-
 ];
 
 // Table headers
@@ -185,7 +173,7 @@ const Manage_Members = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost }, index) => {
+                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, salary, endDate, membershipType, membershipCost }, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -224,7 +212,7 @@ const Manage_Members = () => {
 
 
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost } }}>
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, salary, membershipType, membershipCost } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>
@@ -247,6 +235,14 @@ const Manage_Members = () => {
                               <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
                             </IconButton>
                           </Tooltip>
+
+                          <Link to={`/dashboard/work-profile/${_id}`}>
+                            <Tooltip content="Work Process">
+                              <IconButton variant="text">
+                                <FcProcess className="h-4 w-4 text-red-500" />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
 
                           <Link to={`/dashboard/file-manage/${_id}`}>
                             <Tooltip content="File Manage">

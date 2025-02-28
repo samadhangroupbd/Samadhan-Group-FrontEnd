@@ -13,35 +13,35 @@ import {
   Tooltip,
   CardFooter,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom"; // Use react-router-dom Link
+import { Link, useNavigate } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
-import { FcProcess } from "react-icons/fc";
-import { MdDriveFileMoveOutline } from "react-icons/md";
-
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
-  "Country Admin",
-  "Division Admin",
-  "District Admin",
+
+  "Central chief Organizer",
+  "Central Organizer",
+  "Divisional Chief Organizer",
+  "Divisional Organizer",
+  "District Chief Organizer",
+  "District Organizer",
   "Paurasabha Ward Admin",
   "City Corporation Ward Admin",
-  "Upazila Admin",
-  "Union Admin",
-  "Ward Admin",
+  "Upazila Chief Organizer",
+  "Upazila Organizer",
+  "Union Organizer",
+  "Ward Organizer",
 ];
 
 // Table headers
-const TABLE_HEAD = ["Admin", "Position", "Profile ID", "Joining Date", "Actions"];
+const TABLE_HEAD = ["Member", "Position", "Profile ID", "Joining Date", "Actions"];
 
-const Manage_Admin = () => {
+const Organizer_Approve = () => {
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [selectedRole, setSelectedRole] = useState("All"); // Selected role for filtering
-  const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
-
-
+  const navigate = useNavigate();
   // Fetch data from the API
   useEffect(() => {
     const fetchMembers = async () => {
@@ -49,15 +49,12 @@ const Manage_Admin = () => {
         const response = await fetch("http://localhost:5000/signup");
         const data = await response.json();
 
-        // Filter the members where the approval field is "approved"
-        const approvedMembers = data.filter((member) => member.aproval === "approved");
+        // Filter the members based on approval status (pending or missing) and roles
+        const filteredMembers = data
+          .filter((member) => member.aproval === "pending" || !member.aproval) // Filter for pending or missing approval
+          .filter((member) => ROLES_TO_FILTER.includes(member.member)); // Filter by role
 
-        // Filter based on roles if needed
-        const filteredMembers = approvedMembers.filter((member) =>
-          ROLES_TO_FILTER.includes(member.member)
-        );
-
-        // Set the filtered and approved members to state
+        // Set filtered members to state
         setMembers(filteredMembers);
       } catch (error) {
         console.error("Error fetching members:", error);
@@ -67,10 +64,9 @@ const Manage_Admin = () => {
     fetchMembers();
   }, []);
 
-
-  // Update this in the delete handler
+  // Handle delete action
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this admin?');
+    const confirmDelete = window.confirm('Are you sure you want to delete this Member?');
     if (!confirmDelete) return;
 
     setLoading(true); // Start loading
@@ -81,13 +77,46 @@ const Manage_Admin = () => {
         setLoading(false); // Stop loading after deletion
       })
       .catch((error) => {
-        console.error('Error deleting admin:', error);
+        console.error('Error deleting Member:', error);
         setLoading(false); // Stop loading in case of error
       });
   };
 
+  // Handle approve action
+  const handleApprove = (id) => {
+    const confirmApprove = window.confirm("Are you sure you want to approve this admin?");
+    if (!confirmApprove) return;
 
+    setLoading(true); // Start loading
 
+    fetch(`http://localhost:5000/approve-member/${id}`, {
+      method: 'PUT', // Changed to PUT as per the backend implementation
+      headers: {
+        'Content-Type': 'application/json', // Make sure to send content as JSON
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error approving admin');
+        }
+        return response.json();
+      })
+      .then(() => {
+        // Update the local state after approval
+        setMembers((prevMembers) =>
+          prevMembers.map((member) =>
+            member._id === id ? { ...member, aproval: "approved" } : member
+          )
+        );
+        setLoading(false); // Stop loading after approval
+        navigate("/dashboard/manage-members");  // Redirect to the same page after approval
+      })
+      .catch((error) => {
+        console.error('Error approving admin:', error);
+        setLoading(false); // Stop loading in case of error
+        navigate("/dashboard/manage-members");
+      });
+  };
   // Filter members based on search query and selected role
   const filteredMembers = members
     .filter(
@@ -120,18 +149,11 @@ const Manage_Admin = () => {
           <div className="mb-8 flex items-center justify-between gap-8 flex-wrap">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
               <Typography variant="h5" color="blue-gray">
-                Admins list
+                Members list
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                See information about all admins
+                See information about all Members
               </Typography>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-              <Link to={'/dashboard/create-admin'}>
-                <Button className="flex items-center gap-3" size="sm">
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Admin
-                </Button>
-              </Link>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -149,12 +171,17 @@ const Manage_Admin = () => {
             </div>
             <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
               <Input
-                label="Search Name And Admin Position"
+                label="Search(Name/Profile Id)"
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full"
-                labelProps={{ className: "text-sm" }}
+                className="w-full p-2 sm:p-3 md:p-4 lg:p-4" // Adjust padding for responsiveness
+                labelProps={{
+                  className: "text-xs sm:text-sm lg:text-base", // Make label responsive
+                }}
+                inputProps={{
+                  className: "flex items-center", // Align icon and text
+                }}
               />
             </div>
           </div>
@@ -179,7 +206,7 @@ const Manage_Admin = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost,salary }, index) => {
+                ({   _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost }, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -215,18 +242,29 @@ const Manage_Admin = () => {
                       </td>
                       <td className={classes}>
                         <div className="flex gap-2">
+                          {/* Approve Button */}
+                          <Tooltip content="Approve">
+                            <Button
+                              variant="filled"
+                              size="sm"
+                              color="green"
+                              onClick={() => handleApprove(_id)}
+                            >
+                              Approve
+                            </Button>
+                          </Tooltip>
 
-
+                          {/* Edit Button */}
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-admin/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, endDate, membershipType, membershipCost,salary } }}>
+                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost  } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>
                             </Link>
                           </Tooltip>
 
-
-                          <Link to={`/dashboard/user-details/${_id}`}>
+                          {/* View Button */}
+                          <Link to={`/dashboard/member-details/${_id}`}>
                             <Tooltip content="View">
                               <IconButton variant="text">
                                 <FaEye className="h-4 w-4" />
@@ -234,32 +272,12 @@ const Manage_Admin = () => {
                             </Tooltip>
                           </Link>
 
-
-
+                          {/* Delete Button */}
                           <Tooltip content="Delete">
                             <IconButton variant="text">
                               <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
                             </IconButton>
                           </Tooltip>
-
-
-                          <Link to={`/dashboard/work-profile/${_id}`}>
-                            <Tooltip content="Work Process">
-                              <IconButton variant="text">
-                                <FcProcess className="h-4 w-4 text-red-500" />
-                              </IconButton>
-                            </Tooltip>
-                          </Link>
-
-                          <Link to={`/dashboard/file-manage/${_id}`}>
-                            <Tooltip content="File Manage">
-                              <IconButton variant="text">
-                                <MdDriveFileMoveOutline className="h-4 w-4 text-red-500" />
-                              </IconButton>
-                            </Tooltip>
-                          </Link>
-
-
                         </div>
                       </td>
                     </tr>
@@ -289,4 +307,4 @@ const Manage_Admin = () => {
   );
 };
 
-export default Manage_Admin;
+export default Organizer_Approve;

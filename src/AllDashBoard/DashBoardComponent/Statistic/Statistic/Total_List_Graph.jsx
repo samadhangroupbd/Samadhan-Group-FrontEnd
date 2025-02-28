@@ -10,6 +10,7 @@ const Total_List_Graph = () => {
   const adminRoles = [
     "Division Admin",
     "District Admin",
+    "City Corporation Ward Admin", "Paurasabha Ward Admin",
     "Upazila Admin",
     "Union Admin",
     "Ward Admin"
@@ -17,8 +18,8 @@ const Total_List_Graph = () => {
 
   const memberRoles = [
     "General Member", "Central chief Organizer", "Central Organizer",
-    "Divisional Chief Organizer", "Divisional Organizer", "District Chief Organizer",
-    "District Organizer", "Upazila Chief Organizer", "Upazila Organizer",
+    "Divisional Chief Organizer", "Divisional Organizer", "District Chief Organizer", "City Corporation Ward Organizer",
+    "Paurasabha Ward Organizer","District Organizer", "Upazila Chief Organizer", "Upazila Organizer",
     "Union Organizer", "Ward Organizer"
   ];
 

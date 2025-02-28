@@ -49,10 +49,10 @@ const AllProducts = () => {
   };
 
   const filteredProducts = products
-    .filter(product => 
+    .filter(product =>
       product.productName.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    .filter(product => 
+    .filter(product =>
       selectedCategory === "All" || product.category === selectedCategory
     );
 
@@ -73,34 +73,46 @@ const AllProducts = () => {
   }
 
   return (
-    <div className="mt-10 flex flex-col items-center gap-8 p-6 min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100">
+    <div className="mt-16 flex flex-col items-center gap-10 p-6 min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Header Section */}
-      <div className="text-center space-y-4 max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-800">
-          Explore Our Products
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Discover our curated collection of high-quality items
+      <div className="text-center space-y-6 max-w-5xl">
+        <div className="inline-block bg-gradient-to-r from-blue-600 to-indigo-700 p-1 rounded-2xl">
+          <h1 className="text-5xl md:text-4xl font-bold text-white px-8 py-4 rounded-xl shadow-2xl bg-gradient-to-r from-blue-500 to-indigo-600">
+            Explore Our Products
+          </h1>
+        </div>
+        <p className="text-gray-600 text-xl font-light italic">
+          Discover our curated collection of exceptional quality items
         </p>
       </div>
 
       {/* Filters Section */}
-      <div className="w-full max-w-6xl space-y-4 md:space-y-0 md:flex md:gap-6 md:items-center">
-        <div className="flex-1">
+      <div className="w-full max-w-7xl space-y-6 md:space-y-0 md:flex md:gap-8 md:items-center">
+        <div className="flex-1 relative">
+          <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-blue-400">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search luxury items..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-6 py-3 rounded-xl border-2 border-cyan-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 transition-all duration-300"
+            className="w-full pl-16 pr-6 py-4 rounded-2xl border-2 border-blue-100 bg-white focus:border-blue-300 focus:ring-4 ring-blue-50 ring-opacity-50 shadow-sm transition-all duration-300 text-gray-700 placeholder-blue-300 font-medium"
           />
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 relative">
+          <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-blue-400">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+          </div>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full px-6 py-3 rounded-xl border-2 border-cyan-200 bg-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 transition-all duration-300"
+            className="w-full pl-16 pr-6 py-4 rounded-2xl border-2 border-blue-100 bg-white focus:border-blue-300 focus:ring-4 ring-blue-50 ring-opacity-50 shadow-sm appearance-none transition-all duration-300 text-gray-700 font-medium"
           >
             {categories.map(category => (
               <option key={category} value={category}>{category}</option>
@@ -111,60 +123,64 @@ const AllProducts = () => {
 
       {/* Products Grid */}
       {filteredProducts.length === 0 ? (
-        <div className="flex-1 flex items-center justify-center text-gray-500 text-xl">
-          No products found matching your criteria
+        <div className="flex-1 flex flex-col items-center justify-center space-y-6 text-gray-500">
+          <svg className="w-24 h-24 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <p className="text-2xl font-light text-gray-400">No matching items found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full max-w-6xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 w-full max-w-7xl">
           {filteredProducts.map(product => {
             const isApprovedUser = userData?.paymentApprove === "yes" || userData?.aproval === "approved";
             const displayPrice = isApprovedUser ? product.price : product.defaultPrice;
 
             return (
-              <div 
+              <div
                 key={product._id}
-                className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden flex flex-col"
+                className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col transform hover:-translate-y-2"
               >
                 {/* Product Image */}
-                <div className="relative h-60 w-full overflow-hidden rounded-t-3xl">
+                <div className="relative h-72 w-full overflow-hidden rounded-t-3xl">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-t-3xl z-10" />
                   <img
                     src={product.image}
                     alt={product.productName}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-t-3xl" />
+                  <div className="absolute top-4 right-4 z-20">
+                    <span className="px-4 py-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-full text-sm font-semibold shadow-sm">
+                      {product.category}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Product Info */}
-                <div className="p-6 flex flex-col justify-between flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="px-4 py-2 bg-cyan-100 text-cyan-800 rounded-full text-sm font-semibold">
-                      {product.category}
-                    </span>
-                    <span className="text-xl font-bold text-cyan-700">
-                      {displayPrice}
-                    </span>
+                <div className="p-6 flex flex-col justify-between flex-1 space-y-4">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                      {product.productName}
+                    </h3>
+                    <p className="text-gray-600 text-sm font-light leading-relaxed">
+                      {truncateDescription(product.description)}
+                    </p>
                   </div>
 
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    {product.productName}
-                  </h3>
-
-                  <p className="text-gray-600 text-sm">
-                    {truncateDescription(product.description)}
-                  </p>
-
-                  {/* "View Details" Button */}
-                  <button
-                    onClick={() => navigate(`/product/${product._id}`)}
-                    className="mt-auto w-full flex items-center justify-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
-                  >
-                    View Details
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                    </svg>
-                  </button>
+                  <div className="flex items-center justify-between border-t border-blue-50 pt-4">
+                    <span className="text-2xl font-bold text-blue-600">
+                      {displayPrice}
+                    </span>
+                    <button
+                      onClick={() => navigate(`/product/${product._id}`)}
+                      className="flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
+                    >
+                      <span>Details</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             );

@@ -121,9 +121,9 @@ const Manage_Product = () => {
                         </div>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between gap-4">
-                        <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
+                        <div className="w-full sm:w-80 md:w-96 lg:w-1/2 ">
                             <select
-                                className="w-full p-2 sm:p-3 md:p-4 lg:p-4 border rounded-md text-sm md:text-base"
+                                className="w-full p-2  bg-white border-blue-gray-500 sm:p-2 md:p-2 lg:p-3 border rounded-md text-sm md:text-base"
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >

@@ -54,7 +54,7 @@ const InvoiceAndOthers = () => {
         { 
             title: "Appointment", 
             icon: <BriefcaseIcon className="h-8 w-8 text-white"/>, 
-            link: "#",
+            link: `/dashboard/appointment/${id}`,
             count: "Generated",
             bg: "bg-gradient-to-r from-orange-500 to-orange-400"
         },

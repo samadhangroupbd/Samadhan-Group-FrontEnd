@@ -64,15 +64,16 @@ const DashBoardNavBar = (props) => {
                     // { text: 'Create Admin', icon: <IoIosCreate className='text-2xl' />, link: '/dashboard/create-admin' },
 
                     { text: 'Manage Admin', icon: <MdOutlineManageAccounts className='text-2xl' />, link: '/dashboard/manage-admin' },
+                    { text: 'Manage General Member', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
+                    { text: 'Manage Organizer', icon: <GoProjectSymlink className='text-2xl' />, link: 'manage-organizer' },
 
-                    { text: 'Aprove Admin', icon: <TiTick className='text-2xl' />, link: '/dashboard/aprove-admin' },
-
+                   
                     { text: 'Manage Blog', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-blog' },
 
                     { text: 'Manage Product', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-product' },
 
                     { text: 'Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/subscription' },
-                    { text: 'Approve Renew Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-renew-subscription' },
+                   
                     { text: 'Refer List', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/refer-list' },
 
 
@@ -98,8 +99,13 @@ const DashBoardNavBar = (props) => {
             <List>
                 {[
                     // { text: 'Admin List', icon: <RiAdminFill className='text-2xl' />, link: '/dashboard/admin-list' },
-                    { text: 'Member List', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
-                    { text: 'Aprove Member', icon: <TiTick className='text-2xl' />, link: '/dashboard/Aprove-members' },
+
+
+                    { text: 'Approve General Member', icon: <TiTick className='text-2xl' />, link: '/dashboard/Aprove-members' },
+                    { text: 'Approve Organizer', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-organizer' },
+                    { text: 'Aprove Admin', icon: <TiTick className='text-2xl' />, link: '/dashboard/aprove-admin' },
+                    { text: 'Approve Renew Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-renew-subscription' },
+                    
                     // { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },
                     { text: 'Sign Out', icon: <TbLogout className='text-2xl' />, link: '/dashboard/signout' },
                 ].map(({ text, icon, link }, index) => (

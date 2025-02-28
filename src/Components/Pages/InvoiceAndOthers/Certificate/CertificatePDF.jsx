@@ -80,6 +80,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center'
   },
+  profileID: {
+    color: '#ea580c',
+    fontSize: 16,
+    marginVertical: 10,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
   description: {
     color: '#9ca3af',
     fontSize: 14,
@@ -147,6 +154,7 @@ const CertificatePDF = ({ admin }) => (
         {/* Recipient Details */}
         <Text style={styles.recipient}>This certificate is proudly presented to</Text>
         <Text style={[styles.name, { fontWeight: 'bold' }]}>{admin.fullName}</Text>
+        <Text style={[styles.profileID, { fontWeight: 'bold' }]}>{"Unique ATM ID: "+admin.profileId}</Text>
         <Text style={styles.description}>
           For outstanding performance and dedication. This award is presented in recognition
           of their exceptional contributions.
@@ -157,7 +165,7 @@ const CertificatePDF = ({ admin }) => (
 
         {/* Award Image */}
         <View style={{ marginTop: 30, alignItems: 'center' }}>
-          <Image src="/awardImg.png" style={{ width: 70, height: 70 }} />
+          <Image src="/awardSG.png" style={{ width: 100, height: 80 }} />
         </View>
 
         {/* Signature Section */}

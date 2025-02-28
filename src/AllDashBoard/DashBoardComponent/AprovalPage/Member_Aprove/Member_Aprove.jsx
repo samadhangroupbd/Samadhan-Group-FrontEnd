@@ -19,18 +19,7 @@ import { FaEye } from "react-icons/fa";
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
   "General Member",
-  "Central chief Organizer",
-  "Central Organizer",
-  "Divisional Chief Organizer",
-  "Divisional Organizer",
-  "District Chief Organizer",
-  "District Organizer",
-  "Paurasabha Ward Admin",
-  "City Corporation Ward Admin",
-  "Upazila Chief Organizer",
-  "Upazila Organizer",
-  "Union Organizer",
-  "Ward Organizer",
+  
 ];
 
 // Table headers
@@ -157,7 +146,7 @@ const Member_Aprove = () => {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="flex flex-wrap gap-2">
+            {/* <div className="flex flex-wrap gap-2">
               {["All", ...ROLES_TO_FILTER].map((role) => (
                 <Button
                   key={role}
@@ -168,7 +157,7 @@ const Member_Aprove = () => {
                   {role}
                 </Button>
               ))}
-            </div>
+            </div> */}
             <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
               <Input
                 label="Search(Name/Profile Id)"

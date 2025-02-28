@@ -45,6 +45,9 @@ import IdCard from "../Pages/InvoiceAndOthers/IdCard/IdCard";
 import PersonalInfo from "../Pages/InvoiceAndOthers/PersonalInfo/PersonalInfo";
 import VisitingCard from "../Pages/InvoiceAndOthers/VisitingCard/VisitingCard";
 import Invoice from "../Pages/InvoiceAndOthers/Invoice/Invoice";
+import Organizer_Member from "../../AllDashBoard/DashBoardComponent/Manage_Members_Component/Organizer_Member/Organizer_Member";
+import Organizer_Approve from "../../AllDashBoard/DashBoardComponent/AprovalPage/Organizer_Approve/Organizer_Approve";
+import AppointmentLetter from "../Pages/InvoiceAndOthers/AppointmentLetter/AppointmentLetter";
 
 export const router = createBrowserRouter([
     {
@@ -194,6 +197,10 @@ export const router = createBrowserRouter([
                 element:<Certificate></Certificate>
             },
             {
+                path: "/dashboard/appointment/:id",
+                element:<AppointmentLetter></AppointmentLetter>
+            },
+            {
                 path: "/dashboard/edit-admin/:id",
                 element:<EditAdmin></EditAdmin>
             },
@@ -208,6 +215,14 @@ export const router = createBrowserRouter([
             {
                 path: "manage-members",
                 element:<Manage_Members></Manage_Members>
+            },
+            {
+                path: "/dashboard/approve-organizer",
+                element: <Organizer_Approve></Organizer_Approve>
+            },
+            {
+                path: "manage-organizer",
+                element: <Organizer_Member></Organizer_Member>
             },
             {
                 path: "Aprove-members",

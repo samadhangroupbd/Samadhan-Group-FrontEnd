@@ -60,14 +60,14 @@ const Statistic = () => {
         const filteredData = filterData(data);
         
         // Count admins (approved only)
-        const adminRoles = ["Division Admin", "District Admin", "Upazila Admin", "Union Admin", "Ward Admin"];
+        const adminRoles = ["Division Admin", "District Admin", "City Corporation Ward Admin", "Paurasabha Ward Admin", "Upazila Admin", "Union Admin", "Ward Admin"];
         const admins = filteredData.filter(item => adminRoles.includes(item.member) && item.aproval === "approved");
         setAdminCount(admins.length);
 
         // Count members (approved only)
         const memberRoles = [
           "General Member", "Central chief Organizer", "Central Organizer",
-          "Divisional Chief Organizer", "Divisional Organizer", "District Chief Organizer",
+          "Divisional Chief Organizer", "Divisional Organizer", "District Chief Organizer","City Corporation Ward Organizer", "Paurasabha Ward Organizer",
           "District Organizer", "Upazila Chief Organizer", "Upazila Organizer",
           "Union Organizer", "Ward Organizer"
         ];

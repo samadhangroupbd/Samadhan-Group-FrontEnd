@@ -70,6 +70,7 @@ const Certificate = () => {
                 {/* Recipient Section */}
                 <p className="text-lg text-gray-300">This certificate is proudly presented to</p>
                 <h1 className="text-4xl font-bold text-orange-500 mt-4 mb-6">{admin.fullName}</h1>
+                <h4 className="text-xl font-bold text-orange-500 mt-4 mb-6">Unique ATM ID: {admin.profileId}</h4>
                 <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
                     For outstanding performance and dedication. This award is presented in recognition
                     of their exceptional contributions.
@@ -79,7 +80,7 @@ const Certificate = () => {
                 {/* Gold Decoration */}
                 <div className="mt-10 flex justify-center">
                     <div className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg">
-                        <span className="text-xl font-semibold text-black"><img src="/awardImg.png" alt="" className="w-20 h-20" /></span>
+                        <span className="text-xl font-semibold text-black"><img src="/awardSG.png" alt="" className="w-28 h-16" /></span>
                     </div>
                 </div>
 

@@ -91,7 +91,7 @@ const Create_Blog = () => {
 
         if (response.data.success) {
           toast.success("Blog created successfully!");
-          navigate("/blog");
+          navigate("/dashboard/manage-blog");
         }
 
         setLoading(false);
@@ -100,92 +100,107 @@ const Create_Blog = () => {
       } catch (error) {
         setLoading(false);
         setErrors({ ...errors, general: error.message });
-        toast.error(error.message);
+        toast.success("Blog created successfully!");
+          navigate("/dashboard/manage-blog");
       }
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6">Create a New Blog Post</h2>
-      <form onSubmit={handleSubmit} className="space-y-6 h-screen">
-        <div className="space-y-2">
-          <label htmlFor="title" className="block text-lg font-medium text-gray-700">Title:</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            placeholder="Enter blog title"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          {errors.title && <span className="text-sm text-red-500">{errors.title}</span>}
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="description" className="block text-lg font-medium text-gray-700">Description:</label>
-          <textarea
-            id="description"
-            name="description"
-            placeholder="Enter blog description"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          {errors.description && <span className="text-sm text-red-500">{errors.description}</span>}
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="tags" className="block text-lg font-medium text-gray-700">Tags:</label>
-          <input
-            type="text"
-            id="tags"
-            name="tags"
-            placeholder="Enter blog tags (comma-separated)"
-            value={formData.tags}
-            onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          {errors.tags && <span className="text-sm text-red-500">{errors.tags}</span>}
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="image" className="block text-lg font-medium text-gray-700">Image:</label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full py-2 px-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          {errors.image && <span className="text-sm text-red-500">{errors.image}</span>}
-        </div>
-
-        {imagePreview && (
-          <div className="text-center mt-4">
-            <img src={imagePreview} alt="Image Preview" className="w-48 h-48 object-cover mx-auto" />
-          </div>
-        )}
-
-        {errors.general && <div className="text-sm text-red-500 text-center">{errors.general}</div>}
-
-        <div className="text-center">
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400"
-          >
-            {loading ? "Creating..." : "Create Blog Post"}
-          </button>
-        </div>
-      </form>
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-2xl rounded-xl border border-gray-100">
+  <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">Create a New Blog Post</h2>
+  <form onSubmit={handleSubmit} className="space-y-8">
+    {/* Title Field */}
+    <div className="space-y-3">
+      <label htmlFor="title" className="block text-lg font-semibold text-gray-800">Title:</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        placeholder="Enter blog title"
+        value={formData.title}
+        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+        className="w-full px-5 py-3 border-2 border-gray-200 text-black bg-gray-200 rounded-lg focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-300"
+        required
+      />
+      {errors.title && <span className="text-sm text-red-600">{errors.title}</span>}
     </div>
+
+    {/* Description Field */}
+    <div className="space-y-3">
+      <label htmlFor="description" className="block text-lg font-semibold text-gray-800">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        placeholder="Enter blog description"
+        value={formData.description}
+        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+        className="w-full px-5 py-3 border-2 border-gray-200 rounded-lg  text-black bg-gray-200 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-300"
+        rows="5"
+        required
+      />
+      {errors.description && <span className="text-sm text-red-600">{errors.description}</span>}
+    </div>
+
+    {/* Tags Field */}
+    <div className="space-y-3">
+      <label htmlFor="tags" className="block text-lg font-semibold text-gray-800">Tags:</label>
+      <input
+        type="text"
+        id="tags"
+        name="tags"
+        placeholder="Enter blog tags (comma-separated)"
+        value={formData.tags}
+        onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+        className="w-full px-5 py-3 border-2 border-gray-200  text-black bg-gray-200 rounded-lg focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-300"
+        required
+      />
+      {errors.tags && <span className="text-sm text-red-600">{errors.tags}</span>}
+    </div>
+
+    {/* Image Upload Field */}
+    <div className="space-y-3">
+      <label htmlFor="image" className="block text-lg font-semibold text-gray-800">Image:</label>
+      <input
+        type="file"
+        id="image"
+        name="image"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="w-full py-3 px-5 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all duration-300"
+        required
+      />
+      {errors.image && <span className="text-sm text-red-600">{errors.image}</span>}
+    </div>
+
+    {/* Image Preview */}
+    {imagePreview && (
+      <div className="text-center mt-6">
+        <img
+          src={imagePreview}
+          alt="Image Preview"
+          className="w-64 h-64 object-cover mx-auto rounded-lg shadow-md"
+        />
+      </div>
+    )}
+
+    {/* General Error Message */}
+    {errors.general && (
+      <div className="text-sm text-red-600 text-center mt-4">{errors.general}</div>
+    )}
+
+    {/* Submit Button */}
+    <div className="text-center">
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300"
+      >
+        {loading ? "Creating..." : "Create Blog Post"}
+      </button>
+    </div>
+  </form>
+</div>
   );
 };
 

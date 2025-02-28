@@ -275,7 +275,7 @@ const Create_Admin = () => {
 
           setLoading(false);  // Stop loading state
           toast.success("Admin Create successful!");  // Show success message
-          navigate("/manage-admin");  // Redirect to homepage/dashboard (or any other page)
+          navigate("/dashboard/manage-admin");  // Redirect to homepage/dashboard (or any other page)
         }
 
         // Reset form after successful signup
@@ -287,6 +287,7 @@ const Create_Admin = () => {
         setLoading(false);  // Stop loading state
         setErrors({ ...errors, general: error.message });  // Set general error message if any
         toast.error(error.message);  // Show error message in toast
+        navigate("/dashboard/manage-admin");  // Redirect to homepage/dashboard (or any other page)
       }
     }
   };

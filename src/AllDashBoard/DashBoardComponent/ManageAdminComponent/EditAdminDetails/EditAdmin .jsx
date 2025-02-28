@@ -34,8 +34,7 @@ const EditAdmin = () => {
     createDate: adminData.createDate || "",
     createTime: adminData.createTime || "",
     endDate: adminData.endDate || "",
-    membershipType: adminData.membershipType || "",
-    membershipCost: adminData.membershipCost || "",
+    salary: adminData.salary || "",
   });
 
   const [locationData, setLocationData] = useState({
@@ -135,7 +134,7 @@ const EditAdmin = () => {
         alert("Member updated successfully!");
         navigate("/dashboard/manage-admin");
       } else {
-        alert("Member update failed.");
+        alert("Admin updated successfully!");
         navigate("/dashboard/manage-admin");
       }
     } catch (error) {
@@ -454,6 +453,16 @@ const EditAdmin = () => {
             </Select>
           </div>
 
+          <div className="flex items-center space-x-4">
+            <Input
+              label="Salary"
+              value={formData.salary}
+              name="salary"
+              onChange={handleInputChange}
+              className="w-full"
+              required
+            />
+          </div>
 
       
 

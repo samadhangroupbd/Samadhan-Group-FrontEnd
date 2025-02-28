@@ -87,6 +87,7 @@ const Invoice = () => {
     doc.text(admin.email, margin, y + 11);
     doc.text(admin.phoneNumber, margin, y + 16);
     doc.text(admin.member, margin, y + 21);
+    doc.text("Id: "+admin.profileId, margin, y + 26);
     y += 40;
 
     // Table Title
@@ -130,34 +131,33 @@ y += 10;
     ];
 
     rowData.forEach((data) => {
-        x = margin;
-        columns.forEach((col, index) => {
-            doc.setFillColor(245, 245, 245);
-            doc.rect(x, y, col.width, 10, "F");
-            doc.setTextColor(...darkText);
-            doc.setFontSize(12);
-            let text = "";
-            switch (index) {
-                case 0:
-                    text = data.serialNo;
-                    break;
-                case 1:
-                    text = data.name;
-                    break;
-                // case 2:
-                //     text = data.fee;
-                //     break;
-                case 2:
-                    text = data.amount;
-                    break;
-            }
-            doc.text(text.toString(), x + col.width / 2, y + 7, { align: 'center' });
-            x += col.width;
-        });
-        y += 10;
-    });
+      x = margin;
+      columns.forEach((col, index) => {
+          doc.setFillColor(245, 245, 245);
+          doc.rect(x, y, col.width, 10, "F");
+          doc.setTextColor(...darkText);
+          doc.setFontSize(12);
+  
+          let text = "";
+          switch (index) {
+              case 0:
+                  text = data.serialNo != null ? data.serialNo.toString() : "N/A"; // Default value if undefined
+                  break;
+              case 1:
+                  text = data.name || "Unknown"; // Default value if undefined
+                  break;
+              case 2:
+                  text = data.amount != null ? data.amount.toString() : "0"; // Default value if undefined
+                  break;
+          }
+          doc.text(text, x + col.width / 2, y + 7, { align: 'center' });
+          x += col.width;
+      });
+      y += 10;
+  });
+  
 
-
+  
      // Watermark Image - Add first to place it behind text
      const watermarkUrl = "/watermarkLogo01.png"; // Add the watermark URL here
      const watermarkX = 55;  // Center horizontally
@@ -185,7 +185,7 @@ y += 10;
     y += 8;
     doc.text(`Payment Transaction Id: ${admin.transactionId}`, pageWidth - margin - 60, y);
     y += 8;
-    doc.text(`Payment Date: ${new Date().toLocaleDateString('en-GB')}`, pageWidth - margin - 60, y);
+    doc.text(`Payment Date: ${admin.createDate}`, pageWidth - margin - 60, y);
 
     // Terms and Footer
     // y = 280; // Near bottom of A4 page
@@ -199,7 +199,7 @@ y += 10;
     // doc.text("2. Late payments subject to 2% monthly interest", margin, y + 10);
     
     // Save PDF
-    doc.save(`invoice_${generateMemoNumber()}.pdf`);
+    doc.save(`invoice_${admin.fullName +" "+ generateMemoNumber()}.pdf`);
 };
 
 

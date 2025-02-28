@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { AuthContext } from "../AuthProvider/AuthProvider";
-import { toast } from "react-toastify"; // Assuming you're using react-toastify for error messages
+import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
 import { AuthContext } from "../../../Components/Authentication/AuthProvider/AuthProvider";
 
@@ -48,6 +48,21 @@ const Create_Member = () => {
     "Sylhet": ["Sylhet", "Moulvibazar", "Habiganj", "Sunamganj"],
     "Mymensingh": ["Tangail", "Jamalpur", "Mymensingh", "Kishoreganj", "Sherpur", "Netrokona"],
   };
+
+
+  useEffect(() => {
+    // Get current date
+    const currentDate = new Date();
+    
+    // Add one month to the current date
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    
+    // Format the date as YYYY-MM-DD (standard format for <input type="date">)
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    
+    // Set the formatted date to the endDate state
+    setEndDate(formattedDate);
+  }, []);
 
 
 
@@ -216,13 +231,7 @@ const Create_Member = () => {
       newErrors.image = "File must be an image";
     }
 
-    if (!formData.membershipType) {
-      newErrors.membershipType = "Membership Type is required";
-    }
 
-    if (!formData.membershipCost) {
-      newErrors.membershipCost = "Membership Cost is required";
-    }
 
     return newErrors;
   };
@@ -230,7 +239,9 @@ const Create_Member = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const profileId = "SG" + Math.floor(1000000000 + Math.random() * 9000000000); // Generates a random 10-digit number after "SG", making a total of 12 digits
+  
+
+    const profileId = "SG" + Math.floor(100000000000 + Math.random() * 9000000000); // Generates a random 10-digit number after "SG", making a total of 12 digits
 
     // Manually extract form values from e.target
     const fullName = e.target.fullName.value;
@@ -386,7 +397,7 @@ const Create_Member = () => {
       } catch (error) {
         setLoading(false);  // Stop loading state
         setErrors({ ...errors, general: error.message });  // Set general error message if any
-        toast.error(error.message);  // Show error message in toast
+        toast.success("Member Create successful!");  // Show success message
         navigate("/dashboard/manage-members");
       }
     }
@@ -478,13 +489,13 @@ const Create_Member = () => {
 
   return (
     <div className="flex justify-center  items-center min-h-screen ">
-      <div className="w-full max-w-5xl p-8 my-10 rounded-lg shadow-lg bg-gray-100 text-gray-800">
-        <h2 className="mb-4 text-3xl font-semibold text-center text-gray-800">Create Member Account</h2>
+      <div className="w-full max-w-5xl p-8 my-10 rounded-lg shadow-lg bg-gray-200 text-gray-800">
+        <h2 className="mb-4 text-3xl font-semibold text-center text-gray-800">Create Member</h2>
 
         {/* Display General Error */}
         {errors.general && (
           // <div className="mb-4 text-red-400 text-center">{errors.general}</div>
-          <div className="mb-4 text-red-400 text-center"><span className="font-bold">Create Member Successfully....</span></div>
+          <div className="mb-4 text-red-400 text-center"><span className="font-bold">Create Successfully....</span></div>
         )}
 
 
@@ -590,21 +601,6 @@ const Create_Member = () => {
             </div>
 
 
-            <div className="space-y-2">
-              <label htmlFor="referenceId" className="block text-sm text-gray-800">Reference ID</label>
-              <input type="text" id="referenceId" name="referenceId" placeholder="Reference ID"
-                className={`w-full px-4 py-2 border rounded-md ${errors.referenceId ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
-              {errors.referenceId && <span className="text-xs text-red-400">{errors.referenceId}</span>}
-            </div>
-
-
-
-
-          </div>
-
-
-          {/* Division, District*/}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <div className="space-y-2">
               <label htmlFor="country" className="block text-sm text-gray-800">Country</label>
@@ -612,6 +608,16 @@ const Create_Member = () => {
                 className={`w-full px-4 py-2 border rounded-md ${errors.country ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.country && <span className="text-xs text-red-400">{errors.country}</span>}
             </div>
+
+
+
+          </div>
+
+
+          {/* Division, District*/}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          
 
             <div className="space-y-2">
               {/* Division Dropdown */}
@@ -781,6 +787,8 @@ const Create_Member = () => {
             </div>
 
 
+
+
             <div className="space-y-2">
               <label htmlFor="ward" className="block text-sm text-gray-800">Ward</label>
               <select
@@ -791,26 +799,9 @@ const Create_Member = () => {
                 className="w-full px-4 py-2 border rounded-md border-gray-700 bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none"
               >
                 <option value="">Select Ward</option>
-                {/* {wards.map((ward, index) => (
+                {wards.map((ward, index) => (
                   <option key={index} value={ward}>{ward}</option>
-                ))} */}
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
-                <option value="">5</option>
-                <option value="">6</option>
-                <option value="">7</option>
-                <option value="">8</option>
-                <option value="">9</option>
-                <option value="">10</option>
-                <option value="">11</option>
-                <option value="">12</option>
-                <option value="">13</option>
-                <option value="">14</option>
-                <option value="">15</option>
-
-
+                ))}
                 <option value="Other">Other</option>
               </select>
               {selectedWard === 'Other' && (
@@ -823,6 +814,9 @@ const Create_Member = () => {
                 />
               )}
             </div>
+
+
+
 
 
 
@@ -912,8 +906,7 @@ const Create_Member = () => {
 
 
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <div className="space-y-2">
               <label htmlFor="member" className="block text-sm text-gray-800">Member Type</label>
@@ -941,62 +934,38 @@ const Create_Member = () => {
               </select>
             </div>
 
-
-            {selectedMemberType !== "General Member" && (
-              <div className="space-y-2">
-                <label htmlFor="organizerFee" className="block text-sm text-gray-800">Organizer Fee</label>
-                <input
-                  type="number"
-                  id="organizerFee"
-                  name="organizerFee"
-                  value={30000}
-                  readOnly
-                  className={`w-full px-4 py-2 border rounded-md ${errors.organizerFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-                />
-              </div>
-            )}
-
-
-
+            {/* Organizer Fee field will always be shown, but the value depends on the selected member type */}
             <div className="space-y-2">
-              <label htmlFor="membershipType" className="block text-sm text-gray-800">Subscription Time</label>
-              <select
-                id="membershipType"
-                name="membershipType"
-                value={membershipType}
-                onChange={handleMembershipTypeChange}
-                className={`w-full px-4 py-2 border rounded-md ${errors.membershipType ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}>
-                <option value="" disabled>Select Subscription Time</option>
-                <option value="monthly">Monthly</option>
-                {/* <option value="half_yearly">Half Yearly</option>
-                <option value="yearly">Yearly</option>
-                <option value="lifetime">Life Time</option> */}
-              </select>
-              {errors.membershipType && <span className="text-xs text-red-400">{errors.membershipType}</span>}
-            </div>
-
-
-            <div className="space-y-2">
-              <label htmlFor="membershipCost" className="block text-sm text-gray-800">Subscription Fee</label>
+              <label htmlFor="organizerFee" className="block text-sm text-gray-800">Organizer Fee</label>
               <input
-                type="text"
-                id="membershipCost"
-                name="membershipCost"
-                value={membershipCost}
-                disabled
-                className={`w-full px-4 py-2 border rounded-md ${errors.membershipCost ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+                type="number"
+                id="organizerFee"
+                name="organizerFee"
+                value={selectedMemberType === "General Member" ? 0 : 30000}
+                readOnly
+                className={`w-full px-4 py-2 border rounded-md ${errors.organizerFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
               />
-              {errors.membershipCost && <span className="text-xs text-red-400">{errors.membershipCost}</span>}
             </div>
 
 
+
+            
+            <div className="space-y-2">
+              <label htmlFor="referenceId" className="block text-sm text-gray-800">Reference ID</label>
+              <input type="text" id="referenceId" name="referenceId" placeholder="Reference ID"
+                className={`w-full px-4 py-2 border rounded-md ${errors.referenceId ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
+              {errors.referenceId && <span className="text-xs text-red-400">{errors.referenceId}</span>}
+            </div>
+
+
+            
 
           </div>
 
 
 
-          {/* {registration fee, Id card fee, Service charge fee} */}
 
+          {/* Registration fee, Id card fee, Service charge fee */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
 
             <div className="space-y-2">
@@ -1006,61 +975,46 @@ const Create_Member = () => {
               {errors.registrationFee && <span className="text-xs text-red-400">{errors.registrationFee}</span>}
             </div>
 
-
-
             <div className="space-y-2">
-              <label htmlFor="idCardFee" className="block text-sm text-gray-800">ID Card Fee</label>
+              <label htmlFor="idCardFee" className="block text-sm text-gray-800">ID Card Charge</label>
               <input type="number" id="idCardFee" name="idCardFee" placeholder="Id Card Fee" value={250} readOnly
                 className={`w-full px-4 py-2 border rounded-md ${errors.idCardFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.idCardFee && <span className="text-xs text-red-400">{errors.idCardFee}</span>}
             </div>
 
-
-
-
             <div className="space-y-2">
-              <label htmlFor="serviceFee" className="block text-sm text-gray-800">Service Fee</label>
-              <input type="number" id="serviceFee" name="serviceFee" placeholder="service Fee" value={200} readOnly
+              <label htmlFor="serviceFee" className="block text-sm text-gray-800">Service Charge</label>
+              <input type="number" id="serviceFee" name="serviceFee" placeholder="Service Fee" value={200} readOnly
                 className={`w-full px-4 py-2 border rounded-md ${errors.serviceFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`} />
               {errors.serviceFee && <span className="text-xs text-red-400">{errors.serviceFee}</span>}
             </div>
 
-
-            {/* total amount  */}
-
+            {/* Total amount calculation */}
             <div className="space-y-2">
               <label htmlFor="totalAmount" className="block text-sm text-gray-800">Total Amount</label>
               <input
                 type="number"
                 id="totalAmount"
                 name="totalAmount"
-                value={
-                  (selectedMemberType !== "General Member" ? 30000 : 0) +
-                  (parseInt(membershipCost) || 0) +
-                  100 + // Registration Fee
-                  250 + // ID Card Fee
-                  200   // Service Fee
-                }
+                value={selectedMemberType === "General Member" ? 550 : 30550}  // Display Total Fee based on member type
                 readOnly
                 className={`w-full px-4 py-2 border rounded-md ${errors.totalAmount ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
               />
             </div>
 
-
             {/* End Date */}
             <div className="space-y-2">
-              <label htmlFor="endDate" className="block text-sm text-gray-800">End Date</label>
-              <input
-                type="date"
-                id="endDate"
-                name="endDate"
-                value={endDate}
-                disabled
-                className={`w-full px-4 py-2 border rounded-md ${errors.endDate ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-              />
-              {errors.endDate && <span className="text-xs text-red-400">{errors.endDate}</span>}
-            </div>
-
+    <label htmlFor="endDate" className="block text-sm text-gray-800">End Date</label>
+    <input
+      type="date"
+      id="endDate"
+      name="endDate"
+      value={endDate}
+      disabled
+      className={`w-full px-4 py-2 border rounded-md ${errors.endDate ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
+    />
+    {errors.endDate && <span className="text-xs text-red-400">{errors.endDate}</span>}
+  </div>
 
           </div>
 

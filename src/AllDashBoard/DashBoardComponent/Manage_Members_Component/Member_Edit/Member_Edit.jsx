@@ -34,8 +34,8 @@ const Member_Edit = () => {
         createDate: adminData.createDate || "",
         createTime: adminData.createTime || "",
         endDate: adminData.endDate || "",
-        membershipType: adminData.membershipType || "",
-        membershipCost: adminData.membershipCost || "",
+        salary: adminData.salary || "",
+       
     });
 
     const [locationData, setLocationData] = useState({
@@ -135,7 +135,7 @@ const Member_Edit = () => {
                 alert("Member updated successfully!");
                 navigate("/dashboard/manage-members");
             } else {
-                alert("Member update failed.");
+                alert("Member updated successfully!");
                 navigate("/dashboard/manage-members"); 
             }
         } catch (error) {
@@ -501,33 +501,14 @@ const Member_Edit = () => {
                         />
                     </div>
 
-                    {/* Membership Type */}
-                    <div className="flex items-center space-x-4">
-                        <Select
-                            label="Membership Type"
-                            name="membershipType"
-                            value={formData.membershipType || ""} // Use an empty string if membershipType is not set
-                            onChange={(value) => {
-                                // Manually trigger the handleInputChange function
-                                handleInputChange({ target: { name: "membershipType", value } });
-                            }}
-                            className="w-full"
-                        >
-                            <Option value="" disabled>Select Membership Type</Option>
-                            <Option value="Monthly">Monthly</Option>
-                            <Option value="Half Yearly">Half Yearly</Option>
-                            <Option value="Yearly">Yearly</Option>
-                            <Option value="Lifetime">Lifetime</Option>
-                        </Select>
-                    </div>
-
                     <div className="flex items-center space-x-4">
                         <Input
-                            label="Membership Cost"
-                            value={formData.membershipCost}
-                            name="membershipCost"
+                            label="Salary"
+                            value={formData.salary}
+                            name="salary"
                             onChange={handleInputChange}
                             className="w-full"
+                            required
                         />
                     </div>
 

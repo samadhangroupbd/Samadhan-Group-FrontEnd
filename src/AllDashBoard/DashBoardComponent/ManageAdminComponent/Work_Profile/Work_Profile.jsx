@@ -60,7 +60,9 @@ const Work_Profile = () => {
             // Skip members with roles like 'Division Admin', 'District Admin', etc.
             const excludedRoles = [
                 'Division Admin', 
-                'District Admin', 
+                'District Admin',
+                'City Corporation Ward Admin', 
+                'Paurasabha Ward Admin',
                 'Upazila Admin', 
                 'Union Admin', 
                 'Ward Admin'
@@ -100,6 +102,14 @@ const Work_Profile = () => {
                         case 'District Admin':
                             filteredMembers = membersData.filter(member => 
                                 member.district === admin.district && member.aproval === 'approved');
+                            break;
+                        case 'City Corporation Ward Admin':
+                            filteredMembers = membersData.filter(member =>
+                                member.cityCorporationWard === admin.cityCorporationWard && member.aproval === 'approved');
+                            break;
+                        case 'Paurasabha Ward Admin':
+                            filteredMembers = membersData.filter(member =>
+                                member.paurasabhaWard === admin.paurasabhaWard && member.aproval === 'approved');
                             break;
                         case 'Upazila Admin':
                             filteredMembers = membersData.filter(member => 
