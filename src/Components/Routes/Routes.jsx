@@ -48,6 +48,12 @@ import Invoice from "../Pages/InvoiceAndOthers/Invoice/Invoice";
 import Organizer_Member from "../../AllDashBoard/DashBoardComponent/Manage_Members_Component/Organizer_Member/Organizer_Member";
 import Organizer_Approve from "../../AllDashBoard/DashBoardComponent/AprovalPage/Organizer_Approve/Organizer_Approve";
 import AppointmentLetter from "../Pages/InvoiceAndOthers/AppointmentLetter/AppointmentLetter";
+import Manage_Employee from "../../AllDashBoard/DashBoardComponent/Manage_Employee_Components/Manage_Employee/Manage_Employee";
+import Create_Employee from "../../AllDashBoard/DashBoardComponent/Manage_Employee_Components/Create_Employee/Create_Employee";
+import Edit_Employee from "../../AllDashBoard/DashBoardComponent/Manage_Employee_Components/Edit_Employee/Edit_Employee";
+import Employee_Approve from "../../AllDashBoard/DashBoardComponent/AprovalPage/Approve_Employee/Approve_Employee";
+
+
 
 export const router = createBrowserRouter([
     {
@@ -142,6 +148,14 @@ export const router = createBrowserRouter([
                 element:<Create_Admin></Create_Admin>
             },
             {
+                path:"/dashboard/create-employee",
+                element:<Create_Employee></Create_Employee>
+            },
+            {
+                path:"/dashboard/approve-employee",
+                element:<Employee_Approve></Employee_Approve>
+            },
+            {
                 path:"create-member",
                 element:<Create_Member></Create_Member>
             },
@@ -205,6 +219,10 @@ export const router = createBrowserRouter([
                 element:<EditAdmin></EditAdmin>
             },
             {
+                path: "/dashboard/edit-employee/:id",
+                element:<Edit_Employee></Edit_Employee>
+            },
+            {
                 path: "/dashboard/visiting-card/:id",
                 element:<VisitingCard></VisitingCard>
             },
@@ -215,6 +233,10 @@ export const router = createBrowserRouter([
             {
                 path: "manage-members",
                 element:<Manage_Members></Manage_Members>
+            },
+            {
+                path: "manage-employee",
+                element:<Manage_Employee></Manage_Employee>
             },
             {
                 path: "/dashboard/approve-organizer",

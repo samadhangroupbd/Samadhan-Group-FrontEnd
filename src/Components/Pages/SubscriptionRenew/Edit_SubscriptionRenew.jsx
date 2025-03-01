@@ -33,8 +33,8 @@ const Edit_SubscriptionRenew = () => {
         createDate: adminData.createDate || "",
         endDate: adminData.endDate || "",
         profileId: adminData.profileId || "",
-        membershipType: adminData.membershipType || "",
-        membershipCost: adminData.membershipCost || "",
+        membershipType: "monthly", // Set default membershipType to "monthly"
+        membershipCost: "300", // Set default membership cost to 300
         paymentPhoto: adminData.paymentPhoto || null,
         paymentApprove: "no",
     });
@@ -59,15 +59,15 @@ const Edit_SubscriptionRenew = () => {
             case "monthly":
                 newEndDate.setMonth(newEndDate.getMonth() + 1);
                 break;
-            case "half_yearly":
-                newEndDate.setMonth(newEndDate.getMonth() + 6);
-                break;
-            case "yearly":
-                newEndDate.setFullYear(newEndDate.getFullYear() + 1);
-                break;
-            case "lifetime":
-                newEndDate.setFullYear(newEndDate.getFullYear() + 10);
-                break;
+            // case "half_yearly":
+            //     newEndDate.setMonth(newEndDate.getMonth() + 6);
+            //     break;
+            // case "yearly":
+            //     newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+            //     break;
+            // case "lifetime":
+            //     newEndDate.setFullYear(newEndDate.getFullYear() + 10);
+            //     break;
             default:
                 break;
         }
@@ -76,23 +76,8 @@ const Edit_SubscriptionRenew = () => {
         setFormData((prevData) => ({
             ...prevData,
             endDate: newEndDate.toISOString().split("T")[0], // set the endDate
-            membershipCost: getMembershipCost(selectedMembershipType), // set the membership cost dynamically
+            membershipCost: "300", // Always set membershipCost to 300 for "monthly"
         }));
-    };
-
-    const getMembershipCost = (membershipType) => {
-        switch (membershipType) {
-            case "monthly":
-                return "100";
-            case "half_yearly":
-                return "500";
-            case "yearly":
-                return "900";
-            case "lifetime":
-                return "5000";
-            default:
-                return "";
-        }
     };
 
     const handleInputChange = (e) => {
@@ -268,11 +253,7 @@ const Edit_SubscriptionRenew = () => {
                                 onChange={handleInputChange}
                                 className={`w-full px-4 py-2 border rounded-md ${errors.membershipType ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
                             >
-                                <option value="" disabled>Select Membership Type</option>
                                 <option value="monthly">Monthly</option>
-                                <option value="half_yearly">Half Yearly</option>
-                                <option value="yearly">Yearly</option>
-                                <option value="lifetime">Life Time</option>
                             </select>
                             {errors.membershipType && <span className="text-xs text-red-400">{errors.membershipType}</span>}
                         </div>

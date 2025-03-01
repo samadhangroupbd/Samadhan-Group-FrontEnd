@@ -164,7 +164,7 @@ const Subscription_Manage = () => {
               <select
                 value={availabilityFilter}
                 onChange={(e) => setAvailabilityFilter(e.target.value)}
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md bg-white border-gray-400"
               >
                 <option value="All">All Availability</option>
                 <option value="Available">Available</option>

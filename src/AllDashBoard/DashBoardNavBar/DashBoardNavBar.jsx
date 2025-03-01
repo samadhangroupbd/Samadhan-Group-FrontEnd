@@ -66,6 +66,7 @@ const DashBoardNavBar = (props) => {
                     { text: 'Manage Admin', icon: <MdOutlineManageAccounts className='text-2xl' />, link: '/dashboard/manage-admin' },
                     { text: 'Manage General Member', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
                     { text: 'Manage Organizer', icon: <GoProjectSymlink className='text-2xl' />, link: 'manage-organizer' },
+                    { text: 'Manage Employee', icon: <GoProjectSymlink className='text-2xl' />, link: 'manage-employee' },
 
                    
                     { text: 'Manage Blog', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-blog' },
@@ -103,7 +104,8 @@ const DashBoardNavBar = (props) => {
 
                     { text: 'Approve General Member', icon: <TiTick className='text-2xl' />, link: '/dashboard/Aprove-members' },
                     { text: 'Approve Organizer', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-organizer' },
-                    { text: 'Aprove Admin', icon: <TiTick className='text-2xl' />, link: '/dashboard/aprove-admin' },
+                    { text: 'Approve Admin', icon: <TiTick className='text-2xl' />, link: '/dashboard/aprove-admin' },
+                    { text: 'Approve Employee', icon: <TiTick className='text-2xl' />, link: '/dashboard/approve-employee' },
                     { text: 'Approve Renew Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-renew-subscription' },
                     
                     // { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },

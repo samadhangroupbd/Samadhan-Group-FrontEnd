@@ -116,7 +116,7 @@ const Manage_Members = () => {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
               <Link to={'/dashboard/create-member'}>
                 <Button className="flex items-center gap-3" size="sm">
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Member
+                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add General Member
                 </Button>
               </Link>
             </div>

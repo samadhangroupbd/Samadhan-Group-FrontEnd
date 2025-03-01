@@ -21,6 +21,28 @@ const Update_Product = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const categories = [
+    "Electronics", "Smartphones", "Laptops", "Tablets", "TVs", "Headphones", "Wearable Technology (e.g., Smartwatches)", 
+    "Cameras", "Fashion & Apparel", "Men’s Clothing", "Women’s Clothing", "Shoes", "Accessories (e.g., Bags, Hats, Scarves)", 
+    "Jewelry", "Activewear", "Beauty & Personal Care", "Skincare", "Haircare", "Makeup", "Fragrances", "Health & Wellness Products", 
+    "Grooming Tools", "Home & Living", "Furniture", "Home Decor", "Kitchen Appliances", "Bedding & Linens", "Lighting Fixtures", 
+    "Rugs & Carpets", "Toys & Games", "Action Figures", "Board Games", "Dolls", "Puzzles", "Outdoor Play Equipment", 
+    "Educational Toys", "Health & Fitness", "Supplements", "Exercise Equipment", "Apparel (e.g., Gym Clothes)", 
+    "Sports Accessories", "Yoga & Meditation Gear", "Books & Media", "Fiction", "Non-Fiction", "Educational Books", 
+    "E-books", "Magazines", "Music & Movies (CDs, DVDs)", "Food & Beverages", "Snacks", "Beverages (e.g., Soft Drinks, Juices)", 
+    "Dairy Products", "Groceries", "Organic & Specialty Foods", "Automotive & Tools", "Car Parts & Accessories", 
+    "Motorbikes & Accessories", "Tools & Equipment", "Car Care Products", "Electronics for Cars (e.g., GPS, Dashcams)", 
+    "Office Supplies & Stationery", "Office Furniture", "Paper Products", "Writing Tools (Pens, Pencils)", 
+    "Organizational Items (Binders, Files)", "Tech Accessories (Keyboards, Mice)", "Sports & Outdoors", "Camping & Hiking Gear", 
+    "Bicycles & Accessories", "Outdoor Furniture", "Fishing & Hunting Gear", "Team Sports Equipment", "Pet Supplies", 
+    "Pet Food & Treats", "Pet Toys", "Pet Grooming Products", "Pet Accessories (e.g., Leashes, Beds)", "Pet Health Products (e.g., Flea & Tick Solutions)", 
+    "Baby Products", "Diapers & Wipes", "Baby Clothes", "Feeding & Nursing", "Baby Gear (Strollers, Car Seats)", 
+    "Nursery Furniture", "Arts & Crafts", "Art Supplies (e.g., Paint, Brushes)", "Craft Materials (e.g., Paper, Yarn)", 
+    "DIY Kits", "Sewing & Knitting", "Party Supplies", "Luxury Goods", "Designer Clothing & Accessories", "High-end Jewelry", 
+    "Luxury Watches", "Premium Bags & Footwear", "Fine Wines & Spirits", "Technology & Software", "Software Applications", 
+    "Web Development Tools", "Cloud Services", "Hardware (e.g., Servers, Routers)"
+  ];
+
   // Handle text input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -148,13 +170,21 @@ const Update_Product = () => {
           />
           {errors.productName && <span className="text-xs text-red-400">{errors.productName}</span>}
 
-          <Input
-            label="Category"
-            value={formData.category}
-            name="category"
-            onChange={handleInputChange}
-            className="mb-4"
-          />
+          {/* Category Select */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Category</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="mt-2 w-full p-2 border rounded-md bg-white border-gray-400"
+            >
+              <option value="">Select a Category</option>
+              {categories.map((category, index) => (
+                <option key={index} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
 
           <Input
             label="Default Price"

@@ -13,38 +13,56 @@ import {
   Tooltip,
   CardFooter,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom"; // Use react-router-dom Link
+import { Link, Navigate, useNavigate } from "react-router-dom"; // Use react-router-dom Link
 import { FaEye } from "react-icons/fa";
-import { MdDriveFileMoveOutline } from "react-icons/md";
-import { FcProcess } from "react-icons/fc";
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
+  "IT Employee",
+  "HR Employee",
+   "Finance Employee",
+    "Security Employee",
+    "Office Staff",
+    "Office Employee",
+    "Office Admin",
+    "Office Manager",
+    "Office Supervisor",
+    "Office Assistant",
+    "Office Clerk",
+    "Office Secretary",
+    "Office Coordinator",
+    "Office Executive",
+    "Office Director",
+    "Office President",
+    "Office Vice President",
+    "Office CEO",
+    "Office COO",
+    "Office CTO",
+    "Office CMO",
+    "Office CIO",
+    "Office CFO",
+    "Office CSO",
+    "Office CRO",
+    "Office CCO",
+    "Office CDO",
+    "Office CBO",
+    "Office CLO",
+    "Office CPO",
+    "Office CVO",
 
-  "Central chief Organizer",
-  "Central Organizer",
-  "Divisional Chief Organizer",
-  "Divisional Organizer",
-  "District Chief Organizer",
-  "District Organizer",
-  "Paurasabha Ward Organizer",
-  "City Corporation Ward Organizer",
-  "Upazila Chief Organizer",
-  "Upazila Organizer",
-  "Union Organizer",
-  "Ward Organizer",
 
 ];
 
 // Table headers
-const TABLE_HEAD = ["Member", "Position", "Profile ID", "Joining Date", "Actions"];
+const TABLE_HEAD = ["Admin", "Position", "Profile ID", "Joining Date", "Actions"];
 
-const Organizer_Member = () => {
+const Employee_Approve = () => {
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [selectedRole, setSelectedRole] = useState("All"); // Selected role for filtering
-  const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
+
   // Fetch data from the API
   useEffect(() => {
     const fetchMembers = async () => {
@@ -52,10 +70,11 @@ const Organizer_Member = () => {
         const response = await fetch("http://localhost:5000/signup");
         const data = await response.json();
 
-        // Filter members for approval status and role
-        const filteredMembers = data
-          .filter((member) => member.aproval === "approved") // Filter only approved members
-          .filter((member) => ROLES_TO_FILTER.includes(member.member)); // Filter by role
+        // Filter the members based on the roles and approval status
+        const filteredMembers = data.filter((member) =>
+          ROLES_TO_FILTER.includes(member.member) &&
+        (member.aproval === "pending" || !member.aproval)
+        );
 
         // Set filtered members to state
         setMembers(filteredMembers);
@@ -68,8 +87,8 @@ const Organizer_Member = () => {
   }, []);
 
 
-  // Update this in the delete handler
-  const handleDelete = (id) => {
+   // Update this in the delete handler
+   const handleDelete = (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this Member?');
     if (!confirmDelete) return;
 
@@ -87,6 +106,41 @@ const Organizer_Member = () => {
   };
 
 
+// Handle approve action
+const handleApprove = (id) => {
+  const confirmApprove = window.confirm("Are you sure you want to approve this admin?");
+  if (!confirmApprove) return;
+
+  setLoading(true); // Start loading
+
+  fetch(`http://localhost:5000/approve-admin/${id}`, {
+    method: 'PUT', // Changed to PUT as per the backend implementation
+    headers: {
+      'Content-Type': 'application/json', // Make sure to send content as JSON
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Error approving admin');
+      }
+      return response.json();
+    })
+    .then(() => {
+      // Update the local state after approval
+      setMembers((prevMembers) =>
+        prevMembers.map((member) =>
+          member._id === id ? { ...member, aproval: "approved" } : member
+        )
+      );
+      setLoading(false); // Stop loading after approval
+      navigate("/dashboard/manage-admin");  // Redirect to the same page after approval
+    })
+    .catch((error) => {
+      console.error('Error approving admin:', error);
+      setLoading(false); // Stop loading in case of error
+      navigate("/dashboard/manage-admin"); 
+    });
+};
 
   // Filter members based on search query and selected role
   const filteredMembers = members
@@ -101,7 +155,7 @@ const Organizer_Member = () => {
     });
 
   // Pagination
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastMember = currentPage * itemsPerPage;
   const indexOfFirstMember = indexOfLastMember - itemsPerPage;
@@ -120,18 +174,11 @@ const Organizer_Member = () => {
           <div className="mb-8 flex items-center justify-between gap-8 flex-wrap">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
               <Typography variant="h5" color="blue-gray">
-                Members list
+                Admins list
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                See information about all Members
+                See information about all admins
               </Typography>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-              <Link to={'/dashboard/create-member'}>
-                <Button className="flex items-center gap-3" size="sm">
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Organizer Member
-                </Button>
-              </Link>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -149,21 +196,14 @@ const Organizer_Member = () => {
             </div>
             <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
               <Input
-                label="Search(Name/Profile Id)"
+                label="Search Name And Admin Position"
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-2 sm:p-3 md:p-4 lg:p-4" // Adjust padding for responsiveness
-                labelProps={{
-                  className: "text-xs sm:text-sm lg:text-base", // Make label responsive
-                }}
-                inputProps={{
-                  className: "flex items-center", // Align icon and text
-                }}
+                className="w-full"
+                labelProps={{ className: "text-sm" }}
               />
             </div>
-
-
           </div>
         </CardHeader>
 
@@ -186,7 +226,7 @@ const Organizer_Member = () => {
             </thead>
             <tbody>
               {currentMembers.map(
-                ({ _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, salary, endDate, membershipType, membershipCost }, index) => {
+                ({_id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost }, index) => {
                   const isLast = index === currentMembers.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -222,18 +262,17 @@ const Organizer_Member = () => {
                       </td>
                       <td className={classes}>
                         <div className="flex gap-2">
-
-
+                          {/* Edit Button */}
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-member/${_id}`} state={{ adminData: { _id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto, profileId, createDate, createTime, salary, endDate, membershipType, membershipCost } }}>
+                            <Link to={`/dashboard/edit-admin/${_id}`} state={{ adminData: {_id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost   } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>
                             </Link>
                           </Tooltip>
 
-
-                          <Link to={`/dashboard/member-details/${_id}`}>
+                          {/* View Button */}
+                          <Link to={`/dashboard/user-details/${_id}`}>
                             <Tooltip content="View">
                               <IconButton variant="text">
                                 <FaEye className="h-4 w-4" />
@@ -241,31 +280,23 @@ const Organizer_Member = () => {
                             </Tooltip>
                           </Link>
 
-
-
-                          <Tooltip content="Delete">
-                            <IconButton variant="text">
-                              <TrashIcon className="h-4 w-4 text-red-500" onClick={() => handleDelete(`${_id}`)} />
-                            </IconButton>
+                          <Tooltip content="Approve">
+                            <Button
+                              variant="filled"
+                              size="sm"
+                              color="green"
+                              onClick={() => handleApprove(_id)}
+                            >
+                              Approve
+                            </Button>
                           </Tooltip>
 
-                          <Link to={`/dashboard/work-profile/${_id}`}>
-                            <Tooltip content="Work Process">
-                              <IconButton variant="text">
-                                <FcProcess className="h-4 w-4 text-red-500" />
-                              </IconButton>
-                            </Tooltip>
-                          </Link>
-
-                          <Link to={`/dashboard/file-manage/${_id}`}>
-                            <Tooltip content="File Manage">
-                              <IconButton variant="text">
-                                <MdDriveFileMoveOutline className="h-4 w-4 text-red-500" />
-                              </IconButton>
-                            </Tooltip>
-                          </Link>
-
-
+                          {/* Delete Button */}
+                          <Tooltip content="Delete">
+                            <IconButton variant="text" onClick={() => handleDelete(_id)}>
+                              <TrashIcon className="h-4 w-4 text-red-500" />
+                            </IconButton>
+                          </Tooltip>
                         </div>
                       </td>
                     </tr>
@@ -295,4 +326,4 @@ const Organizer_Member = () => {
   );
 };
 
-export default Organizer_Member;
+export default Employee_Approve;
