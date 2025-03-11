@@ -52,6 +52,10 @@ import Manage_Employee from "../../AllDashBoard/DashBoardComponent/Manage_Employ
 import Create_Employee from "../../AllDashBoard/DashBoardComponent/Manage_Employee_Components/Create_Employee/Create_Employee";
 import Edit_Employee from "../../AllDashBoard/DashBoardComponent/Manage_Employee_Components/Edit_Employee/Edit_Employee";
 import Employee_Approve from "../../AllDashBoard/DashBoardComponent/AprovalPage/Approve_Employee/Approve_Employee";
+import View_Blog from "../../AllDashBoard/DashBoardComponent/Manage_Blog/View_Blog";
+import Edit_Blog from "../../AllDashBoard/DashBoardComponent/Manage_Blog/Edit_Blog";
+import About_Us from "../Pages/About_US/About_US";
+import Contact from "../Pages/ContactPage/Contact";
 
 
 
@@ -73,6 +77,10 @@ export const router = createBrowserRouter([
             {
                 path: "/product/:id",
                 element: <HomeProductDetail></HomeProductDetail>
+            },
+            {
+                path: "/blog/:id",
+                element: <View_Blog></View_Blog>
             },
 
             {
@@ -113,6 +121,14 @@ export const router = createBrowserRouter([
             {
                 path: "/edit-profile/:id",
                 element:<Edit_Profile></Edit_Profile>
+            },
+            {
+                path: "about-us",
+                element: <About_Us></About_Us>
+            },
+            {
+                path:"contact",
+                element: <Contact></Contact>
             }
 
 
@@ -174,6 +190,10 @@ export const router = createBrowserRouter([
             {
                 path: "manage-blog",
                 element:<Manage_Blog></Manage_Blog>
+            },
+            {
+                path: "/dashboard/Edit_Blog/:id",
+                element: <Edit_Blog></Edit_Blog>
             },
 
             {

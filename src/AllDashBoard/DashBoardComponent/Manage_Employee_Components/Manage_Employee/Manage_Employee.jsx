@@ -21,37 +21,27 @@ import { MdDriveFileMoveOutline } from "react-icons/md";
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
-  "IT Employee",
-  "HR Employee",
-   "Finance Employee",
-    "Security Employee",
-    "Office Staff",
-    "Office Employee",
-    "Office Admin",
-    "Office Manager",
-    "Office Supervisor",
-    "Office Assistant",
-    "Office Clerk",
-    "Office Secretary",
-    "Office Coordinator",
-    "Office Executive",
-    "Office Director",
-    "Office President",
-    "Office Vice President",
-    "Office CEO",
-    "Office COO",
-    "Office CTO",
-    "Office CMO",
-    "Office CIO",
-    "Office CFO",
-    "Office CSO",
-    "Office CRO",
-    "Office CCO",
-    "Office CDO",
-    "Office CBO",
-    "Office CLO",
-    "Office CPO",
-    "Office CVO",
+  "Country Admin",
+  "Division Admin",
+  "District Admin",
+  "Paurasabha Ward Admin",
+  "City Corporation Ward Admin",
+  "Upazila Admin",
+  "Union Admin",
+  "Ward Admin",
+  "General Member",
+  "Central chief Organizer",
+  "Central Organizer",
+  "Divisional Chief Organizer",
+  "Divisional Organizer",
+  "District Chief Organizer",
+  "District Organizer",
+  "Paurasabha Ward Organizer",
+  "City Corporation Ward Organizer",
+  "Upazila Chief Organizer",
+  "Upazila Organizer",
+  "Union Organizer",
+  "Ward Organizer",
 
 ];
 
@@ -78,7 +68,7 @@ const Manage_Employee = () => {
 
         // Filter based on roles if needed
         const filteredMembers = approvedMembers.filter((member) =>
-          ROLES_TO_FILTER.includes(member.member)
+          !ROLES_TO_FILTER.includes(member.member)
         );
 
         // Set the filtered and approved members to state
@@ -94,7 +84,7 @@ const Manage_Employee = () => {
 
   // Update this in the delete handler
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this admin?');
+    const confirmDelete = window.confirm('Are you sure you want to delete this Employee?');
     if (!confirmDelete) return;
 
     setLoading(true); // Start loading
@@ -105,7 +95,7 @@ const Manage_Employee = () => {
         setLoading(false); // Stop loading after deletion
       })
       .catch((error) => {
-        console.error('Error deleting admin:', error);
+        console.error('Error deleting Employee:', error);
         setLoading(false); // Stop loading in case of error
       });
   };
@@ -144,10 +134,10 @@ const Manage_Employee = () => {
           <div className="mb-8 flex items-center justify-between gap-8 flex-wrap">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
               <Typography variant="h5" color="blue-gray">
-                Admins list
+              Employees list
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                See information about all admins
+                See information about all Employees
               </Typography>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -159,7 +149,7 @@ const Manage_Employee = () => {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="flex flex-wrap gap-2">
+            {/* <div className="flex flex-wrap gap-2">
               {["All", ...ROLES_TO_FILTER].map((role) => (
                 <Button
                   key={role}
@@ -170,10 +160,10 @@ const Manage_Employee = () => {
                   {role}
                 </Button>
               ))}
-            </div>
+            </div> */}
             <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
               <Input
-                label="Search Name And Admin Position"
+                label="Search Name And Employee Position"
                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

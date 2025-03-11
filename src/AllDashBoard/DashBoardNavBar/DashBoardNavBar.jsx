@@ -18,7 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link, useLocation } from 'react-router-dom';  // Import Link and useLocation for active highlighting
+import { Link, useLocation, useNavigate } from 'react-router-dom';  // Import Link and useLocation for active highlighting
 import { IoIosCreate, IoIosPeople } from "react-icons/io";
 import { MdManageSearch, MdOutlineManageAccounts, MdOutlineManageSearch } from 'react-icons/md';
 import { TbLogout } from 'react-icons/tb';
@@ -26,10 +26,7 @@ import { CgProfile } from "react-icons/cg";
 import { RiAdminFill } from "react-icons/ri";
 import { GoProjectSymlink } from "react-icons/go";
 import { TiTick } from "react-icons/ti";
-
-
-
-
+import { AuthContext } from '../../Components/Authentication/AuthProvider/AuthProvider';
 
 const drawerWidth = 240;
 
@@ -38,6 +35,13 @@ const DashBoardNavBar = (props) => {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
     const location = useLocation();  // Hook to get the current path for highlighting
+    const { user, logOut } = React.useContext(AuthContext);
+    const navigate = useNavigate(); // Declare navigate
+
+    const handleSignOut = () => {
+        logOut(); // Call the logOut function from AuthContext
+        navigate('/login'); // Redirect user to the login page after logging out
+    };
 
     const handleDrawerClose = () => {
         setIsClosing(true);
@@ -56,30 +60,17 @@ const DashBoardNavBar = (props) => {
 
     const drawer = (
         <div>
-
             <List>
-                {[
+                {[ 
                     { text: 'Dashboard', icon: <DashboardIcon />, link: '/dashboard/statistic' },
-
-                    // { text: 'Create Admin', icon: <IoIosCreate className='text-2xl' />, link: '/dashboard/create-admin' },
-
                     { text: 'Manage Admin', icon: <MdOutlineManageAccounts className='text-2xl' />, link: '/dashboard/manage-admin' },
                     { text: 'Manage General Member', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
-                    { text: 'Manage Organizer', icon: <GoProjectSymlink className='text-2xl' />, link: 'manage-organizer' },
-                    { text: 'Manage Employee', icon: <GoProjectSymlink className='text-2xl' />, link: 'manage-employee' },
-
-                   
+                    { text: 'Manage Organizer', icon: <GoProjectSymlink className='text-2xl' />, link: '/dashboard/manage-organizer' },
+                    { text: 'Manage Employee', icon: <GoProjectSymlink className='text-2xl' />, link: '/dashboard/manage-employee' },
                     { text: 'Manage Blog', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-blog' },
-
                     { text: 'Manage Product', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-product' },
-
                     { text: 'Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/subscription' },
-                   
                     { text: 'Refer List', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/refer-list' },
-
-
-
-
                 ].map(({ text, icon, link }, index) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton selected={location.pathname === link}>
@@ -97,28 +88,28 @@ const DashBoardNavBar = (props) => {
             </List>
 
             <Divider />
+
             <List>
                 {[
-                    // { text: 'Admin List', icon: <RiAdminFill className='text-2xl' />, link: '/dashboard/admin-list' },
-
-
                     { text: 'Approve General Member', icon: <TiTick className='text-2xl' />, link: '/dashboard/Aprove-members' },
                     { text: 'Approve Organizer', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-organizer' },
                     { text: 'Approve Admin', icon: <TiTick className='text-2xl' />, link: '/dashboard/aprove-admin' },
                     { text: 'Approve Employee', icon: <TiTick className='text-2xl' />, link: '/dashboard/approve-employee' },
                     { text: 'Approve Renew Subscription', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-renew-subscription' },
-                    
-                    // { text: 'Profile', icon: <CgProfile className='text-2xl' />, link: '/dashboard/profile' },
-                    { text: 'Sign Out', icon: <TbLogout className='text-2xl' />, link: '/dashboard/signout' },
-                ].map(({ text, icon, link }, index) => (
+                    { text: 'Sign Out', icon: <TbLogout className='text-2xl' />, onClick: handleSignOut },
+                ].map(({ text, icon, link, onClick }, index) => (
                     <ListItem key={text} disablePadding>
-                        <ListItemButton selected={location.pathname === link}>
+                        <ListItemButton selected={location.pathname === link} onClick={onClick}>
                             <ListItemIcon>{icon}</ListItemIcon>
                             <ListItemText
                                 primary={
-                                    <Link to={link} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        {text}
-                                    </Link>
+                                    link ? (
+                                        <Link to={link} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            {text}
+                                        </Link>
+                                    ) : (
+                                        text
+                                    )
                                 }
                             />
                         </ListItemButton>

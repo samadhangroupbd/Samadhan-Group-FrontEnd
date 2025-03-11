@@ -55,32 +55,30 @@ const TrustedBrand = () => {
         <div className="scene">
           <div className="carousel keen-slider" ref={sliderRef}>
             <div className="carousel__cell number-slide1">
-              <img src="./trustBrand0.jpg" alt="Brand 1" />
+              <img src="./brand01.jpg" alt="Brand 1" />
             </div>
             <div className="carousel__cell number-slide2">
-              <img src="./trustBrand0.jpg" alt="Brand 2" />
+              <img src="./brand02.jpg" alt="Brand 2" />
             </div>
             <div className="carousel__cell number-slide3">
-              <img src="./trustBrand0.jpg" alt="Brand 3" />
+              <img src="./brand03.jpg" alt="Brand 3" />
             </div>
             <div className="carousel__cell number-slide4">
-              <img src="./trustBrand0.jpg" alt="Brand 4" />
+              <img src="./brand04.jpg" alt="Brand 4" />
             </div>
             <div className="carousel__cell number-slide5">
-              <img src="./trustBrand0.jpg" alt="Brand 5" />
+              <img src="./brand05.jpg" alt="Brand 5" />
             </div>
             <div className="carousel__cell number-slide6">
-              <img src="./trustBrand0.jpg" alt="Brand 6" />
+              <img src="./brand06.jpg" alt="Brand 6" />
             </div>
             <div className="carousel__cell number-slide6">
-              <img src="./trustBrand0.jpg" alt="Brand 6" />
+              <img src="./brand07.jpg" alt="Brand 6" />
             </div>
             <div className="carousel__cell number-slide6">
-              <img src="./trustBrand0.jpg" alt="Brand 6" />
+              <img src="./brand08.jpg" alt="Brand 6" />
             </div>
-            <div className="carousel__cell number-slide6">
-              <img src="./trustBrand0.jpg" alt="Brand 6" />
-            </div>
+            
           </div>
         </div>
       </div>

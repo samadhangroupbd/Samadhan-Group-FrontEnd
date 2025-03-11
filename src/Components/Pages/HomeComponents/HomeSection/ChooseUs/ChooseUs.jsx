@@ -27,7 +27,7 @@ export function GalleryWithCarousel() {
 // Main ChooseUs Component
 const ChooseUs = () => {
   return (
-    <div className="bg-gray-100 py-12">
+    <div className="bg-gray-100 py-12 px-4">
       {/* Heading moved to the very top */}
       <div className="container mx-auto text-center mb-8">
         <h2 className="text-4xl font-bold text-gray-800">Why Choose Us?</h2>

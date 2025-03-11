@@ -775,33 +775,6 @@ const Create_Employee = () => {
     <option value="HR Employee">HR Employee</option>
     <option value="Finance Employee">Finance Employee</option>
     <option value="Security Employee">Security Employee</option>
-    <option value="Office Staff">Office Staff</option>
-    <option value="Office Employee">Office Employee</option>
-    <option value="Office Admin">Office Admin</option>
-    <option value="Office Manager">Office Manager</option>
-    <option value="Office Supervisor">Office Supervisor</option>
-    <option value="Office Assistant">Office Assistant</option>
-    <option value="Office Clerk">Office Clerk</option>
-    <option value="Office Secretary">Office Secretary</option>
-    <option value="Office Coordinator">Office Coordinator</option>
-    <option value="Office Executive">Office Executive</option>
-    <option value="Office Director">Office Director</option>
-    <option value="Office President">Office President</option>
-    <option value="Office Vice President">Office Vice President</option>
-    <option value="Office CEO">Office CEO</option>
-    <option value="Office COO">Office COO</option>
-    <option value="Office CTO">Office CTO</option>
-    <option value="Office CMO">Office CMO</option>
-    <option value="Office CIO">Office CIO</option>
-    <option value="Office CFO">Office CFO</option>
-    <option value="Office CSO">Office CSO</option>
-    <option value="Office CRO">Office CRO</option>
-    <option value="Office CCO">Office CCO</option>
-    <option value="Office CDO">Office CDO</option>
-    <option value="Office CBO">Office CBO</option>
-    <option value="Office CLO">Office CLO</option>
-    <option value="Office CPO">Office CPO</option>
-    <option value="Office CVO">Office CVO</option>
   </select>
   {errors.member && <span className="text-xs text-red-400">{errors.member}</span>}
 </div>
@@ -817,7 +790,7 @@ const Create_Employee = () => {
           <div className="mt-6">
             <button type="submit" disabled={loading}
               className="w-full py-2 px-4 text-white bg-blue-600 rounded-md shadow-md focus:outline-none hover:bg-blue-500 disabled:opacity-50">
-              {loading ? "Create Employee..." : "Create Employee;"}
+              {loading ? "Create Employee..." : "Create Employee"}
             </button>
           </div>
         </form>

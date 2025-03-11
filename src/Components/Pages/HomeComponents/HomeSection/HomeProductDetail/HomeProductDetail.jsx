@@ -34,7 +34,7 @@ const HomeProductDetail = () => {
         <img
           src={product.image} // Dynamic image URL from the product data
           alt={product.productName}
-          className="w-full lg:w-1/2 h-2/3 object-cover mb-4 lg:mb-0 lg:mr-6 rounded-2xl"
+          className="w-1-3 lg:w-1/3 h-2/3 object-cover mb-4 lg:mb-0 lg:mr-6 rounded-2xl"
         />
 
         {/* Text Section */}

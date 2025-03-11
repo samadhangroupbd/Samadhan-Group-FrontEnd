@@ -6,6 +6,7 @@ import Total_List_Graph from "./Total_List_Graph";
 const Statistic = () => {
   const { user } = useContext(AuthContext);
   const [registrationData, setRegistrationData] = useState(null);
+  const [loading, setLoading] = useState(true); // Track loading state
   const [filter, setFilter] = useState("all");
   const [adminCount, setAdminCount] = useState(0);
   const [memberCount, setMemberCount] = useState(0);
@@ -46,9 +47,10 @@ const Statistic = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setLoading(true); // Start loading
         const response = await axios.get("http://localhost:5000/signup");
         const data = response.data;
-
+ 
         // Find the logged-in user's data based on email
         const userData = data.find(item => item.email === user?.email);
 
@@ -65,13 +67,7 @@ const Statistic = () => {
         setAdminCount(admins.length);
 
         // Count members (approved only)
-        const memberRoles = [
-          "General Member", "Central chief Organizer", "Central Organizer",
-          "Divisional Chief Organizer", "Divisional Organizer", "District Chief Organizer","City Corporation Ward Organizer", "Paurasabha Ward Organizer",
-          "District Organizer", "Upazila Chief Organizer", "Upazila Organizer",
-          "Union Organizer", "Ward Organizer"
-        ];
-        const members = filteredData.filter(item => memberRoles.includes(item.member) && item.aproval === "approved");
+        const members = filteredData.filter(item => !adminRoles.includes(item.member) && item.aproval === "approved");
         setMemberCount(members.length);
 
         // Count renewals (approved and paymentApprove === "yes")
@@ -79,11 +75,13 @@ const Statistic = () => {
         setRenewalCount(renewals.length);
 
         // Count unsubscribed users (paymentApprove === "no" and endDate is after the current date)
-        const unsubscribed = filteredData.filter(item => item.aproval === "approved" &item.paymentApprove === "no" || new Date(item.endDate) < new Date());
+        const unsubscribed = filteredData.filter(item => item.aproval === "approved" && item.paymentApprove === "no" || new Date(item.endDate) < new Date());
         setUnsubscribeCount(unsubscribed.length); // Update unsubscribe count
         
       } catch (error) {
         console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false); // Stop loading after the data fetch is completed
       }
     };
 
@@ -92,11 +90,17 @@ const Statistic = () => {
     }
   }, [user?.email, filter]); // Update the data when filter changes
 
+  // If still loading, show loading message
+  // if (loading) {
+  //   return <div className="text-center text-xl text-gray-600">Loading user data...</div>;
+  // }
+
   if (!registrationData) {
-    return <div className="text-center text-xl text-gray-600">Loading user data...</div>;
+    return <div className="text-center text-xl text-gray-600">No user data found!</div>;
   }
 
-  console.log(registrationData)
+  console.log(registrationData);
+
   return (
     <div className="bg-gradient-to-r min-h-screen py-2 px-6 sm:px-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-screen-xl mx-auto">
@@ -156,9 +160,7 @@ const Statistic = () => {
             <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-white text-gray-800">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" className="h-10 w-10 text-indigo-500">
                 <path d="M256,16C123.452,16,16,123.452,16,256S123.452,496,256,496,496,388.548,496,256,388.548,16,256,16ZM403.078,403.078a207.253,207.253,0,1,1,44.589-66.125A207.332,207.332,0,0,1,403.078,403.078Z"></path>
-                <path d="M256,384A104,104,0,0,0,360,280H152A104,104,0,0,0,256,384Z"></path>
-                <polygon points="205.757 228.292 226.243 203.708 168 155.173 109.757 203.708 130.243 228.292 168 196.827 205.757 228.292"></polygon>
-                <polygon points="285.757 203.708 306.243 228.292 344 196.827 381.757 228.292 402.243 203.708 344 155.173 285.757 203.708"></polygon>
+                <path d="M256,384A104,104,0,0,0,360,280a104.142,104.142,0,0,0-40-52A104,104,0,0,0,256,128a104,104,0,0,0-64,240A104,104,0,0,0,256,384Z"></path>
               </svg>
             </div>
             <div className="flex flex-col justify-center align-middle">
@@ -167,11 +169,12 @@ const Statistic = () => {
             </div>
           </div>
 
-          {/* Renewals Count */}
-          <div className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-r from-teal-600 via-green-400 to-yellow-400 text-gray-100 hover:scale-105 transition-transform duration-300">
+          {/* Renewal Count */}
+          <div className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-r from-yellow-500 via-orange-400 to-teal-500 text-gray-100 hover:scale-105 transition-transform duration-300">
             <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-white text-gray-800">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" className="h-10 w-10 text-teal-500">
-                <path d="M231.345 0l15.405 40.494-69.531 18.24 15.625 50.219 54.688 15.272-42.352 38.517 10.43 51.927L231.345 141l-42.35-38.517L178.67 107l15.625-50.22-69.531-18.24L231.345 0z"></path>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" className="h-10 w-10 text-yellow-500">
+                <path d="M224,32C107.31,32,16,123.31,16,256s91.31,224,208,224,208-91.31,208-224S340.69,32,224,32Zm0,384c-88.22,0-160-71.78-160-160s71.78-160,160-160,160,71.78,160,160S312.22,416,224,416Z"></path>
+                <circle cx="224" cy="256" r="40"></circle>
               </svg>
             </div>
             <div className="flex flex-col justify-center align-middle">
@@ -180,11 +183,12 @@ const Statistic = () => {
             </div>
           </div>
 
-          {/* Unsubscribe Count */}
-          <div className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-r from-red-600 via-orange-400 to-red-400 text-gray-100 hover:scale-105 transition-transform duration-300">
+          {/* Unsubscribed Count */}
+          <div className="flex p-4 space-x-4 rounded-lg md:space-x-6 bg-gradient-to-r from-red-500 via-pink-400 to-teal-500 text-gray-100 hover:scale-105 transition-transform duration-300">
             <div className="flex justify-center p-2 align-middle rounded-lg sm:p-4 bg-white text-gray-800">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" className="h-10 w-10 text-red-500">
-                <path d="M144 16C64.5 16 16 64.5 16 144C16 184.5 28.7 222.6 48.3 254.3L144 352L239.7 254.3C259.3 222.6 272 184.5 272 144C272 64.5 223.5 16 144 16zM144 250.7L51.3 144L144 37.3L236.7 144L144 250.7z"></path>
+                <path d="M496 120c0-13.3-10.7-24-24-24h-160c-13.3 0-24 10.7-24 24s10.7 24 24 24h160c13.3 0 24-10.7 24-24z"></path>
+                <path d="M304 336c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24s24-10.7 24-24v-48c0-13.3-10.7-24-24-24z"></path>
               </svg>
             </div>
             <div className="flex flex-col justify-center align-middle">
@@ -194,7 +198,6 @@ const Statistic = () => {
           </div>
         </div>
       </section>
-
       <Total_List_Graph></Total_List_Graph>
     </div>
   );

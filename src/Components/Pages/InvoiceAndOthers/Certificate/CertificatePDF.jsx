@@ -136,11 +136,11 @@ const CertificatePDF = ({ admin }) => (
 
         {/* Corner Design with Rotation */}
         <Image
-          src="/border2.png"
+          src="/border5.png"
           style={[styles.cornerImage, { top: 10, left: 10, transform: [{ rotate: '45deg' }] }]}
         />
         <Image
-          src="/border3.png"
+          src="/border4.png"
           style={[styles.cornerImage, { top: 10, right: 10, transform: [{ rotate: '-180deg' }] }]}
         />
 
@@ -165,7 +165,7 @@ const CertificatePDF = ({ admin }) => (
 
         {/* Award Image */}
         <View style={{ marginTop: 30, alignItems: 'center' }}>
-          <Image src="/awardSG.png" style={{ width: 100, height: 80 }} />
+          <Image src="/awardSG.png" style={{ width: 115, height: 95 }} />
         </View>
 
         {/* Signature Section */}

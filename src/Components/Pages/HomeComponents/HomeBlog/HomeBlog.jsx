@@ -17,15 +17,21 @@ const formatDate = (dateString) => {
 const HomeBlog = () => {
   const [blogs, setBlogs] = useState([]);
 
-  // Fetch blog data from the JSON file
+  // Fetch blog data from the API
   useEffect(() => {
-    fetch("/blog.json")
+    fetch("http://localhost:5000/blog")
       .then((response) => response.json())
       .then((data) => {
         setBlogs(data); // Set the blog data
       })
       .catch((error) => console.error("Error fetching blog data:", error));
   }, []);
+
+  // Function to get 3 random blogs
+  const getRandomBlogs = () => {
+    const shuffledBlogs = [...blogs].sort(() => 0.5 - Math.random()); // Shuffle the blogs
+    return shuffledBlogs.slice(0, 3); // Return the first 3 blogs after shuffle
+  };
 
   return (
     <div className="bg-gray-100">
@@ -34,12 +40,12 @@ const HomeBlog = () => {
       </div>
       <div className="max-w-screen-2xl p-5 mx-auto bg-gray-100 text-gray-800">
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
-          {/* Map over the blogs data and display each one */}
-          {blogs.map((blog) => (
+          {/* Map over the random 3 blogs */}
+          {getRandomBlogs().map((blog) => (
             <div
-              key={blog.id}
+              key={blog._id}
               className="relative flex items-end justify-start w-full text-left bg-center bg-cover h-96 rounded-2xl shadow-lg"
-              style={{ backgroundImage: `url(${blog.image})` }} // Dynamic image from JSON
+              style={{ backgroundImage: `url(${blog.image})` }} // Dynamic image from API
             >
               {/* Darken the entire background using a more intense gradient */}
               <div className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b from-black to-black opacity-70 rounded-2xl"></div>
@@ -49,23 +55,23 @@ const HomeBlog = () => {
                   href="#"
                   className="px-3 py-2 text-xs font-semibold tracking-wider uppercase text-white bg-violet-600 rounded-full"
                 >
-                  {blog.category} {/* Dynamic category */}
+                  {blog.tags} {/* Dynamic tags from API */}
                 </a>
                 <div className="flex flex-col justify-start text-center text-white">
                   <span className="text-3xl font-semibold leading-none tracking-wide">
-                    {formatDate(blog.date).split(" ")[0]} {/* Day */}
+                    {formatDate(blog.createDate).split(" ")[0]} {/* Day */}
                   </span>
                   <span className="leading-none uppercase">
-                    {formatDate(blog.date).split(" ")[1]} {/* Month */}
+                    {formatDate(blog.createDate).split(" ")[1]} {/* Month */}
                   </span>
                   <span className="leading-none uppercase">
-                    {formatDate(blog.date).split(" ")[2]} {/* Year */}
+                    {formatDate(blog.createDate).split(" ")[2]} {/* Year */}
                   </span>
                 </div>
               </div>
               <h2 className="z-10 p-5 text-white">
                 <Link
-                  to={`/blog/${blog.id}`}  // Link to the details page
+                  to={`/blog/${blog._id}`}  // Link to the details page using the blog _id
                   className="font-semibold text-xl hover:underline"
                 >
                   {blog.title}

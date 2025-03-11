@@ -18,8 +18,8 @@ const Home = () =>{
             <TrustedBrand></TrustedBrand>
             <ChooseUs></ChooseUs>
             <CompanyMission></CompanyMission>
-            <HomeProjects></HomeProjects>
-            <AllWebsiteShow></AllWebsiteShow>
+            {/* <HomeProjects></HomeProjects> */}
+            {/* <AllWebsiteShow></AllWebsiteShow> */}
             <Testimonials></Testimonials>
             <HomeProduct></HomeProduct>
             <HomeBlog></HomeBlog>

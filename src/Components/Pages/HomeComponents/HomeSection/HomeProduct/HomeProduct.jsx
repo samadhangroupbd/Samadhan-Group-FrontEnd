@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../../Authentication/AuthProvider/AuthProvider";
+// import { AuthContext } from "../../../../Components/Authentication/AuthProvider/AuthProvider"; // Import AuthContext
 
 // Function to truncate the description to a given number of words
 const truncateDescription = (description, wordLimit = 15) => {
@@ -13,10 +15,11 @@ const truncateDescription = (description, wordLimit = 15) => {
 const HomeProduct = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate(); // To navigate to the details page
+  const { user } = useContext(AuthContext); // Access user from AuthContext
 
-  // Fetch product data from JSON
+  // Fetch product data from API
   useEffect(() => {
-    fetch("/product.json")
+    fetch("http://localhost:5000/product")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched product data:", data);
@@ -40,12 +43,12 @@ const HomeProduct = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
         {products.map((product) => (
           <div
-            key={product.id}
+            key={product._id} // Using the unique _id from the API
             className="max-w-sm rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transform transition-all duration-300 ease-in-out flex flex-col"
           >
             <img
               className="w-full h-48 object-cover rounded-t-2xl"
-              src={product.productImage}
+              src={product.image}
               alt={product.productName}
             />
             <div className="p-6 flex flex-col flex-grow">
@@ -53,16 +56,17 @@ const HomeProduct = () => {
                 {product.productName}
               </h5>
               <p className="text-gray-600 text-sm mb-4 flex-grow">
-                {truncateDescription(product.productDescription, 15)} {/* Truncated description */}
+                {truncateDescription(product.description, 15)} {/* Truncated description */}
               </p>
 
               {/* Price and Button Section */}
               <div className="flex justify-between items-center mt-auto">
                 <span className="text-xl font-semibold text-cyan-700">
-                  ৳{product.productPrice}
+                  {/* Show default price if no user is logged in, otherwise show actual price */}
+                  {user ? product.price : product.defaultPrice}
                 </span>
                 <button
-                  onClick={() => navigate(`/product/${product.id}`)} // Navigate to product detail page
+                  onClick={() => navigate(`/product/${product._id}`)} // Navigate to product detail page
                   className="inline-block rounded-lg bg-cyan-700 px-6 py-2 text-white text-sm font-medium hover:bg-cyan-800 transition-all duration-200 ease-in-out"
                 >
                   Read More

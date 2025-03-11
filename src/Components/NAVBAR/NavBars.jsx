@@ -152,12 +152,12 @@ const navListItems = [
     {
         label: "Blogs",
         icon: FaBloggerB,
-        to: "/blogs",
+        to: "/blog",
     },
     {
         label: "About Us",
         icon: FaAddressBook,
-        to: "/about",
+        to: "/about-us",
     },
     {
         label: "Contact",

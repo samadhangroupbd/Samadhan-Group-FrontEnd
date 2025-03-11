@@ -21,6 +21,9 @@ const Manage_Blog = () => {
   const [endDate, setEndDate] = useState("");  // End date for filtering
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // Number of items per page
+  const [loading, setLoading] = useState(false);
+
+
 
   // Fetch blog data from API
   useEffect(() => {
@@ -59,6 +62,24 @@ const Manage_Blog = () => {
   const indexOfFirstBlog = indexOfLastBlog - itemsPerPage;
   const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this blog?");
+    if (!confirmDelete) return;
+
+    setLoading(true); // Start loading
+
+    fetch(`http://localhost:5000/blog-delete/${id}`, { method: "DELETE" })
+      .then(() => {
+        setBlogs(blogs.filter((blogs) => blogs._id !== id));
+        setLoading(false); // Stop loading after deletion
+      })
+      .catch((error) => {
+        console.error("Error deleting blogs:", error);
+        setLoading(false); // Stop loading in case of error
+      });
+  };
+
+
   // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -73,10 +94,6 @@ const Manage_Blog = () => {
     // Implement your edit functionality here
   };
 
-  const handleDelete = (id) => {
-    console.log("Delete blog with ID:", id);
-    // Implement your delete functionality here
-  };
 
   const handleView = (id) => {
     console.log("View blog with ID:", id);
@@ -182,7 +199,7 @@ const Manage_Blog = () => {
               </tr>
             </thead>
             <tbody>
-              {currentBlogs.map(({ _id, title, tags, createDate }, index) => {
+              {currentBlogs.map(({ _id, title, image, tags,description, createDate }, index) => {
                 const isLast = index === currentBlogs.length - 1;
                 const classes = isLast
                   ? "p-4"
@@ -207,16 +224,22 @@ const Manage_Blog = () => {
                     </td>
                     <td className={classes}>
                       <div className="flex gap-2">
+                        <Link to={`/dashboard/Edit_Blog/${_id}`} state={{ adminData: {  _id, title, image, description,tags, createDate} }}>
                         <Tooltip content="Edit">
                           <IconButton variant="text" onClick={() => handleEdit(_id)}>
                             <PencilIcon className="h-4 w-4" />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip content="View">
-                          <IconButton variant="text" onClick={() => handleView(_id)}>
-                            <FaEye className="h-4 w-4" />
-                          </IconButton>
-                        </Tooltip>
+                        </Link>
+
+                        <Link to={`/blog/${_id}`}>
+                          <Tooltip content="View">
+                            <IconButton variant="text">
+                              <FaEye className="h-4 w-4" />
+                            </IconButton>
+                          </Tooltip>
+                        </Link>
+
                         <Tooltip content="Delete">
                           <IconButton variant="text" onClick={() => handleDelete(_id)}>
                             <TrashIcon className="h-4 w-4 text-red-500" />

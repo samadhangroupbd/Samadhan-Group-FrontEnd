@@ -130,9 +130,9 @@ const ViewAdmin = () => {
       {/* Image Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4 ">
-          <div className="relative max-w-4xl w-full">
+          <div className="relative max-w-2xl w-full mt-10">
             <img
-              className="w-1/2 mx-auto max-h-[90vh] object-contain rounded-lg"
+              className="w-2/3  mx-auto max-h-[90vh] object-contain rounded-lg"
               src={selectedImage}
               alt="Enlarged view"
             />

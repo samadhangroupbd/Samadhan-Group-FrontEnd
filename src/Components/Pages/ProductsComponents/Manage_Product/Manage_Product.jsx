@@ -161,7 +161,7 @@ const Manage_Product = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentProducts.map(({ _id, productName, category, price, createDate, image }, index) => {
+                            {currentProducts.map(({ _id, productName, category, price,defaultPrice, createDate, image }, index) => {
                                 const isLast = index === currentProducts.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -195,7 +195,7 @@ const Manage_Product = () => {
                                         <td className={classes}>
                                             <div className="flex gap-2">
                                                 <Tooltip content="Edit">
-                                                    <Link to={`/dashboard/edit-product/${_id}`} state={{ adminData: { _id, productName, category, price, createDate, image } }}>
+                                                    <Link to={`/dashboard/edit-product/${_id}`} state={{ adminData: { _id, productName, category, price,defaultPrice, createDate, image } }}>
                                                         <IconButton variant="text">
                                                             <PencilIcon className="h-4 w-4" />
                                                         </IconButton>

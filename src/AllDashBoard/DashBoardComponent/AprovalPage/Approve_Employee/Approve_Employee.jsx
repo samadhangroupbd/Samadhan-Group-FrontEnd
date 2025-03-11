@@ -18,37 +18,28 @@ import { FaEye } from "react-icons/fa";
 
 // Define roles you're interested in
 const ROLES_TO_FILTER = [
-  "IT Employee",
-  "HR Employee",
-   "Finance Employee",
-    "Security Employee",
-    "Office Staff",
-    "Office Employee",
-    "Office Admin",
-    "Office Manager",
-    "Office Supervisor",
-    "Office Assistant",
-    "Office Clerk",
-    "Office Secretary",
-    "Office Coordinator",
-    "Office Executive",
-    "Office Director",
-    "Office President",
-    "Office Vice President",
-    "Office CEO",
-    "Office COO",
-    "Office CTO",
-    "Office CMO",
-    "Office CIO",
-    "Office CFO",
-    "Office CSO",
-    "Office CRO",
-    "Office CCO",
-    "Office CDO",
-    "Office CBO",
-    "Office CLO",
-    "Office CPO",
-    "Office CVO",
+ "Country Admin",
+  "Division Admin",
+  "District Admin",
+  "Paurasabha Ward Admin",
+  "City Corporation Ward Admin",
+  "Upazila Admin",
+  "Union Admin",
+  "Ward Admin",
+  "General Member",
+  "Central chief Organizer",
+  "Central Organizer",
+  "Divisional Chief Organizer",
+  "Divisional Organizer",
+  "District Chief Organizer",
+  "District Organizer",
+  "Paurasabha Ward Organizer",
+  "City Corporation Ward Organizer",
+  "Upazila Chief Organizer",
+  "Upazila Organizer",
+  "Union Organizer",
+  "Ward Organizer",
+
 
 
 ];
@@ -72,7 +63,7 @@ const Employee_Approve = () => {
 
         // Filter the members based on the roles and approval status
         const filteredMembers = data.filter((member) =>
-          ROLES_TO_FILTER.includes(member.member) &&
+          !ROLES_TO_FILTER.includes(member.member) &&
         (member.aproval === "pending" || !member.aproval)
         );
 
@@ -182,7 +173,7 @@ const handleApprove = (id) => {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="flex flex-wrap gap-2">
+            {/* <div className="flex flex-wrap gap-2">
               {["All", ...ROLES_TO_FILTER].map((role) => (
                 <Button
                   key={role}
@@ -193,7 +184,7 @@ const handleApprove = (id) => {
                   {role}
                 </Button>
               ))}
-            </div>
+            </div> */}
             <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
               <Input
                 label="Search Name And Admin Position"
@@ -264,7 +255,7 @@ const handleApprove = (id) => {
                         <div className="flex gap-2">
                           {/* Edit Button */}
                           <Tooltip content="Edit">
-                            <Link to={`/dashboard/edit-admin/${_id}`} state={{ adminData: {_id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost   } }}>
+                            <Link to={`/dashboard/edit-employee/${_id}`} state={{ adminData: {_id, fullName, email, phoneNumber, nationality, image, fatherName, motherName, nidNumber, gender, dateOfBirth, bloodGroup, referenceId, country, division, district, thana, postOffice, village, ward, nidBirthImage, member, payment, transactionId, paymentPhoto,profileId,createDate,createTime,endDate,membershipType,membershipCost   } }}>
                               <IconButton variant="text">
                                 <PencilIcon className="h-4 w-4" />
                               </IconButton>

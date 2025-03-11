@@ -28,29 +28,30 @@ const Total_List_Graph = () => {
     axios.get("http://localhost:5000/signup")
       .then(response => {
         const fetchedMembers = response.data;
-        setMembers(fetchedMembers);
-  
+
         // Filter for approved members
         const approvedMembers = fetchedMembers.filter(member => member.aproval === "approved");
-  
+
         // Sort approved members based on createDate and createTime in descending order
         const sortedMembers = approvedMembers.sort((a, b) => {
           // Combine createDate and createTime into an ISO format string
           const aDateTime = new Date(`${a.createDate}T${a.createTime}`);
           const bDateTime = new Date(`${b.createDate}T${b.createTime}`);
-  
+
           return bDateTime - aDateTime; // Sorting in descending order (latest first)
         });
-  
-        // Get the latest 5 members (take the last 5 from the sorted list)
+
+        // Get the latest 5 approved members (take the last 5 from the sorted list)
         const latestFive = sortedMembers.slice(-5); // Slicing from the end (last 5 members)
         setLatestMembers(latestFive);
+
+        // Set all members (filtered only for approved ones)
+        setMembers(approvedMembers);
       })
       .catch(error => {
         console.error("Error fetching members:", error);
       });
   }, []);
-  
   
 
   // Count members for each role

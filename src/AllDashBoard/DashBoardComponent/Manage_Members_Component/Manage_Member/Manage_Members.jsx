@@ -122,7 +122,7 @@ const Manage_Members = () => {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="flex flex-wrap gap-2">
+            {/* <div className="flex flex-wrap gap-2">
               {["All", ...ROLES_TO_FILTER].map((role) => (
                 <Button
                   key={role}
@@ -133,7 +133,7 @@ const Manage_Members = () => {
                   {role}
                 </Button>
               ))}
-            </div>
+            </div> */}
             <div className="w-full sm:w-80 md:w-96 lg:w-1/2">
               <Input
                 label="Search(Name/Profile Id)"
