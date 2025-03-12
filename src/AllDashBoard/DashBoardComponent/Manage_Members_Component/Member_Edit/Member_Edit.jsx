@@ -444,6 +444,7 @@ const Member_Edit = () => {
                         >
                             <Option value="" disabled >Select Member Type</Option>
                             <Option value="General Member">General Member</Option>
+                            <Option value="Dealer">Dealer</Option>
                             <Option value="Central chief Organizer">Central chief Organizer</Option>
                             <Option value="Central Organizer">Central Organizer</Option>
                             <Option value="Divisional Chief Organizer">Divisional Chief Organizer</Option>

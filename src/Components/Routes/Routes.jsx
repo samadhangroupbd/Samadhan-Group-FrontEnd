@@ -56,6 +56,9 @@ import View_Blog from "../../AllDashBoard/DashBoardComponent/Manage_Blog/View_Bl
 import Edit_Blog from "../../AllDashBoard/DashBoardComponent/Manage_Blog/Edit_Blog";
 import About_Us from "../Pages/About_US/About_US";
 import Contact from "../Pages/ContactPage/Contact";
+import ManageDealer from "../../AllDashBoard/DashBoardComponent/DealerComponent/ManageDealer/ManageDealer";
+import CreateDealer from "../../AllDashBoard/DashBoardComponent/DealerComponent/CreateDealer/CreateDealer";
+import Approve_Dealer from "../../AllDashBoard/DashBoardComponent/AprovalPage/Approve_Dealer/Approve_Dealer";
 
 
 
@@ -249,6 +252,18 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/invoice/:id",
                 element:<Invoice></Invoice>
+            },
+            {
+                path: "/dashboard/manage-dealer",
+                element:<ManageDealer></ManageDealer>
+            },
+            {
+                path: "/dashboard/create-dealer",
+                element: <CreateDealer></CreateDealer>
+            },
+            {
+                path: "/dashboard/approve-dealer",
+                element:<Approve_Dealer></Approve_Dealer>
             },
             {
                 path: "manage-members",

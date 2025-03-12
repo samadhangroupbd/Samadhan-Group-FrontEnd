@@ -3,9 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 // import { AuthContext } from "../AuthProvider/AuthProvider";
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
-import { AuthContext } from "../../../Components/Authentication/AuthProvider/AuthProvider";
+import { AuthContext } from "../../../../Components/Authentication/AuthProvider/AuthProvider";
+// import { AuthContext } from "../../../Components/Authentication/AuthProvider/AuthProvider";
 
-const Registration = () => {
+const CreateDealer = () => {
   const { signUpUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate(); // For redirect after successful signup
   const [membershipType, setMembershipType] = useState('');
@@ -910,7 +911,7 @@ const Registration = () => {
 
 
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <div className="space-y-2">
               <label htmlFor="member" className="block text-sm text-gray-800">Member Type</label>
@@ -924,33 +925,11 @@ const Registration = () => {
                 <option value="" disabled>Select Member Type</option>
                 <option value="General Member">General Member</option> 
                 <option value="Dealer">Dealer</option> 
-                <option value="Central chief Organizer">Central chief Organizer</option>
-                <option value="Central Organizer">Central Organizer</option>
-                <option value="Divisional Chief Organizer">Divisional Chief Organizer</option>
-                <option value="Divisional Organizer">Divisional Organizer</option>
-                <option value="District Chief Organizer">District Chief Organizer</option>
-                <option value="District Organizer">District Organizer</option>
-                <option value="City Corporation Ward Organizer">City Corporation Ward Organizer</option>
-                <option value="Paurasabha Ward Organizer">Paurasabha Ward Organizer</option>
-                <option value="Upazila Chief Organizer">Upazila Chief Organizer</option>
-                <option value="Upazila Organizer">Upazila Organizer</option>
-                <option value="Union Organizer">Union Organizer</option>
-                <option value="Ward Organizer">Ward Organizer</option>
+               
               </select>
             </div>
 
-            {/* Organizer Fee field will always be shown, but the value depends on the selected member type */}
-            <div className="space-y-2">
-              <label htmlFor="organizerFee" className="block text-sm text-gray-800">Organizer Fee</label>
-              <input
-                type="number"
-                id="organizerFee"
-                name="organizerFee"
-                value={selectedMemberType === "General Member" || selectedMemberType === "Dealer" ? 0 : 30000}
-                readOnly
-                className={`w-full px-4 py-2 border rounded-md ${errors.organizerFee ? "border-red-400" : "border-gray-700"} bg-gray-100 text-gray-800 focus:border-violet-400 focus:outline-none`}
-              />
-            </div>
+            
 
             <div className="space-y-2">
               <label htmlFor="dealerFee" className="block text-sm text-gray-800">Dealership Fee</label>
@@ -1108,7 +1087,7 @@ const Registration = () => {
           <div className="mt-6">
             <button type="submit" disabled={loading}
               className="w-full py-2 px-4 text-white bg-blue-600 rounded-md shadow-md focus:outline-none hover:bg-blue-500 disabled:opacity-50">
-              {loading ? "Create Member..." : "Create Member"}
+              {loading ? "Create Dealer..." : "Create Dealer"}
             </button>
           </div>
         </form>
@@ -1119,4 +1098,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default CreateDealer;

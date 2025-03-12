@@ -65,6 +65,7 @@ const DashBoardNavBar = (props) => {
                     { text: 'Dashboard', icon: <DashboardIcon />, link: '/dashboard/statistic' },
                     { text: 'Manage Admin', icon: <MdOutlineManageAccounts className='text-2xl' />, link: '/dashboard/manage-admin' },
                     { text: 'Manage General Member', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-members' },
+                    { text: 'Manage Dealer', icon: <IoIosPeople className='text-2xl' />, link: '/dashboard/manage-dealer' },
                     { text: 'Manage Organizer', icon: <GoProjectSymlink className='text-2xl' />, link: '/dashboard/manage-organizer' },
                     { text: 'Manage Employee', icon: <GoProjectSymlink className='text-2xl' />, link: '/dashboard/manage-employee' },
                     { text: 'Manage Blog', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/manage-blog' },
@@ -92,6 +93,7 @@ const DashBoardNavBar = (props) => {
             <List>
                 {[
                     { text: 'Approve General Member', icon: <TiTick className='text-2xl' />, link: '/dashboard/Aprove-members' },
+                    { text: 'Approve Dealer', icon: <TiTick className='text-2xl' />, link: '/dashboard/approve-dealer' },
                     { text: 'Approve Organizer', icon: <MdOutlineManageSearch className='text-2xl' />, link: '/dashboard/approve-organizer' },
                     { text: 'Approve Admin', icon: <TiTick className='text-2xl' />, link: '/dashboard/aprove-admin' },
                     { text: 'Approve Employee', icon: <TiTick className='text-2xl' />, link: '/dashboard/approve-employee' },
